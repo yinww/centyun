@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yinww.account.mapper.TenantMapper">
+	<resultMap id="TenantResultMap" type="com.yinww.account.domain.Tenant">
+		<id column="id" jdbcType="VARCHAR" property="id"/>
+		<result column="name" jdbcType="VARCHAR" property="name"/>
+		<result column="code" jdbcType="VARCHAR" property="code"/>
+		<result column="main_account_id" jdbcType="VARCHAR" property="mainAccountId"/>
+		<result column="main_account_name" jdbcType="VARCHAR" property="mainAccountName"/>
+		<result column="contact" jdbcType="VARCHAR" property="contact"/>
+		<result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+		<result column="phone" jdbcType="VARCHAR" property="phone"/>
+		<result column="email" jdbcType="VARCHAR" property="email"/>
+		<result column="address" jdbcType="VARCHAR" property="address"/>
+		<result column="logo" jdbcType="VARCHAR" property="logo"/>
+		<result column="type" jdbcType="INTEGER" property="type"/>
+		<result column="status" jdbcType="INTEGER" property="status"/>
+		<result column="note" jdbcType="VARCHAR" property="note"/>
+		<result column="access_key" jdbcType="VARCHAR" property="accessKey"/>
+		<result column="creator" jdbcType="VARCHAR" property="creator"/>
+		<result column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" property="createTime"/>
+		<result column="editor" jdbcType="VARCHAR" property="editor"/>
+		<result column="edit_time" jdbcType="TIMESTAMP" javaType="java.util.Date" property="editTime"/>
+	</resultMap>
+	
+	<select id="getTenants" resultMap="TenantResultMap">
+		select * from ac_tenant
+	</select>
+	
+	<insert id="addTenant">
+	    insert into ac_tenant (id, name, code, contact, mobile, create_time)
+	    values(#{id}, #{name}, #{code}, #{contact}, #{mobile}, now())
+	</insert>
+	
+	<update id="updateTenant">
+	    update ac_tenant set name=#{name}, code=#{code}, contact=#{contact}, mobile=#{mobile}, edit_time=now()
+	    where id=#{id}
+	</update>
+</mapper>

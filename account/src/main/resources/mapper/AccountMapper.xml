@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yinww.account.mapper.AccountMapper">
+	<resultMap id="AccountResultMap" type="com.yinww.web.core.domain.Account">
+		<id column="id" jdbcType="VARCHAR" property="id"/>
+		<result column="login_name" jdbcType="VARCHAR" property="loginName"/>
+		<result column="type" jdbcType="INTEGER" property="type"/>
+		<result column="password" jdbcType="VARCHAR" property="password"/>
+		<result column="display_name" jdbcType="VARCHAR" property="displayName"/>
+		<result column="tenant_id" jdbcType="VARCHAR" property="tenantId"/>
+		<result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+		<result column="phone" jdbcType="VARCHAR" property="phone"/>
+		<result column="email" jdbcType="VARCHAR" property="email"/>
+		<result column="head_img" jdbcType="VARCHAR" property="headImg"/>
+		<result column="gender" jdbcType="VARCHAR" property="gender"/>
+		<result column="status" jdbcType="INTEGER" property="status"/>
+		<result column="grade" jdbcType="INTEGER" property="grade"/>
+		<result column="creator" jdbcType="VARCHAR" property="creator"/>
+		<result column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" property="createTime"/>
+		<result column="editor" jdbcType="VARCHAR" property="editor"/>
+		<result column="edit_time" jdbcType="TIMESTAMP" javaType="java.util.Date" property="editTime"/>
+	</resultMap>
+	
+	<select id="getAccounts" resultMap="AccountResultMap">
+		select * from ac_account where tenant_id=#{tenantId}
+	</select>
+	
+	<select id="getAccount" resultMap="AccountResultMap">
+		select * from ac_account where id=#{id}
+	</select>
+	
+	<insert id="addAccount">
+	    insert into ac_account (id, login_name, type, password, display_name, tenant_id, mobile, phone, email, create_time)
+	    values(#{id}, #{loginName}, #{type}, #{password}, #{displayName}, #{tenantId}, #{mobile}, #{phone}, #{email}, now())
+	</insert>
+	
+	<update id="updateAccount">
+	    update ac_account set display_name=#{displayName}, mobile=#{mobile}, edit_time=now()
+	    where id=#{id}
+	</update>
+</mapper>
