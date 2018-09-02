@@ -8,7 +8,7 @@
 		<artifactId>cloud-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>account</artifactId>
+	<artifactId>spider</artifactId>
 	
 	<dependencies>
 		<dependency>
@@ -23,11 +23,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-actuator</artifactId>
+			<artifactId>spring-boot-starter-data-elasticsearch</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.session</groupId>
-			<artifactId>spring-session-data-redis</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
@@ -35,41 +35,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-thymeleaf</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.mybatis.spring.boot</groupId>
-			<artifactId>mybatis-spring-boot-starter</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.github.ulisesbocchio</groupId>
 			<artifactId>jasypt-spring-boot-starter</artifactId>
-		</dependency>
-		<dependency>
-		    <groupId>com.zaxxer</groupId>
-		    <artifactId>HikariCP</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-		    <groupId>com.github.ulisesbocchio</groupId>
-		    <artifactId>jasypt-spring-boot-starter</artifactId>
-		</dependency>
-		<dependency>
-		    <groupId>io.lettuce</groupId>
-		    <artifactId>lettuce-core</artifactId>
-		</dependency>
-		<dependency>
-		    <groupId>com.github.pagehelper</groupId>
-		    <artifactId>pagehelper-spring-boot-starter</artifactId>
-		    <version>1.2.5</version>
 		</dependency>
 	</dependencies>
 </project>

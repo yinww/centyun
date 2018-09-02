@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" th:src="@{/lib/jquery.min.js}"></script>
+<script type="text/javascript">
+function changeLang(obj){
+	var lang = $(obj).attr('value');
+	$.ajax({
+		url : '/changeLang',
+		type : 'POST',
+		dataType : 'json',
+		data : {lang : lang},
+		success : function(data){
+			console.log(data);
+			window.location.reload();
+		},
+		error : function(data){
+			console.log("change language error.");
+		}
+	});
+}
+</script>
+</head>
+<body>
+	<div id="language">
+		<span value="zh" onclick="changeLang(this);">中文</span>/
+		<span value="en" onclick="changeLang(this);">English</span>
+	</div>
+
+  这是首页 <span th:text="#{welcome}"></span>
+</body>
+</html>
