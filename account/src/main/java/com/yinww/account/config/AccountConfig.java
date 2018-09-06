@@ -43,8 +43,8 @@ public class AccountConfig {
         pro.put("kaptcha.border.color", "105,179,90");
         pro.put("kaptcha.textproducer.font.color", "blue");
         pro.put("kaptcha.image.width", "125");
-        pro.put("kaptcha.image.height", "45");
-        pro.put("kaptcha.textproducer.font.size", "40");
+        pro.put("kaptcha.image.height", "40");
+        pro.put("kaptcha.textproducer.font.size", "35");
         pro.put("kaptcha.session.key", "code");
         pro.put("kaptcha.textproducer.char.length", "4");
         pro.put("kaptcha.textproducer.font.names", "宋体,楷体,微软雅黑");

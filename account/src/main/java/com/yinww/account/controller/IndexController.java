@@ -24,7 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import com.google.code.kaptcha.Producer;
-import com.yinww.account.captcha.CaptchaAuthenticationFilter;
+import com.yinww.account.security.CaptchaAuthenticationFilter;
 import com.yinww.web.core.constant.ResultEntity;
 
 @Controller
@@ -74,27 +74,26 @@ public class IndexController {
             
             //将验证码存入session
             request.getSession().setAttribute(CaptchaAuthenticationFilter.SESSION_CAPTCHA_KEY, captcha);
-            // create the image with the text  
-            //System.out.println(request.getSession().getAttribute(Constants.KAPTCHA_SESSION_KEY));
-            BufferedImage bi = captchaProducer.createImage(captcha);  
-            out = response.getOutputStream();  
-            // write the data out  
+            // create the image with the text
+            BufferedImage bi = captchaProducer.createImage(captcha);
+            out = response.getOutputStream();
+            // write the data out
             ImageIO.write(bi, "jpg", out);
-            out.flush();  
+            out.flush();
             log.info("*****服务端验证码：*******" + captcha);
         } catch (IOException e) {
         	log.info("*****服务端验证码异常*******" + e.getMessage());
             e.printStackTrace();
-        }  
-        finally {  
-               try {
-                out.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-                log.info("*****关流失败*****"+e.getMessage());
-            }
-        }  
-        return null;  
+        }
+		finally {
+			try {
+				out.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+				log.info("*****关流失败*****" + e.getMessage());
+			}
+		}
+		return null;
     }
 
 	/**
@@ -105,10 +104,14 @@ public class IndexController {
 	@RequestMapping(value = "/changeLang", method = RequestMethod.POST)
 	@ResponseBody
 	public ResultEntity changeLanguage(HttpSession session, String lang) {
-		if ("zh".equals(lang)) {
+		if ("zh_CN".equals(lang)) {
 			session.setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, Locale.CHINA);
-		} else if ("en".equals(lang)) {
+		} else if ("en_US".equals(lang)) {
 			session.setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, Locale.US);
+		} else {
+			String[] langs = lang.split("_");
+			Locale locale = new Locale(langs[0], langs[1]);
+			session.setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);
 		}
 		return new ResultEntity(HttpStatus.OK.value());
 	}

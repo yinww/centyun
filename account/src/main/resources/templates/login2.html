@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title th:text="#{Login.UserLogin}">Insert title here</title>
+<script type="text/javascript" th:src="@{/lib/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/lib/sha256.min.js}"></script>
+<script type="text/javascript">
+function changeLang(obj){
+	var passwd = sha256('world');
+	console.log(passwd);
+	var lang = $(obj).attr('value');
+	$.ajax({
+		url : '/changeLang',
+		type : 'POST',
+		dataType : 'json',
+		data : {lang : lang},
+		success : function(data){
+			console.log(data);
+			//window.location.reload();
+		},
+		error : function(data){
+			console.log("change language error.");
+		}
+	});
+}
+</script>
+</head>
+<body>
+	<div id="language">
+		<span value="zh" onclick="changeLang(this);">中文</span>/
+		<span value="en" onclick="changeLang(this);">English</span>
+	</div>
+	
+	<p th:text="#{home.welcome}">Welcome to our grocery store!</p>
+	<form class="form-signin" action="/login/form" method="post">
+		<h2 class="form-signin-heading" th:text="#{Login.UserLogin}">用户登录</h2>
+		<table>
+			<tr>
+				<td th:text="#{Login.User}">用户名:</td>
+				<td><input type="text" name="username" class="form-control"
+					placeholder="请输入用户名" /></td>
+			</tr>
+			<tr>
+				<td th:text="#{Login.Password}">密码:</td>
+				<td><input type="password" name="password" class="form-control"
+					placeholder="请输入密码" /></td>
+			</tr>
+			</tr>
+			<tr>
+				<td th:text="#{Login.Captcha}">验证码:</td>
+				<td><input type="text" name="j_captcha" class="form-control"
+					placeholder="请输入验证码" /><img th:src="@{/captcha-image}"></td>
+			</tr>
+			<tr th:if="${session.SPRING_SECURITY_LAST_EXCEPTION} != null">
+				<td>错误信息:</td>
+				<td><p th:text="#{${session.SPRING_SECURITY_LAST_EXCEPTION.message}}">用户名或密码错误</p></td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<button type="submit" class="btn btn-lg btn-primary btn-block" th:text="#{Login.Login}">登录</button>
+				</td>
+			</tr>
+		</table>
+	</form>
+</body>
+</html>

@@ -5,15 +5,18 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import com.yinww.account.captcha.CaptchaAuthenticationFilter;
+import com.yinww.account.security.CaptchaAuthenticationFilter;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
@@ -25,6 +28,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private AuthenticationProvider authenticationProvider;
 	
+	@Autowired
+    private AuthenticationFailureHandler captchaAuthenticationFailHander;
+	
+	@Autowired
+    private AuthenticationSuccessHandler captchaAuthenticationSuccessHandler;
+	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.formLogin()
@@ -32,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		        .successHandler(accountAuthenticationSuccessHandler)
 		        .failureHandler(accountAuthenticationFailHander)
 		    .permitAll()
-		.and().authorizeRequests().antMatchers("/captcha-image").permitAll()
+		.and().authorizeRequests().antMatchers("/captcha-image", "/changeLang").permitAll()
 		    .anyRequest().access("@securityService.hasPermission(request, authentication)")  //必须经过认证以后才能访问
 		.and().csrf().disable();
 		
@@ -49,8 +58,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	    authenticationFilter.setAuthenticationManager(authenticationManager());
 	    //只有post请求才拦截
 	    authenticationFilter.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/login/form", "POST"));
-//	    myAuthenticationFilter.setAuthenticationSuccessHandler(myAuthenticationSuccessHandler);
-	    authenticationFilter.setAuthenticationFailureHandler(accountAuthenticationFailHander);
+	    authenticationFilter.setAuthenticationSuccessHandler(captchaAuthenticationSuccessHandler);
+	    authenticationFilter.setAuthenticationFailureHandler(captchaAuthenticationFailHander);
 	    return authenticationFilter;
+	}
+	
+	@Override
+	public void configure(WebSecurity web) throws Exception {
+		web.ignoring().antMatchers("/css/**").antMatchers("/js/**").antMatchers("/lib/**").antMatchers("/images/**");
 	}
 }
