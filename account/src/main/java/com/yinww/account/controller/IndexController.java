@@ -1,7 +1,6 @@
 package com.yinww.account.controller;
 
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.Locale;
 
 import javax.imageio.ImageIO;
@@ -28,14 +27,14 @@ import com.yinww.account.security.CaptchaAuthenticationFilter;
 import com.yinww.web.core.constant.ResultEntity;
 
 @Controller
-public class IndexController {
+public class IndexController extends BaseController {
 	
 	private Logger log = LoggerFactory.getLogger(getClass());
 
 	@Autowired
     private Producer captchaProducer;
 
-	@RequestMapping(value = "/")
+	@RequestMapping(value = "/index")
 	public String index() {
 		return "index";
 	}
@@ -43,13 +42,13 @@ public class IndexController {
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
     public ModelAndView login(
             @RequestParam(value = "error", required = false) String error,
-            @RequestParam(value = "logout", required = false) String logout) {
+            @RequestParam(value = "logout", required = false) String logout, HttpServletRequest request) {
         ModelAndView model = new ModelAndView();
         if (error != null) {
-            model.addObject("error", "不正确的用户名和密码");
+            model.addObject("error", getMessage("Login.UserPasswdError", request));
         }
         if (logout != null) {
-            model.addObject("msg", "你已经成功退出");
+            model.addObject("msg", getMessage("Logout.Success", request));
         }
         model.setViewName("login");
         return model;
@@ -61,6 +60,9 @@ public class IndexController {
 		return SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	}
 	
+	/**
+	 * 生成验证码
+	 */
 	@RequestMapping("/captcha-image")  
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) {  
         ServletOutputStream out = null;
@@ -80,17 +82,14 @@ public class IndexController {
             // write the data out
             ImageIO.write(bi, "jpg", out);
             out.flush();
-            log.info("*****服务端验证码：*******" + captcha);
-        } catch (IOException e) {
-        	log.info("*****服务端验证码异常*******" + e.getMessage());
-            e.printStackTrace();
-        }
-		finally {
+            log.info("*****get captcha*******" + captcha);
+        } catch (Exception e) {
+        	log.error(e.getMessage(), e);
+        } finally {
 			try {
 				out.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-				log.info("*****关流失败*****" + e.getMessage());
+			} catch (Exception e) {
+				log.info(e.getMessage(), e);
 			}
 		}
 		return null;
@@ -101,7 +100,7 @@ public class IndexController {
 	 *
 	 * @param lang, zh - 中文, en - 英文
 	 */
-	@RequestMapping(value = "/changeLang", method = RequestMethod.POST)
+	@RequestMapping(value = "/change-lang", method = RequestMethod.POST)
 	@ResponseBody
 	public ResultEntity changeLanguage(HttpSession session, String lang) {
 		if ("zh_CN".equals(lang)) {

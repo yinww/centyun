@@ -1,6 +1,7 @@
 package com.yinww.account.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -30,9 +31,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
     private AuthenticationFailureHandler captchaAuthenticationFailHander;
-	
+
 	@Autowired
-    private AuthenticationSuccessHandler captchaAuthenticationSuccessHandler;
+	private AuthenticationSuccessHandler captchaAuthenticationSuccessHandler;
+
+	@Value("${security.ignore}")
+	private String ignore;
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -41,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		        .successHandler(accountAuthenticationSuccessHandler)
 		        .failureHandler(accountAuthenticationFailHander)
 		    .permitAll()
-		.and().authorizeRequests().antMatchers("/captcha-image", "/changeLang").permitAll()
+		.and().authorizeRequests().antMatchers("/captcha-image", "/change-lang", "/login/**").permitAll()
 		    .anyRequest().access("@securityService.hasPermission(request, authentication)")  //必须经过认证以后才能访问
 		.and().csrf().disable();
 		
@@ -65,6 +69,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("/css/**").antMatchers("/js/**").antMatchers("/lib/**").antMatchers("/images/**");
+	    String[] ignores = ignore.split(",");
+	    for (String string : ignores) {
+	      web.ignoring().antMatchers(string);
+	    }
 	}
 }

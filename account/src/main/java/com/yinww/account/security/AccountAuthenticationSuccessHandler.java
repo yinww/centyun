@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -27,14 +28,22 @@ public class AccountAuthenticationSuccessHandler extends SavedRequestAwareAuthen
 	
 	@Autowired
     private MessageSource messageSource;
+
+	@Value("${home.url}")
+	private String homeUrl;
 	
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws ServletException, IOException {
+		String ip = request.getParameter("ip");
+	    System.out.println(ip);
+	    Object principal = authentication.getPrincipal();
+	    System.out.println(principal);
 		// 这里可以根据实际情况，来确定是跳转到页面或者json格式。
 		Map<String, Object> map = new HashMap<>();
 		map.put("code", HttpStatus.OK.value());
 		map.put("msg", getMessage("Login.Success", request));
+		map.put("url", homeUrl);
 		response.setContentType("application/json;charset=UTF-8");
 		response.getWriter().write(objectMapper.writeValueAsString(map));
 		

@@ -12,6 +12,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
+import com.yinww.util.SHA256Util;
+
 @Component
 public class AccountAuthenticationProvider implements AuthenticationProvider {
 
@@ -25,7 +27,9 @@ public class AccountAuthenticationProvider implements AuthenticationProvider {
         
         // 这里构建来判断用户是否存在和密码是否正确
 		UserInfo userInfo = (UserInfo) userDetailService.loadUserByUsername(userName); // 这里调用我们的自己写的获取用户的方法；
-		if (userInfo == null || !userInfo.getPassword().equals(password)) {
+		String pwd = userInfo.getPassword();
+		pwd = SHA256Util.getSHA256(pwd);
+		if (userInfo == null || !pwd.equals(password)) {
 			throw new BadCredentialsException("Login.UserPasswdError");
 		}
 		Collection<? extends GrantedAuthority> authorities = userInfo.getAuthorities();

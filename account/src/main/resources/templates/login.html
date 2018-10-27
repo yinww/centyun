@@ -32,7 +32,7 @@
       <span value="zh_CN" onclick="changeLang(this);">中文</span> / <span value="en_US" onclick="changeLang(this);">English</span>
     </div>
 
-    <form action="../../index2.html" method="post">
+    <form id="loginForm">
       <div class="form-group has-feedback">
         <input type="text" class="form-control" id="user" name="user" th:attr="placeholder=#{Login.User}" placeholder="User">
         <span class="glyphicon glyphicon-user form-control-feedback"></span>
@@ -46,7 +46,7 @@
           <input type="text" id="captcha" class="form-control" th:attr="placeholder=#{Login.Captcha}" placeholder="Captcha">
         </div>
         <div class="col-xs-5">
-          <img th:src="@{/captcha-image}" style="height:34px;" onclick="changeCaptchaImage(this);">
+          <img th:src="@{/captcha-image}" style="height:34px;" id="captchaImage" onclick="changeCaptchaImage();">
         </div>
       </div>
       
@@ -79,11 +79,14 @@
 <script th:src="@{/js/lang.js}"></script>
 <script th:src="@{/lib/bootstrap/js/bootstrap.min.js}"></script>
 <script type="text/javascript" th:src="@{/lib/sha256.min.js}"></script>
+<script src="//pv.sohu.com/cityjson?ie=utf-8"></script>
 <script type="text/javascript">
+var ip = returnCitySN["cip"];
+
 function changeLang(obj){
     var lang = $(obj).attr('value');
 	$.ajax({
-		url : '/changeLang',
+		url : '/change-lang',
 		type : 'POST',
 		dataType : 'json',
 		data : {lang : lang},
@@ -97,8 +100,8 @@ function changeLang(obj){
 	});
 }
 
-function changeCaptchaImage(obj) {
-	$(obj).attr('src', "/captcha-image?t="+new Date());
+function changeCaptchaImage() {
+	$("#captchaImage").attr('src', "/captcha-image?t="+new Date());
 }
 
 $(function() {
@@ -113,31 +116,27 @@ $(function() {
 function loginPost() {
 	if (checkLogin()) {
 		var pwd = $('#password').val();
-		pwd = sha256(pwd)
+		pwd = sha256(pwd);
+		console.log("pwd:" + pwd);
 		$.ajax({
-			url : '${ctx}/login.html',
+			url : '/login/form',
 			type : 'post',
 			dataType : 'json',
-			data : {'ip' : ip,'city' : city,'userName' : $('#userName').val(), 'password' : pwd, 'captcha' : $('#captcha').val(), 'isAjax' : true},
+			data : {'ip' : ip, 'username' : $('#user').val(), 'password' : pwd, 'j_captcha' : $('#captcha').val()},
 			success : function(data) {
-				if (data.success) {
-					$("#ip").val(ip);
-					$("#city").val(city);
-					$('#form')[0].submit();
+				if (data.code == 200) {
+					window.location.href = data.url;
 				} else {
-					if (data.error && data.error.indexOf('ready') != -1) {
-						$('#ready')[0].style.display = 'block';
-					} else {
-						$('#captcha').val("");
-						flushcaptcha();
-						$('#errMsg').text(data.error);
-					}
+					$('#captcha').val("");
+					changeCaptchaImage();
+					$('#errMsg').html(data.msg);
 				}
 			},
 			error : function(data) {
-				$("#ip").val(ip);
-				$("#city").val(city);
-				$('#form')[0].submit();
+				console.log(data);
+				$('#captcha').val("");
+				changeCaptchaImage();
+				$('#errMsg').text(getI18n('loginError'));
 			}
 		});
 	}
@@ -150,18 +149,17 @@ function checkLogin() {
 		$('#errMsg').html(getI18n('userCantEmpty'));
 		return false;
 	}
+	
 	var password = $('#password').val();
 	if (null == password || '' == password) {
 		$('#errMsg').html(getI18n('passwordCantEmpty'));
 		return false;
 	}
+	
 	var captcha = $('#captcha').val();
 	if (null == captcha || '' == captcha) {
 		$('#errMsg').html(i18njs.password);
 		return false;
-	}
-	if (getQueryString('needRedirect') == 'true') {
-		$('#redirectUrl').val(window.location.href);
 	}
 	return true;
 }

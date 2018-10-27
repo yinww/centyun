@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -27,6 +28,9 @@ public class CaptchaAuthenticationSuccessHandler extends SavedRequestAwareAuthen
 	
 	@Autowired
     private MessageSource messageSource;
+
+	@Value("${home.url}")
+	private String homeUrl;
 	
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -35,6 +39,7 @@ public class CaptchaAuthenticationSuccessHandler extends SavedRequestAwareAuthen
 		Map<String, Object> map = new HashMap<>();
 		map.put("code", HttpStatus.OK.value());
 		map.put("msg", getMessage("Login.Success", request));
+		map.put("url", homeUrl);
 		response.setContentType("application/json;charset=UTF-8");
 		response.getWriter().write(objectMapper.writeValueAsString(map));
 		

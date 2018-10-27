@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.github.pagehelper.PageInfo;
 import com.yinww.account.domain.Tenant;
 import com.yinww.account.service.TenantService;
+import com.yinww.web.core.constant.AppConstant;
 
 @RestController
 @RequestMapping(value = "/tenant")
@@ -26,6 +27,7 @@ public class TenantController {
 	@Autowired
 	private TenantService tenantService;
 
+	// setSession和getSession不处理实际的业务, 仅做session共享的测试
 	@RequestMapping(value = "/setsession", method = RequestMethod.POST)
 	public Object setSession(@RequestParam(required=false) Integer page, HttpSession session) {
 		session.setAttribute("page", page);
@@ -46,9 +48,8 @@ public class TenantController {
 		if(page == null || page < 1) {
 			page = 1;
 		}
-		if(size == null) {
-//			size = AppConstant.DEFAULT_PAGE_SIZE;
-			size = 2;
+		if(size == null || size < 1) {
+			size = AppConstant.DEFAULT_PAGE_SIZE;
 		}
 		PageInfo<Tenant> tenants = tenantService.getTenants(page, size);
 		return tenants;

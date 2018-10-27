@@ -32,7 +32,7 @@ public class AccountAuthenticationFailHander extends SimpleUrlAuthenticationFail
         log.info("login error", exception);
 		Map<String, Object> map = new HashMap<>();
 		map.put("code", HttpStatus.BAD_REQUEST.value());
-		map.put("msg", "Login.Fail");
+		map.put("msg", exception.getMessage());
 		response.setContentType("application/json;charset=UTF-8");
 		response.getWriter().write(objectMapper.writeValueAsString(map));
 	}

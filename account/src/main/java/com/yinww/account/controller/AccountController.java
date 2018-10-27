@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.PageInfo;
 import com.yinww.account.service.AccountService;
+import com.yinww.web.core.constant.AppConstant;
 import com.yinww.web.core.domain.Account;
 
 @RestController
@@ -23,7 +24,6 @@ public class AccountController {
 	@Autowired
 	private AccountService accountService;
 
-
 	@RequestMapping(value = "/accounts/{tenantId}", method = RequestMethod.POST)
 	@ResponseBody
 	public Object getAccounts(@PathVariable(value = "tenantId") String tenantId
@@ -31,9 +31,8 @@ public class AccountController {
 		if(page == null || page < 1) {
 			page = 1;
 		}
-		if(size == null) {
-//			size = AppConstant.DEFAULT_PAGE_SIZE;
-			size = 2;
+		if(size == null || size < 1) {
+			size = AppConstant.DEFAULT_PAGE_SIZE;
 		}
 		PageInfo<Account> accounts = accountService.getAccounts(tenantId, page, size);
 		return accounts;
