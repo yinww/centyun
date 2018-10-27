@@ -5,6 +5,21 @@ import java.util.Collection;
 import java.util.List;
 
 public class CommonUtil {
+
+	/**
+	 * 身份证号正则
+	 */
+	private static String REG_IDCARD = "^\\d{6}(19|20)\\d{2}((1[0-2])|0\\d)([0-2]\\d|30|31)\\d{3}[\\d|X|x]$";
+
+	/**
+	 * 判断是否是身份证号
+	 * 
+	 * @param str 任意字符串(不为null)
+	 * @return 如果字符串满足邮箱格式返回true
+	 */
+	public static boolean isIdCard(String str) {
+		return str.matches(REG_IDCARD);
+	}
 	
 	public static boolean isEmpty(String str) {
 		return str == null || str.trim().length() == 0;

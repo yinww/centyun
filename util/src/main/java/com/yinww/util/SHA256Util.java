@@ -41,7 +41,7 @@ public class SHA256Util {
 	}
 	
 	public static void main(String[] args) {
-		String sha256 = getSHA256("world");
+		String sha256 = getSHA256("123456");
 		System.out.println(sha256);
 	}
 }
