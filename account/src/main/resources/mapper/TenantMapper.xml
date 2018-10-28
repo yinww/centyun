@@ -27,6 +27,19 @@
 	
 	<select id="getTenants" resultMap="TenantResultMap">
 		select * from ac_tenant
+		<where>
+		    <if test="searchValue != null">
+		        name like concat('%', #{searchValue}, '%')
+		        or code like concat('%', #{searchValue}, '%')
+		        or contact like concat('%', #{searchValue}, '%')
+		        or mobile like concat('%', #{searchValue}, '%')
+		        or email like concat('%', #{searchValue}, '%')
+		    </if>
+		</where>
+		<if test="orders != null">
+		    order by
+		    <foreach collection="orders" item="order" separator=",">CONVERT(${order.key} USING gbk) ${order.value}</foreach>
+		</if>
 	</select>
 	
 	<insert id="addTenant">

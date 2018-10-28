@@ -2,7 +2,10 @@ package com.yinww.account.security;
 
 import java.util.Collection;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -12,10 +15,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
-import com.yinww.util.SHA256Util;
+import com.yinww.account.domain.Manager;
 
 @Component
 public class AccountAuthenticationProvider implements AuthenticationProvider {
+	private Logger log = LoggerFactory.getLogger(getClass());
 
 	@Autowired
     private UserDetailsService userDetailService;
@@ -26,15 +30,22 @@ public class AccountAuthenticationProvider implements AuthenticationProvider {
         String password = (String) authentication.getCredentials();// 这个是表单中输入的密码
         
         // 这里构建来判断用户是否存在和密码是否正确
-		UserInfo userInfo = (UserInfo) userDetailService.loadUserByUsername(userName); // 这里调用我们的自己写的获取用户的方法；
-		String pwd = userInfo.getPassword();
-		pwd = SHA256Util.getSHA256(pwd);
-		if (userInfo == null || !pwd.equals(password)) {
+        Manager manager = null;
+		try {
+			manager = (Manager) userDetailService.loadUserByUsername(userName);
+		} catch (DataAccessException e) {
+			log.error(e.getMessage(), e);
+			throw new BadCredentialsException("Login.DBError");
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new BadCredentialsException("Login.Error");
+		}
+		if (manager == null || !EncryptUtils.valid(password, manager.getPassword())) {
 			throw new BadCredentialsException("Login.UserPasswdError");
 		}
-		Collection<? extends GrantedAuthority> authorities = userInfo.getAuthorities();
+		Collection<? extends GrantedAuthority> authorities = manager.getAuthorities();
 		// 构建返回的用户登录成功的token
-		return new UsernamePasswordAuthenticationToken(userInfo, password, authorities);
+		return new UsernamePasswordAuthenticationToken(manager, password, authorities);
 	}
 
 	@Override

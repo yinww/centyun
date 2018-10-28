@@ -3,11 +3,14 @@ package com.yinww.account.domain;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.apache.ibatis.type.Alias;
+
 /**
  * Tenant 租户
  * @author yinww
  *
  */
+@Alias("tenant")
 public class Tenant implements Serializable {
 	private static final long serialVersionUID = 7841144358194132207L;
 	

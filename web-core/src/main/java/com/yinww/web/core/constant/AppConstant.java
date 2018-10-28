@@ -25,6 +25,7 @@ public interface AppConstant {
 	String EMPTY = "";
 	String DOT = ".";
 	
-	int DEFAULT_PAGE_SIZE = 20;
+	int DEFAULT_PAGE_START = 1;
+	int DEFAULT_PAGE_SIZE = 10;
 
 }

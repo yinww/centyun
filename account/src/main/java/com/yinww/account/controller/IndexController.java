@@ -13,7 +13,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,7 +25,11 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import com.google.code.kaptcha.Producer;
+import com.yinww.account.domain.Audit;
+import com.yinww.account.domain.Manager;
 import com.yinww.account.security.CaptchaAuthenticationFilter;
+import com.yinww.account.service.AuditService;
+import com.yinww.util.IPUtil;
 import com.yinww.web.core.constant.ResultEntity;
 
 @Controller
@@ -34,9 +40,17 @@ public class IndexController extends BaseController {
 	@Autowired
     private Producer captchaProducer;
 
-	@RequestMapping(value = "/index")
+	@Autowired
+	private AuditService auditService;
+
+	@RequestMapping(value = "/")
+	public String home() {
+		return "forward:/tenant/list.html";
+	}
+
+	@RequestMapping(value = "/index.html")
 	public String index() {
-		return "index";
+        return "forward:/tenant/list.html";
 	}
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -54,10 +68,28 @@ public class IndexController extends BaseController {
         return model;
     }
 
-	@RequestMapping("/whoim")
-	@ResponseBody
-	public Object whoIm() {
-		return SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	@RequestMapping("/logout")
+	public String userLogout(HttpServletRequest request, HttpServletResponse response) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (auth != null) {
+			new SecurityContextLogoutHandler().logout(request, response, auth);
+		}
+
+    	// TODO 记录登录成功的日志 这里的代码没有起作用??
+		Object principal = auth.getPrincipal();
+	    if(principal instanceof Manager) {
+	    	Manager manager = (Manager) principal;
+	    	String ip = request.getParameter("ip");
+	    	Audit audit = new Audit();
+	    	audit.setAction("logout");
+	    	audit.setModule("system");
+	    	audit.setContent(ip);
+	    	audit.setIp(IPUtil.ipToLong(ip));
+	    	audit.setOperator(manager.getLoginName());
+	    	auditService.saveAccount(audit);
+	    }
+    	
+		return "redirect:/login?logout222";
 	}
 	
 	/**

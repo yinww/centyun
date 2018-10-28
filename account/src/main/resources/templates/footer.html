@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<!-- Main Footer -->
+	<footer th:fragment="copy" class="main-footer">
+		<!-- To the right -->
+		<div class="pull-right hidden-xs" th:text="#{Platform.Title}"></div>
+		<!-- Default to the left -->
+		<strong><a th:href="@{https://www.centyun.com}"
+			th:text="#{Platform.Name}">CentYun</a></strong> [[#{Copy.Right}]]
+	</footer>
+
+</body>
+</html>

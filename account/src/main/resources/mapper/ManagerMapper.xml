@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yinww.account.mapper.ManagerMapper">
+	<resultMap id="ModuleResultMap" type="module">
+		<id column="id" jdbcType="VARCHAR" property="id"/>
+		<result column="code" jdbcType="VARCHAR" property="code"/>
+		<result column="name" jdbcType="INTEGER" property="name"/>
+		<result column="english_name" jdbcType="VARCHAR" property="englishName"/>
+		<result column="icon" jdbcType="VARCHAR" property="icon"/>
+		<result column="url" jdbcType="VARCHAR" property="url"/>
+		<result column="order_no" jdbcType="VARCHAR" property="orderNo"/>
+		<result column="status" jdbcType="VARCHAR" property="status"/>
+		<result column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" property="createTime"/>
+	</resultMap>
+	
+	<resultMap id="ManagerResultMap" type="manager">
+		<id column="id" jdbcType="VARCHAR" property="id"/>
+		<result column="login_name" jdbcType="VARCHAR" property="loginName"/>
+		<result column="password" jdbcType="INTEGER" property="password"/>
+		<result column="display_name" jdbcType="VARCHAR" property="displayName"/>
+		<result column="phone" jdbcType="VARCHAR" property="phone"/>
+		<result column="email" jdbcType="VARCHAR" property="email"/>
+		<result column="status" jdbcType="VARCHAR" property="status"/>
+		<result column="creator" jdbcType="VARCHAR" property="creator"/>
+		<result column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" property="createTime"/>
+		<result column="editor" jdbcType="VARCHAR" property="editor"/>
+		<result column="edit_time" jdbcType="TIMESTAMP" javaType="java.util.Date" property="editTime"/>
+		<result column="password_time" jdbcType="TIMESTAMP" javaType="java.util.Date" property="passwordTime"/>
+	</resultMap>
+	
+	<select id="getManager" resultMap="ManagerResultMap">
+		select * from ac_manager where login_name=#{loginName}
+	</select>
+	
+	<select id="getModules" resultMap="ModuleResultMap">
+		select * from ac_module where status=1 order by order_no
+	</select>
+	
+	<update id="updateLanguage">
+	    update ac_manager set language=#{language} where id=#{id}
+	</update>
+</mapper>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title th:text="#{Platform.Title}">CentYun</title>
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css">
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
+
+</head>
+
+<body>
+
+	<table id="example2" class="table table-bordered">
+		<thead>
+			<tr>
+				<th th:text="#{tenant.name}">名称</th>
+				<th th:text="#{tenant.code}">代码</th>
+				<th th:text="#{tenant.contact}">联系人</th>
+				<th th:text="#{tenant.mobile}">手机</th>
+				<th th:text="#{tenant.phone}">电话</th>
+				<th th:text="#{tenant.email}">邮箱</th>
+			</tr>
+		</thead>
+	</table>
+
+	<script>
+  $(function () {
+	  var i18n = "[[${session.SPRING_SECURITY_CONTEXT.authentication.principal.language == 'zh_CN' ? 'Chinese.json' : 'English.json'}]]";
+		var table = $('#example2').DataTable( {
+	        "processing": true,
+	        "serverSide": true,
+	        "ajax": {
+	            "url": "/tenant/tenants",
+	            "type": "POST",
+	            "dataSrc": 'data'
+	        },
+	        "rowId": 'id',
+	        "columns": [
+	            { "data": "name" },
+	            { "data": "code" },
+	            { "data": "contact" },
+	            { "data": "mobile" },
+	            { "data": "phone" },
+	            { "data": "email" }
+	        ],
+	        "dom": 'rtilp',
+	        "language": {
+                "url": "/lib/datatables.net-bs/js/" + i18n
+            }
+	    });
+  });
+</script>
+</body>
+</html>

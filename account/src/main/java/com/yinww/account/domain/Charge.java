@@ -3,12 +3,15 @@ package com.yinww.account.domain;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.apache.ibatis.type.Alias;
+
 /**
  * Charge 充值
  * 
  * @author yinww
  * 
  */
+@Alias("charge")
 public class Charge implements Serializable {
 
 	private static final long serialVersionUID = 7421627264111503805L;

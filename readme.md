@@ -59,3 +59,5 @@ http://ip.taobao.com/service/getIpInfo.php?ip=[ip地址字串]
 其中code的值的含义为，0：成功，1：失败。
 
 
+icons:
+https://adminlte.io/themes/AdminLTE/pages/UI/icons.html

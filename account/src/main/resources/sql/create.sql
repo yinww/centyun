@@ -62,10 +62,11 @@ create table ac_manager
 (
    id                   varchar(32) not null,
    login_name           varchar(32) not null,
+   password             varchar(108) not null,
    display_name         varchar(32) not null,
-   mobile               char(10),
    phone                varchar(32),
    email                varchar(64),
+   language             varchar(8),
    status               tinyint,
    creator              varchar(32),
    create_time          datetime,
@@ -113,6 +114,42 @@ create table ac_charge
    status               tinyint,
    charge_manager       varchar(32),
    charge_time          datetime,
+   primary key (id)
+)
+ENGINE = InnoDB
+DEFAULT CHARSET = utf8;
+
+/*==============================================================*/
+/* Table: ac_module                                             */
+/*==============================================================*/
+create table ac_module
+(
+   id                   varchar(32) not null,
+   code                 varchar(32),
+   name                 varchar(32),
+   english_name         varchar(64),
+   icon                 varchar(32),
+   url                  varchar(128),
+   order_no             smallint,
+   status               tinyint,
+   create_time          datetime,
+   primary key (id)
+)
+ENGINE = InnoDB
+DEFAULT CHARSET = utf8;
+
+/*==============================================================*/
+/* Table: ac_audit                                              */
+/*==============================================================*/
+create table ac_audit
+(
+   id                   varchar(32) not null,
+   action               varchar(64),
+   module               varchar(32),
+   content              text,
+   ip                   bigint,
+   operator             varchar(32),
+   operate_time         datetime,
    primary key (id)
 )
 ENGINE = InnoDB

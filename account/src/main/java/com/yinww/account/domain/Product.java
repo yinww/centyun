@@ -3,6 +3,9 @@ package com.yinww.account.domain;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.apache.ibatis.type.Alias;
+
+@Alias("product")
 public class Product implements Serializable {
 	private static final long serialVersionUID = -2981023802310876879L;
 	

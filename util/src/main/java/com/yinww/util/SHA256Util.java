@@ -1,8 +1,6 @@
 package com.yinww.util;
 
-import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 public class SHA256Util {
 
@@ -13,9 +11,7 @@ public class SHA256Util {
 			messageDigest = MessageDigest.getInstance("SHA-256");
 			messageDigest.update(raw.getBytes("UTF-8"));
 			encodeStr = byte2Hex(messageDigest.digest());
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return encodeStr;

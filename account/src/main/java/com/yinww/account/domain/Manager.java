@@ -1,9 +1,15 @@
 package com.yinww.account.domain;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 
-public class Manager implements Serializable {
+import org.apache.ibatis.type.Alias;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+@Alias("manager")
+public class Manager implements Serializable, UserDetails {
 	private static final long serialVersionUID = -4465842418724220179L;
 	
 	private String id;
@@ -18,6 +24,7 @@ public class Manager implements Serializable {
 	private String editor;
 	private Date editTime;
 	private Date passwordTime; // 设置密码的时间
+	private String language;
 	
 	public Manager() {
 	}
@@ -122,6 +129,44 @@ public class Manager implements Serializable {
 	public String toString() {
 		return new StringBuilder("Manager{loginName:").append(loginName)
 				.append(", displayName=").append(displayName).append("}").toString();
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return null;
+	}
+
+	@Override
+	public String getUsername() {
+		return loginName;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return status == 1;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return status == 1;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return status == 1;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return status == 1;
+	}
+
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
 	}
 
 }

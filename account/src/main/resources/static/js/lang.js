@@ -15,11 +15,13 @@ var account = {login:[]};
 account.login['zh_CN']={
 	userCantEmpty: '用户名不能为空',
 	passwordCantEmpty: '密码不能为空',
-	loginError: '登录出错'
+	loginError: '登录出错',
+	datatableI18n: 'Chinese.json'
 };
 
 account.login['en_US']={
 	userCantEmpty: 'User Cannot be Empty',
 	passwordCantEmpty: 'Password Cannot be Empty',
-	loginError: 'Login Error'
+	loginError: 'Login Error',
+	datatableI18n: 'English.json'
 };
