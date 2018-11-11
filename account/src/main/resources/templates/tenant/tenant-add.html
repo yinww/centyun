@@ -1,10 +1,205 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title th:text="#{Platform.Title}">CentYun</title>
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <link rel="stylesheet" th:href="@{/lib/bootstrap/css/bootstrap.min.css}">
+  <link rel="stylesheet" th:href="@{/lib/font-awesome/css/font-awesome.min.css}">
+  <link rel="stylesheet" th:href="@{/lib/Ionicons/css/ionicons.min.css}">
+  <link rel="stylesheet" th:href="@{/lib/adminlte/css/adminlte.min.css}">
+  <link rel="stylesheet" th:href="@{/lib/adminlte/css/skins/skin-blue.min.css}">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  <!-- Google Font -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
-<body>
-  add tenant
+
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+  <header th:replace="footer :: main-header"></header>
+  
+  <!-- Left side column. contains the logo and sidebar -->
+  <aside th:replace="footer :: main-sidebar"></aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content container-fluid">
+    
+          <!-- Horizontal Form -->
+          <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">添加租户</h3>
+            </div>
+            <!-- /.box-header -->
+            <!-- form start -->
+            <form class="form-horizontal">
+              <div class="box-body">
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <label for="name" class="col-sm-2 control-label" th:text="#{tenant.name}">Name</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" name="name" id="name" th:placeholder="#{tenant.name}">
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="code" class="col-sm-2 control-label" th:text="#{tenant.code}">Code</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" name="code" id="code" th:placeholder="#{tenant.code}">
+                  </div>
+                </div>
+              </div>
+          <!-- /.row -->
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <label for="mainAccount" class="col-sm-2 control-label" th:text="#{tenant.mainAccount}">MainAccount</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" name="mainAccount" id="mainAccount" th:placeholder="#{tenant.mainAccount}">
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="contact" class="col-sm-2 control-label" th:text="#{tenant.contact}">Contact</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" name="contact" id="contact" th:placeholder="#{tenant.contact}">
+                  </div>
+                </div>
+              </div>
+          <!-- /.row -->
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <label for="mobile" class="col-sm-2 control-label" th:text="#{tenant.mobile}">Mobile</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" name="mobile" id="mobile" th:placeholder="#{tenant.mobile}">
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="phone" class="col-sm-2 control-label" th:text="#{tenant.phone}">Phone</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" name="phone" id="phone" th:placeholder="#{tenant.email}">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <label for="email" class="col-sm-2 control-label" th:text="#{tenant.email}">Email</label>
+                  <div class="col-sm-10">
+                    <input type="email" class="form-control" name="email" id="email" th:placeholder="#{tenant.email}">
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="address" class="col-sm-2 control-label" th:text="#{tenant.address}">Address</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" name="address" id="address" th:placeholder="#{tenant.address}">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <label for="logo" class="col-sm-2 control-label" th:text="#{tenant.logo}">Logo</label>
+                  <div class="col-sm-10">
+                    <input type="file" name="logo" id="logo">
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="type" class="col-sm-2 control-label" th:text="#{tenant.type}">Type</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" name="type" id="type" th:placeholder="#{tenant.type}">
+                  </div>
+                </div>
+              </div>
+          <!-- /.row -->
+              <div class="row">
+			      <div class="form-group col-md-6">
+			          <div  class="col-sm-offset-2 col-sm-10" id="errMsg" style="color: red;"></div>
+			      </div>
+              </div>
+          <!-- /.row -->
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <div class="col-sm-offset-2 col-sm-10">
+                    <button type="button" id="save" class="btn btn-primary" th:text="#{common.save}">保存</button>
+                    <button type="button" id="saveadd" class="btn btn-default" th:text="#{common.saveadd}">保存并继续添加</button>
+                    <button type="button" onclick="history.go(-1);" class="btn btn-default" th:text="#{common.return}">返回</button>
+                  </div>
+                </div>
+              </div>
+          <!-- /.row -->
+              </div>
+              <!-- /.box-body -->
+            </form>
+          </div>
+          <!-- /.box -->
+
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  <!-- Main Footer -->
+  <div th:replace="footer :: copy"></div>
+</div>
+<!-- ./wrapper -->
+
+<script th:src="@{/lib/jquery.min.js}"></script>
+<script th:src="@{/lib/js.cookie.min.js}"></script>
+<script th:src="@{/js/lang.js}"></script>
+<script th:src="@{/lib/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/lib/adminlte/js/adminlte.min.js}"></script>
+
+<script>
+  $(function () {
+	  $("#save").click(function(){
+		  save(0);
+	  });
+	  $("#saveadd").click(function(){
+		  save(1);
+	  });
+  });
+  
+  function save(data) {
+	  if (checkForm()) {
+		$.ajax({
+			url : '/tenant/save-tenant',
+			type : 'post',
+			dataType : 'json',
+			data : {'name' : $('#name').val(), 'code' : $('#code').val(), 'mainAccount' : $('#mainAccount').val(), 'contact' : $('#contact').val()},
+			success : function(data) {
+				if (data.status == 200) {
+					window.location.href = data == 0 ? "/tenant/index.html" : "/tenant/add.html";
+				} else {
+					$('#errMsg').html(data.msg);
+				}
+			},
+			error : function(data) {
+				console.log(data);
+				$('#errMsg').text(getI18n('loginError'));
+			}
+		});
+	  }
+  }
+
+  function checkForm() {
+  	var username = $('#name').val();
+  	if (null == username || '' == username) {
+  		$('#errMsg').html(getI18n('userCantEmpty'));
+  		return false;
+  	}
+  	
+  	var code = $('#code').val();
+  	if (null == code || '' == code) {
+  		$('#errMsg').html(getI18n('passwordCantEmpty'));
+  		return false;
+  	}
+  	return true;
+  }
+</script>
 </body>
 </html>

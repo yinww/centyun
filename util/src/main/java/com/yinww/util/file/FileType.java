@@ -1,4 +1,4 @@
-package com.yinww.util;
+package com.yinww.util.file;
 
 public enum FileType {
 	/** JPEG */

@@ -89,7 +89,7 @@ public class IndexController extends BaseController {
 	    	auditService.saveAccount(audit);
 	    }
     	
-		return "redirect:/login?logout222";
+		return "redirect:/login?logout";
 	}
 	
 	/**

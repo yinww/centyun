@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,7 @@ import com.yinww.account.domain.Tenant;
 import com.yinww.account.service.TenantService;
 import com.yinww.account.table.DTRequestParams;
 import com.yinww.account.table.DataTableResult;
+import com.yinww.web.core.constant.ResultEntity;
 
 @Controller
 @RequestMapping(value = "/tenant")
@@ -76,7 +78,12 @@ public class TenantController extends BaseController {
 	@RequestMapping(value = "/save-tenant", method = RequestMethod.POST)
 	public Object saveTenant(Tenant tenant) {
 		log.info(tenant.toString());
-		tenantService.saveTenant(tenant);
-		return tenant;
+		try {
+			tenantService.saveTenant(tenant);
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			return new ResultEntity(HttpStatus.BAD_REQUEST.value());
+		}
+		return new ResultEntity(HttpStatus.OK.value());
 	}
 }

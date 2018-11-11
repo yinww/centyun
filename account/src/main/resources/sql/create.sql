@@ -7,7 +7,7 @@ create table ac_tenant
    id                   varchar(32) not null,
    name                 varchar(128) not null,
    code                 varchar(64),
-   main_account_id      varchar(32),
+   main_account         varchar(32),
    contact              varchar(64),
    mobile               varchar(32),
    phone                varchar(32),

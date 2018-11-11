@@ -1,4 +1,4 @@
-package com.yinww.util;
+package com.yinww.util.file;
 
 import java.io.FileInputStream;
 import java.io.IOException;
