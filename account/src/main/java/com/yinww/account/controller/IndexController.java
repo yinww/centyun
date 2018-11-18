@@ -1,6 +1,7 @@
 package com.yinww.account.controller;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.Locale;
 
 import javax.imageio.ImageIO;
@@ -12,21 +13,28 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import com.google.code.kaptcha.Producer;
+import com.yinww.account.AccountApplication;
 import com.yinww.account.domain.Audit;
 import com.yinww.account.domain.Manager;
+import com.yinww.account.file.FileUpload;
 import com.yinww.account.security.CaptchaAuthenticationFilter;
 import com.yinww.account.service.AuditService;
 import com.yinww.util.IPUtil;
@@ -43,14 +51,15 @@ public class IndexController extends BaseController {
 	@Autowired
 	private AuditService auditService;
 
-	@RequestMapping(value = "/")
-	public String home() {
-		return "forward:/tenant/list.html";
-	}
+	@Value("${UPLOAD_DIR}")
+	private String uploadDir;
 
-	@RequestMapping(value = "/index.html")
-	public String index() {
-        return "forward:/tenant/list.html";
+	@Value("${ACCOUNT_URL}")
+	private String accountUrl;
+
+	@RequestMapping(value = {"/", "/index.html"})
+	public String home() {
+		return "forward:/tenant/index.html";
 	}
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -147,4 +156,31 @@ public class IndexController extends BaseController {
 		return new ResultEntity(HttpStatus.OK.value());
 	}
 
+	/**
+	 * 上传文件
+	 * 
+	 * @param file
+	 * @return
+	 */
+	@RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
+	@ResponseBody
+	public ResultEntity uploadFile(@RequestParam(value = "file", required = true) MultipartFile file) {
+		ResultEntity result = new ResultEntity(HttpStatus.OK.value());
+		try {
+			File saveFile = FileUpload.saveFile(file, uploadDir, AccountApplication.APPNAME);
+			String fileUrl = accountUrl + "upload/" + saveFile.getAbsolutePath().substring(uploadDir.length());
+			result.setData(fileUrl.replaceAll("\\\\","/"));
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
+		return result;
+	}
+	
+	@ExceptionHandler(MaxUploadSizeExceededException.class)
+	@ResponseBody
+    public ResponseEntity<String> handleException(MaxUploadSizeExceededException ex) {
+        System.out.println("=====================" + ex.getClass().getName());
+        return ResponseEntity.ok("ok");
+    }
+	
 }

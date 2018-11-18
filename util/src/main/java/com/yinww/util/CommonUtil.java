@@ -3,6 +3,8 @@ package com.yinww.util;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CommonUtil {
 
@@ -50,6 +52,18 @@ public class CommonUtil {
 			result.add(item);
 		}
 		return result;
+	}
+
+	public static boolean isValidFileExt(String fileName, String reg) {
+		boolean flag = false;
+		try {
+			Pattern pattern = Pattern.compile(reg);
+			Matcher matcher = pattern.matcher(fileName.toLowerCase());
+			flag = matcher.matches();
+		} catch (Exception e) {
+			flag = false;
+		}
+		return flag;
 	}
 
 }

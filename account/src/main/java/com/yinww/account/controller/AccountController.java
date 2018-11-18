@@ -29,7 +29,7 @@ public class AccountController extends BaseController {
 	public ModelAndView index() {
 		ModelAndView model = new ModelAndView();
 		model.addObject("modules", getModules("/account/index.html"));
-        model.setViewName("account/index");
+        model.setViewName("account/account-index");
         return model;
 	}
 
@@ -57,7 +57,6 @@ public class AccountController extends BaseController {
 	@RequestMapping(value = "/save-account", method = RequestMethod.POST)
 	@ResponseBody
 	public Object saveAccount(Account account) {
-		log.info(account.toString());
 		accountService.saveAccount(account);
 		return account;
 	}

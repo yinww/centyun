@@ -7,8 +7,7 @@
 		<id column="id" jdbcType="VARCHAR" property="id"/>
 		<result column="name" jdbcType="VARCHAR" property="name"/>
 		<result column="code" jdbcType="VARCHAR" property="code"/>
-		<result column="main_account_id" jdbcType="VARCHAR" property="mainAccountId"/>
-		<result column="main_account_name" jdbcType="VARCHAR" property="mainAccountName"/>
+		<result column="main_account" jdbcType="VARCHAR" property="mainAccount"/>
 		<result column="contact" jdbcType="VARCHAR" property="contact"/>
 		<result column="mobile" jdbcType="VARCHAR" property="mobile"/>
 		<result column="phone" jdbcType="VARCHAR" property="phone"/>
@@ -41,14 +40,24 @@
 		    <foreach collection="orders" item="order" separator=",">CONVERT(${order.key} USING gbk) ${order.value}</foreach>
 		</if>
 	</select>
+
+	<select id="getTenantById" parameterType="java.lang.String" resultMap="TenantResultMap">
+		select * from ac_tenant where id = #{id}
+	</select>
 	
 	<insert id="addTenant">
-	    insert into ac_tenant (id, name, code, contact, mobile, create_time)
-	    values(#{id}, #{name}, #{code}, #{contact}, #{mobile}, now())
+	    insert into ac_tenant (id, name, code, main_account, contact, mobile, phone, email, address, logo, type, status, note, creator, create_time)
+	    values(#{id}, #{name}, #{code}, #{mainAccount}, #{contact}, #{mobile}, #{phone}, #{email}, #{address}, #{logo}, #{type}, 0, #{note}, #{creator}, now())
 	</insert>
 	
 	<update id="updateTenant">
-	    update ac_tenant set name=#{name}, code=#{code}, contact=#{contact}, mobile=#{mobile}, edit_time=now()
+	    update ac_tenant set name=#{name}, code=#{code}, contact=#{contact}, mobile=#{mobile}, phone=#{phone}, email=#{email}
+	    , address=#{address}, logo=#{logo}, type=#{type}, note=#{note}, editor=#{editor} , edit_time=now()
 	    where id=#{id}
 	</update>
+	
+	<delete id="deleteTenant">
+	    delete from ac_tenant where id in
+	    <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
+	</delete>
 </mapper>

@@ -12,22 +12,29 @@ public class Account implements Serializable {
 	private int type; // 账号类型，0子账号, 1主账号
 	private String password;
 	private String displayName;
-	private String nickName;
+	private String realName;
 	private String tenantId;
 	private String tenantName;
 	private String mobile;
 	private String phone;
 	private String email;
+	private String head_img;
 	private int gender; // 性别，1男, 0女
 	private int status; // 状态，0被锁定, 1正常, 2已审核, 3已认证
 	private int grade; // 等级，0子账号, 1主账号
-	private String head_img;
 	private String creator;
 	private Date createTime;
 	private String editor;
 	private Date editTime;
 	
 	public Account() {
+	}
+
+	public Account(String id, String tenantId, String loginName, String creator) {
+		this.id = id;
+		this.tenantId = tenantId;
+		this.loginName = loginName;
+		this.creator = creator;
 	}
 
 	public String getId() {
@@ -70,12 +77,12 @@ public class Account implements Serializable {
 		this.displayName = displayName;
 	}
 
-	public String getNickName() {
-		return nickName;
+	public String getRealName() {
+		return realName;
 	}
 
-	public void setNickName(String nickName) {
-		this.nickName = nickName;
+	public void setRealName(String realName) {
+		this.realName = realName;
 	}
 
 	public String getTenantId() {
@@ -102,12 +109,28 @@ public class Account implements Serializable {
 		this.mobile = mobile;
 	}
 
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
 	public String getEmail() {
 		return email;
 	}
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getHead_img() {
+		return head_img;
+	}
+
+	public void setHead_img(String head_img) {
+		this.head_img = head_img;
 	}
 
 	public int getGender() {
@@ -132,14 +155,6 @@ public class Account implements Serializable {
 
 	public void setGrade(int grade) {
 		this.grade = grade;
-	}
-
-	public String getHead_img() {
-		return head_img;
-	}
-
-	public void setHead_img(String head_img) {
-		this.head_img = head_img;
 	}
 
 	public String getCreator() {
@@ -172,14 +187,6 @@ public class Account implements Serializable {
 
 	public void setEditTime(Date editTime) {
 		this.editTime = editTime;
-	}
-	
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
 	}
 
 	@Override

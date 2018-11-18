@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title th:text="#{Platform.Title}">CentYun</title>
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<title>Insert title here</title>
+<link rel="stylesheet" th:href="@{/css/img.css}">
+</head>
+<body>
+
+<input type="file" name="file" id="file" onchange="uploadFile(this);">
+<input type="hidden" name="logo" id="logo">
+<div id="img" class="upload"></div>
+
+<script th:src="@{/lib/jquery.min.js}"></script>
+<script th:src="@{/js/ajaxfileupload.js}"></script>
+<script>
+
+function uploadFile(ele){
+	$.ajaxFileUpload({
+		url :'/uploadFile',
+		secureuri : false,
+		fileElementId : 'file',
+		dataType : 'text',
+		type : 'post',
+		success : function(data){
+			data = data.replace(/<.*?>/ig, "");
+			data = $.parseJSON(data);
+			if (data.status == 200) {
+			  $("#logo").val(data.data);
+			  $("#img").html("<img src='"+data.data+"'>");
+			 // $("#delMtemplateImg").css("display","");
+		      //$('#upload').val('');
+			}
+		},
+		error:function(data){
+			console.log(data);
+			alert("upload fail");
+		}
+	});
+}
+
+/**
+ * 删除图片
+ */
+function delMtemplateImg(){
+	if(confirm(i18njs.company_add_confirm)){
+		$("#mtemplate").val("");
+		$("#banner_view_field img").remove();
+		$("#delMtemplateImg").css("display","none");
+	}
+}
+</script>
+</body>
+</html>

@@ -45,6 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		        .successHandler(accountAuthenticationSuccessHandler)
 		        .failureHandler(accountAuthenticationFailHander)
 		    .permitAll()
+		.and().headers().frameOptions().sameOrigin()
 		.and().authorizeRequests().antMatchers("/captcha-image", "/change-lang", "/login/**").permitAll()
 		    .anyRequest().access("@securityService.hasPermission(request, authentication)")  //必须经过认证以后才能访问
 		.and().csrf().disable();

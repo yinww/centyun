@@ -17,8 +17,8 @@ public class Tenant implements Serializable {
 	private String id;
 	private String name;
 	private String code;
-	private String mainAccountId;
-	private String mainAccountName;
+	private String mainAccount;
+	private String mainAccountPwd;
 	private String contact;
 	private String mobile;
 	private String phone;
@@ -61,20 +61,12 @@ public class Tenant implements Serializable {
 		this.code = code;
 	}
 
-	public String getMainAccountId() {
-		return mainAccountId;
+	public String getMainAccount() {
+		return mainAccount;
 	}
 
-	public void setMainAccountId(String mainAccountId) {
-		this.mainAccountId = mainAccountId;
-	}
-
-	public String getMainAccountName() {
-		return mainAccountName;
-	}
-
-	public void setMainAccountName(String mainAccountName) {
-		this.mainAccountName = mainAccountName;
+	public void setMainAccount(String mainAccount) {
+		this.mainAccount = mainAccount;
 	}
 
 	public String getContact() {
@@ -187,6 +179,14 @@ public class Tenant implements Serializable {
 
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
+	}
+
+	public String getMainAccountPwd() {
+		return mainAccountPwd;
+	}
+
+	public void setMainAccountPwd(String mainAccountPwd) {
+		this.mainAccountPwd = mainAccountPwd;
 	}
 
 	@Override

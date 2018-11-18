@@ -1,5 +1,6 @@
 package com.yinww.util.io;
 
+import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -24,6 +25,16 @@ public class IOUtil {
 		if(is != null) {
 			try {
 				is.close();
+			} catch (Exception e) {
+				log.error(e.getMessage(), e);
+			}
+		}
+	}
+
+	public static void close(BufferedReader reader) {
+		if(reader != null) {
+			try {
+				reader.close();
 			} catch (Exception e) {
 				log.error(e.getMessage(), e);
 			}

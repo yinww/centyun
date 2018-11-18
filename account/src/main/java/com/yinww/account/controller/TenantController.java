@@ -1,6 +1,8 @@
 package com.yinww.account.controller;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +25,8 @@ import com.yinww.account.domain.Tenant;
 import com.yinww.account.service.TenantService;
 import com.yinww.account.table.DTRequestParams;
 import com.yinww.account.table.DataTableResult;
+import com.yinww.util.CommonUtil;
+import com.yinww.web.core.constant.AppConstant;
 import com.yinww.web.core.constant.ResultEntity;
 
 @Controller
@@ -56,7 +60,7 @@ public class TenantController extends BaseController {
 	public ModelAndView index() {
 		ModelAndView model = new ModelAndView();
 		model.addObject("modules", getModules("/tenant/index.html"));
-        model.setViewName("index");
+        model.setViewName("tenant/tenant-index");
         return model;
 	}
 
@@ -75,14 +79,55 @@ public class TenantController extends BaseController {
         return model;
 	}
 
+	@RequestMapping(value = "/edit.html")
+	public ModelAndView edit(@RequestParam("id") String id) {
+		ModelAndView model = new ModelAndView();
+		model.addObject("modules", getModules("/tenant/index.html"));
+		Tenant tenant = tenantService.getTenantById(id);
+		model.addObject("tenant", tenant);
+        model.setViewName("tenant/tenant-edit");
+        return model;
+	}
+
+	@RequestMapping(value = "/view.html")
+	public ModelAndView view(@RequestParam("id") String id) {
+		ModelAndView model = new ModelAndView();
+		model.addObject("modules", getModules("/tenant/index.html"));
+		Tenant tenant = tenantService.getTenantById(id);
+		model.addObject("tenant", tenant);
+        model.setViewName("tenant/tenant-view");
+        return model;
+	}
+
 	@RequestMapping(value = "/save-tenant", method = RequestMethod.POST)
+	@ResponseBody
 	public Object saveTenant(Tenant tenant) {
-		log.info(tenant.toString());
 		try {
 			tenantService.saveTenant(tenant);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			return new ResultEntity(HttpStatus.BAD_REQUEST.value());
+			ResultEntity result = new ResultEntity();
+			result.setData(e.getMessage());
+			result.setStatus(HttpStatus.BAD_REQUEST.value());
+			return result;
+		}
+		return new ResultEntity(HttpStatus.OK.value());
+	}
+
+	@RequestMapping(value = "/delete-tenant", method = RequestMethod.POST)
+	@ResponseBody
+	public Object deleteTenant(String ids) {
+		if(!CommonUtil.isEmpty(ids)) {
+			try {
+				List<String> list = Arrays.asList(ids.split(AppConstant.COMMA));
+				tenantService.deleteTenant(list);
+			} catch (Exception e) {
+				log.error(e.getMessage(), e);
+				ResultEntity result = new ResultEntity();
+				result.setData(e.getMessage());
+				result.setStatus(HttpStatus.BAD_REQUEST.value());
+				return result;
+			}
 		}
 		return new ResultEntity(HttpStatus.OK.value());
 	}

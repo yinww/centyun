@@ -12,7 +12,7 @@ public class ProductController extends BaseController {
 	public ModelAndView index() {
 		ModelAndView model = new ModelAndView();
 		model.addObject("modules", getModules("/product/index.html"));
-        model.setViewName("product/index");
+        model.setViewName("product/product-index");
         return model;
 	}
 }

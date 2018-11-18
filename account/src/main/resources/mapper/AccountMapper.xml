@@ -9,7 +9,9 @@
 		<result column="type" jdbcType="INTEGER" property="type"/>
 		<result column="password" jdbcType="VARCHAR" property="password"/>
 		<result column="display_name" jdbcType="VARCHAR" property="displayName"/>
+		<result column="real_name" jdbcType="VARCHAR" property="realName"/>
 		<result column="tenant_id" jdbcType="VARCHAR" property="tenantId"/>
+		<result column="tenant_name" jdbcType="VARCHAR" property="tenantName"/>
 		<result column="mobile" jdbcType="VARCHAR" property="mobile"/>
 		<result column="phone" jdbcType="VARCHAR" property="phone"/>
 		<result column="email" jdbcType="VARCHAR" property="email"/>
@@ -24,7 +26,8 @@
 	</resultMap>
 	
 	<select id="getAccounts" resultMap="AccountResultMap">
-		select * from ac_account where tenant_id=#{tenantId}
+		select * from ac_account
+		<if test="tenantId != null">where tenant_id=#{tenantId}</if>
 	</select>
 	
 	<select id="getAccount" resultMap="AccountResultMap">
@@ -36,8 +39,13 @@
 	    values(#{id}, #{loginName}, #{type}, #{password}, #{displayName}, #{tenantId}, #{mobile}, #{phone}, #{email}, now())
 	</insert>
 	
+	<insert id="addMainAccount">
+	    insert into ac_account (id, login_name, type, password, display_name, tenant_id, status, grade, creator, create_time)
+	    values(#{id}, #{loginName}, 1, #{password}, #{loginName}, #{tenantId}, 1, 0, #{creator}, now())
+	</insert>
+	
 	<update id="updateAccount">
-	    update ac_account set display_name=#{displayName}, mobile=#{mobile}, edit_time=now()
+	    update ac_account set display_name=#{displayName}, mobile=#{mobile}, editor=#{editor}, edit_time=now()
 	    where id=#{id}
 	</update>
 </mapper>

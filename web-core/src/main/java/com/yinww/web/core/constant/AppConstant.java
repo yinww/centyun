@@ -24,8 +24,15 @@ public interface AppConstant {
 	String LOCALHOST = "localhost";
 	String EMPTY = "";
 	String DOT = ".";
+	String COMMA = ",";
 	
 	int DEFAULT_PAGE_START = 1;
 	int DEFAULT_PAGE_SIZE = 10;
+	
+	// file ext
+	String REG_FILE_EXT = "^.*?\\.(jpg|jpeg|bmp|gif|png|docx|doc|xlsx|xls|txt|zip|pptx|ppt|rar)$";
+	String REG_EXEL_EXT = "^.*?\\.(xlsx|xls)$";
+	String REG_CONTENT_EXT = "^.*?\\.(txt|html|htm|zip)$";
+	String REG_IMG_EXT = "^.*?\\.(jpg|jpeg|bmp|gif|png)$";
 
 }

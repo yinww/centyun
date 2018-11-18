@@ -18,4 +18,6 @@ public interface AccountMapper {
 
 	Account getAccount(@Param("id") String accountId);
 
+	void addMainAccount(Account account);
+
 }
