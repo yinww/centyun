@@ -110,6 +110,7 @@
 <script th:src="@{/lib/datatables.net/js/jquery.dataTables.min.js}"></script>
 <script th:src="@{/lib/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
 <script th:src="@{/lib/icheck/icheck.min.js}"></script>
+<script th:src="@{/js/datatables.js}"></script>
 
 <script>
   $(function () {
@@ -122,12 +123,7 @@
 	            "type": "POST",
 	            "dataSrc": 'data',
 	            "data" : function(data) { // 重新构造column参数
-	            	for (var i = 0; i < data.columns.length; i++) {
-	            		column = data.columns[i];
-	            		column.searchRegex = column.search.regex;
-	            		column.searchValue = column.search.value;
-	            		delete(column.search);
-	            	}
+	            	planify(data);
 	            }
 	        },
 	        "rowId": 'id',
@@ -155,7 +151,7 @@
             },{
             	"aTargets": -1, //最后一列 
                 "render": function (data, type) {
-                    return "<a href='/tenant/edit.html?id=" + data + "'>编辑</a> | <a href='/tenant/view.html?id=" + data + "'>查看</a> | <a href='#' onclick=\"deleteTenant('" + data +"')\">删除</a>";
+                    return "<a href='/tenant/view.html?id=" + data + "'>查看</a> | <a href='/tenant/edit.html?id=" + data + "'>编辑</a> | <a href='/account/index.html?tenantId=" + data + "'>账号</a> | <a href='#' onclick=\"deleteTenant('" + data +"')\">删除</a>";
                     //return "<button type=\"button\" class=\"btn\" data-toggle=\"tooltip\" title=\"编辑\" onclick=\"editTenant('" + data +"')\"><i class=\"fa fa-pencil\"></i></button> <button type=\"button\" class=\"btn\" data-toggle=\"tooltip\" title=\"删除\" onclick=\"deleteTenant('" + data +"')\"><i class=\"fa fa-trash-o\"></i></button>";
                 }
             },{

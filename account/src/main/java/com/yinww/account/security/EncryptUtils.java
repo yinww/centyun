@@ -69,12 +69,24 @@ public class EncryptUtils {
 		return null;
 	}
 	
+	private static String toDbField(String value) {
+		StringBuilder sb = new StringBuilder();
+		int length = value.length();
+		for (int i = 0; i < length; i++) {
+			char a = value.charAt(i);
+			sb.append(Character.isUpperCase(a) ? "_" + Character.toLowerCase(a) : a);
+		}
+		return sb.toString();
+	}
+	
 	public static void main(String[] args) {
+		String loginName = "loginName";
+		System.out.println(toDbField(loginName));
+		/*
 		String text = "123456";
 		String obfuscationCode = getObfuscationCode(text);
 		System.out.println(obfuscationCode);
 		System.out.println(encryptPwd(text));
-		/*
 		text = "1";
 		obfuscationCode = getObfuscationCode(text);
 		System.out.println(obfuscationCode);

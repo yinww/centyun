@@ -36,15 +36,16 @@
 
     <!-- Main content -->
     <section class="content container-fluid">
+        <input type="hidden" id="tenantId" th:value="${tenantId}">
           <div class="box box-primary">
             <div class="box-header">
               <h3 class="box-title">[[#{account.manage}]] <small>[[#{account.list}]]</small></h3>
             </div>
             <div class="box-tools">
-              <button type="button" class="btn btn-primary" id="addTenant"><i class="fa fa-plus"></i> <span th:text="#{common.add}">添加</span></button>
-              <button type="button" class="btn btn-primary" id="editTenant"><i class="fa fa-pencil"></i> <span th:text="#{common.edit}">编辑</span></button>
-              <button type="button" class="btn btn-primary" id="deleteTenant"><i class="fa fa-trash-o"></i> <span th:text="#{common.delete}">删除</span></button>
-              <button type="button" class="btn btn-primary" id="refreshTenant"><i class="fa fa-refresh"></i> <span th:text="#{common.refresh}">刷新</span></button>
+              <button type="button" class="btn btn-primary" id="addAccount"><i class="fa fa-plus"></i> <span th:text="#{common.add}">添加</span></button>
+              <button type="button" class="btn btn-primary" id="editAccount"><i class="fa fa-pencil"></i> <span th:text="#{common.edit}">编辑</span></button>
+              <button type="button" class="btn btn-primary" id="deleteAccount"><i class="fa fa-trash-o"></i> <span th:text="#{common.delete}">删除</span></button>
+              <button type="button" class="btn btn-primary" id="refreshAccount"><i class="fa fa-refresh"></i> <span th:text="#{common.refresh}">刷新</span></button>
             </div>
               
             <!-- /.box-header -->
@@ -55,10 +56,10 @@
                     <th width="20px"><input type="checkbox" class="icheckbox_minimal" id="all_checked"></th>
                     <th th:text="#{account.loginName}">登录名</th>
                     <th th:text="#{account.tenant}">所属租户</th>
-                    <th th:text="#{account.displayName}">姓名</th>
+                    <th th:text="#{account.type}">类型</th>
+                    <th th:text="#{account.displayName}">显示名</th>
+                    <th th:text="#{account.realName}">真实姓名</th>
                     <th th:text="#{account.mobile}">手机</th>
-                    <th th:text="#{account.phone}">电话</th>
-                    <th th:text="#{account.email}">邮箱</th>
                     <th th:text="#{common.operate}">操作</th>
                   </tr>
                 </thead>
@@ -92,7 +93,7 @@
                 <p>确认要删除选中的数据吗？</p>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-default pull-left" onclick="deleteTenantByIds()">确定</button>
+                <button type="button" class="btn btn-default pull-left" onclick="deleteAccountByIds()">确定</button>
                 <button type="button" class="btn btn-primary" data-dismiss="modal">放弃</button>
               </div>
             </div>
@@ -110,24 +111,22 @@
 <script th:src="@{/lib/datatables.net/js/jquery.dataTables.min.js}"></script>
 <script th:src="@{/lib/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
 <script th:src="@{/lib/icheck/icheck.min.js}"></script>
+<script th:src="@{/js/datatables.js}"></script>
 
 <script>
   $(function () {
 	  var i18n = "[[${session.SPRING_SECURITY_CONTEXT.authentication.principal.language == 'en_US' ? 'English.json' : 'Chinese.json'}]]";
+	  var tenantId = $("#tenantId").val();
+	  var url = (null == tenantId || '' == tenantId) ? "/account/accounts" : "/account/accounts?tenantId=" + tenantId;
 	  var table = $('#example').DataTable( {
 	        "processing": true,
 	        "serverSide": true,
 	        "ajax": {
-	            "url": "/tenant/tenants",
+	            "url": url,
 	            "type": "POST",
 	            "dataSrc": 'data',
 	            "data" : function(data) { // 重新构造column参数
-	            	for (var i = 0; i < data.columns.length; i++) {
-	            		column = data.columns[i];
-	            		column.searchRegex = column.search.regex;
-	            		column.searchValue = column.search.value;
-	            		delete(column.search);
-	            	}
+	            	planify(data);
 	            }
 	        },
 	        "rowId": 'id',
@@ -136,12 +135,12 @@
 	        ],
 	        "columns": [
 	            { "data": "id" },
-	            { "data": "name" },
-	            { "data": "code" },
-	            { "data": "contact" },
+	            { "data": "loginName" },
+	            { "data": "tenantName" },
+	            { "data": "type" },
+	            { "data": "displayName" },
+	            { "data": "realName" },
 	            { "data": "mobile" },
-	            { "data": "phone" },
-	            { "data": "email" },
 	            { "data": "id" }
 	        ],
 	        "language": {
@@ -153,9 +152,14 @@
                 },
                 "aTargets": 0
             },{
+                "render": function (data, type, row) {
+                    return data == 1 ? "主账号" : "子账号";
+                },
+                "aTargets": 3
+            },{
             	"aTargets": -1, //最后一列 
                 "render": function (data, type) {
-                    return "<a href='/tenant/edit.html?id=" + data + "'>编辑</a> | <a href='/tenant/view.html?id=" + data + "'>查看</a> | <a href='#' onclick=\"deleteTenant('" + data +"')\">删除</a>";
+                    return "<a href='/account/edit.html?id=" + data + "'>编辑</a> | <a href='/account/view.html?id=" + data + "'>查看</a> | <a href='#' onclick=\"deleteAccount('" + data +"')\">删除</a>";
                     //return "<button type=\"button\" class=\"btn\" data-toggle=\"tooltip\" title=\"编辑\" onclick=\"editTenant('" + data +"')\"><i class=\"fa fa-pencil\"></i></button> <button type=\"button\" class=\"btn\" data-toggle=\"tooltip\" title=\"删除\" onclick=\"deleteTenant('" + data +"')\"><i class=\"fa fa-trash-o\"></i></button>";
                 }
             },{
@@ -175,23 +179,23 @@
 	        $('[name=ckb-jobid]:checkbox').prop('checked',this.checked);//checked为true时为默认显示的状态
 	    });
 	    
-	    $("#addTenant").click(function(){
-	        window.location.href="/tenant/add.html";
+	    $("#addAccount").click(function(){
+	        window.location.href="/account/add.html";
 	    });
 
-	    $("#editTenant").click(function(){
+	    $("#editAccount").click(function(){
 	        var ids = [];
 	        $('input[name="ckb-jobid"]:checked').each(function(){ 
 	            ids.push($(this).val());
 	        });
 	        if(ids.length > 0) {
-	        	window.location.href="/tenant/add.html?ids=" + ids.join(",");
+	        	window.location.href="/account/add.html?ids=" + ids.join(",");
 	        } else {
 	        	alert("请选择要编辑的数据");
 	        }
 	    });
 
-	    $("#deleteTenant").click(function(){
+	    $("#deleteAccount").click(function(){
 	        var ids = [];
 	        $('input[name="ckb-jobid"]:checked').each(function(){ 
 	        	ids.push($(this).val());
@@ -209,23 +213,22 @@
 	        }
 	    });
 
-	    $("#refreshTenant").click(function(){
-	    	// table.ajax.reload();
+	    $("#refreshAccount").click(function(){
 	    	table.draw(false);
 	    });
 	    
 	    $('#example tbody').on('dblclick', 'tr', function (e, settings, json) {
 	    	var id = this.id;
 	        console.log(id);
-	        window.location.href = "/tenant/view.html?id=" + id;
+	        window.location.href = "/account/view.html?id=" + id;
 	    } );
   });
   
-  function editTenant(data) {
+  function editAccount(data) {
 	  alert("要编辑数据" + data);
   }
   
-  function deleteTenant(data) {
+  function deleteAccount(data) {
 	  $("#ids").val(data);
 	  $('#modal-default').modal({
 		  show: true,
@@ -233,16 +236,16 @@
 	  });
   }
   
-  function deleteTenantByIds() {
+  function deleteAccountByIds() {
 	var ids = $("#ids").val();
 	$.ajax({
-		url : '/tenant/delete-tenant',
+		url : '/account/delete-account',
 		type : 'post',
 		dataType : 'json',
 		data : {'ids' : ids},
 		success : function(data) {
 			if (data.status == 200) {
-				window.location.href = "/tenant/index.html";
+				window.location.href = "/account/index.html";
 			} else {
 				alert(data.msg);
 			}

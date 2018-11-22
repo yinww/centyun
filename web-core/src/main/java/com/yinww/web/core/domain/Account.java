@@ -18,7 +18,7 @@ public class Account implements Serializable {
 	private String mobile;
 	private String phone;
 	private String email;
-	private String head_img;
+	private String headImg;
 	private int gender; // 性别，1男, 0女
 	private int status; // 状态，0被锁定, 1正常, 2已审核, 3已认证
 	private int grade; // 等级，0子账号, 1主账号
@@ -125,12 +125,12 @@ public class Account implements Serializable {
 		this.email = email;
 	}
 
-	public String getHead_img() {
-		return head_img;
+	public String getHeadImg() {
+		return headImg;
 	}
 
-	public void setHead_img(String head_img) {
-		this.head_img = head_img;
+	public void setHeadImg(String headImg) {
+		this.headImg = headImg;
 	}
 
 	public int getGender() {

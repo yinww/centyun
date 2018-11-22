@@ -14,7 +14,7 @@ public class Product implements Serializable {
 	private String code;
 	private String version;
 	private Date publishTime; // 上线时间
-	private String manager; // 产品负责人
+	private String productManager; // 产品负责人
 	private String note;
 	private int status; // 状态： 1正常，2下线停用，3升级后成了旧版，但仍然可以，4升级成后了旧版，不再可以
 	private String creator;
@@ -65,12 +65,12 @@ public class Product implements Serializable {
 		this.publishTime = publishTime;
 	}
 
-	public String getManager() {
-		return manager;
+	public String getProductManager() {
+		return productManager;
 	}
 
-	public void setManager(String manager) {
-		this.manager = manager;
+	public void setProductManager(String productManager) {
+		this.productManager = productManager;
 	}
 
 	public String getNote() {

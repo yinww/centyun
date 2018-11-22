@@ -15,10 +15,12 @@ public interface TenantMapper {
 	
 	void updateTenant(Tenant tenant);
 
-	Tenant getTenantById(@Param("id")String id);
+	Tenant getTenantById(@Param("id") String id);
 
 	List<Tenant> getTenants(@Param("searchValue") String searchValue, @Param("orders") List<KeyValuePair> orders);
 
 	void deleteTenant(@Param("ids") List<String> ids);
+
+	List<KeyValuePair> getAllTenants();
 
 }

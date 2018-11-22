@@ -88,7 +88,7 @@ create table ac_product
    code                 varchar(64),
    version              varchar(32),
    publish_time         datetime,
-   manager              varchar(64),
+   product_manager      varchar(64),
    note                 varchar(255),
    status               tinyint comment '1正常，2下线停用，3升级后成了旧版，但仍然可以，4升级成后了旧版，不再可以',
    creator              varchar(32),

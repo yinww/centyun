@@ -41,6 +41,11 @@ public class TenantService {
 		return pageInfo;
 	}
 
+	public List<KeyValuePair> getAllTenants() {
+		List<KeyValuePair> tenants = tenantMapper.getAllTenants();
+		return tenants;
+	}
+
 	@Transactional
 	public void saveTenant(Tenant tenant) {
 		// 获取当前用户

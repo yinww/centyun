@@ -25,18 +25,31 @@
 		<result column="edit_time" jdbcType="TIMESTAMP" javaType="java.util.Date" property="editTime"/>
 	</resultMap>
 	
-	<select id="getAccounts" resultMap="AccountResultMap">
-		select * from ac_account
-		<if test="tenantId != null">where tenant_id=#{tenantId}</if>
+	<select id="getPageAccounts" resultMap="AccountResultMap">
+		select a.*, t.name tenant_name from ac_account a left join ac_tenant t on a.tenant_id=t.id
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+		    <if test="searchValue != null">
+		        ( a.login_name like concat('%', #{searchValue}, '%')
+		        or a.display_name like concat('%', #{searchValue}, '%')
+		        or t.name like concat('%', #{searchValue}, '%')
+		        or a.mobile like concat('%', #{searchValue}, '%')
+		        or a.real_name like concat('%', #{searchValue}, '%') )
+		    </if>
+		    <if test="tenantId != null">and a.tenant_id=#{tenantId}</if>
+		</trim>
+		<if test="orders != null">
+		    order by
+		    <foreach collection="orders" item="order" separator=",">CONVERT(${order.key} USING gbk) ${order.value}</foreach>
+		</if>
 	</select>
 	
-	<select id="getAccount" resultMap="AccountResultMap">
-		select * from ac_account where id=#{id}
+	<select id="getAccountById" resultMap="AccountResultMap">
+		select a.*, t.id tenant_id, t.name tenant_name from ac_account a left join ac_tenant t on a.tenant_id=t.id where a.id=#{id}
 	</select>
 	
 	<insert id="addAccount">
-	    insert into ac_account (id, login_name, type, password, display_name, tenant_id, mobile, phone, email, create_time)
-	    values(#{id}, #{loginName}, #{type}, #{password}, #{displayName}, #{tenantId}, #{mobile}, #{phone}, #{email}, now())
+	    insert into ac_account (id, login_name, type, password, display_name, tenant_id, mobile, phone, email, creator, create_time)
+	    values(#{id}, #{loginName}, #{type}, #{password}, #{displayName}, #{tenantId}, #{mobile}, #{phone}, #{email}, #{creator}, now())
 	</insert>
 	
 	<insert id="addMainAccount">
@@ -45,7 +58,13 @@
 	</insert>
 	
 	<update id="updateAccount">
-	    update ac_account set display_name=#{displayName}, mobile=#{mobile}, editor=#{editor}, edit_time=now()
+	    update ac_account set display_name=#{displayName}, real_name=#{realName}, mobile=#{mobile}, phone=#{phone}, email=#{email}
+	    , head_img=#{headImg}, gender=#{gender}, editor=#{editor}, edit_time=now()
 	    where id=#{id}
 	</update>
+	
+	<delete id="deleteAccount">
+	    delete from ac_account where id in
+	    <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
+	</delete>
 </mapper>

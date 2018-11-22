@@ -1,3 +1,3 @@
 @charset "UTF-8";
-.upload img{width:60px;height:60px}
+.upload img{width:60px;height:60px;box-shadow: 0px 1px 1px 1px #AAA3A3;}
 span.required{color: red;}

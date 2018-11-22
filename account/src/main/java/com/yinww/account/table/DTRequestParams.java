@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.yinww.util.CommonUtil;
 import com.yinww.web.core.constant.AppConstant;
 
 public class DTRequestParams {
@@ -102,7 +103,7 @@ public class DTRequestParams {
 		for (Map<Order, String> orders : order) {
 			Object col = cols.get(Integer.parseInt(orders.get(Order.column).toString()));
 			Object dir = orders.get(Order.dir);
-			result.add(new KeyValuePair(col, dir));
+			result.add(new KeyValuePair(CommonUtil.toDbField((String)col), dir));
 		}
 		return result;
 	}

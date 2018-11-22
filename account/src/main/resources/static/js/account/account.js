@@ -1,4 +1,4 @@
-function saveTenant(saveType) {
+function saveAccount(saveType) {
 	if (checkForm()) {
 		var arr = {};
 		arr.name = $('#name').val();
@@ -28,13 +28,13 @@ function saveTenant(saveType) {
 			}
 		}
 		$.ajax({
-			url : '/tenant/save-tenant',
+			url : '/account/save-account',
 			type : 'post',
 			dataType : 'json',
 			data : arr,
 			success : function(data) {
 				if (data.status == 200) {
-					window.location.href = saveType == 1 ? "/tenant/add.html" : "/tenant/index.html";
+					window.location.href = saveType == 1 ? "/account/add.html" : "/account/index.html";
 				} else {
 					$('#errMsg').html(data.msg);
 				}
@@ -100,6 +100,6 @@ function gotopage(page) {
 	window.location.href = page;
 }
 
-function editTenant() {
-	window.location.href="/tenant/edit.html?id="+$('#id').val();
+function editAccount() {
+	window.location.href="/account/edit.html?id="+$('#id').val();
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.yinww.account.table.KeyValuePair;
 import com.yinww.web.core.domain.Account;
 
 @Mapper
@@ -14,10 +15,12 @@ public interface AccountMapper {
 	
 	void updateAccount(Account account);
 
-	List<Account> getAccounts(@Param("tenantId") String tenantId);
-
-	Account getAccount(@Param("id") String accountId);
+	Account getAccountById(@Param("id") String accountId);
 
 	void addMainAccount(Account account);
+
+	List<Account> getPageAccounts(@Param("tenantId") String tenantId, @Param("searchValue") String searchValue, @Param("orders") List<KeyValuePair> orders);
+
+	void deleteAccount(List<String> ids);
 
 }

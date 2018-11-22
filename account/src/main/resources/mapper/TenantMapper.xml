@@ -60,4 +60,8 @@
 	    delete from ac_tenant where id in
 	    <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
 	</delete>
+
+	<select id="getAllTenants" resultType="com.yinww.account.table.KeyValuePair">
+		select id `key`, name value from ac_tenant order by CONVERT(name USING gbk)
+	</select>
 </mapper>

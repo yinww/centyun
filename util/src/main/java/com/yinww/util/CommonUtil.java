@@ -66,4 +66,23 @@ public class CommonUtil {
 		return flag;
 	}
 
+	/**
+	 * java变量命名规范的字符串转换为db字段命名规范的字符串， 如loginName 转换为 login_name
+	 * @param value
+	 * @return
+	 */
+	public static String toDbField(String value) {
+		if(isEmpty(value)) {
+			return null;
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		int length = value.length();
+		for (int i = 0; i < length; i++) {
+			char a = value.charAt(i);
+			sb.append(Character.isUpperCase(a) ? "_" + Character.toLowerCase(a) : a);
+		}
+		return sb.toString();
+	}
+
 }
