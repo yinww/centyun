@@ -5,6 +5,8 @@ import java.util.Date;
 
 import org.apache.ibatis.type.Alias;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 /**
  * Charge 充值
  * 
@@ -21,13 +23,18 @@ public class Charge implements Serializable {
 	private String tenantName;
 	private String productId;
 	private String productName;
-	private float money; // 充值金额
+	private double money; // 充值金额
 	private int quota; // 充值额度
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
 	private Date expiredTime;
+	private String note;
 	private int status;
-	private String chargeManagerId;
-	private String chargeManagerName;
+	private String chargeManager;
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
 	private Date chargeTime;
+	private String editor;
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
+	private Date editTime;
 	
 	public Charge() {
 	}
@@ -72,11 +79,11 @@ public class Charge implements Serializable {
 		this.productName = productName;
 	}
 
-	public float getMoney() {
+	public double getMoney() {
 		return money;
 	}
 
-	public void setMoney(float money) {
+	public void setMoney(double money) {
 		this.money = money;
 	}
 
@@ -104,20 +111,12 @@ public class Charge implements Serializable {
 		this.status = status;
 	}
 
-	public String getChargeManagerId() {
-		return chargeManagerId;
+	public String getChargeManager() {
+		return chargeManager;
 	}
 
-	public void setChargeManagerId(String chargeManagerId) {
-		this.chargeManagerId = chargeManagerId;
-	}
-
-	public String getChargeManagerName() {
-		return chargeManagerName;
-	}
-
-	public void setChargeManagerName(String chargeManagerName) {
-		this.chargeManagerName = chargeManagerName;
+	public void setChargeManager(String chargeManager) {
+		this.chargeManager = chargeManager;
 	}
 
 	public Date getChargeTime() {
@@ -127,7 +126,31 @@ public class Charge implements Serializable {
 	public void setChargeTime(Date chargeTime) {
 		this.chargeTime = chargeTime;
 	}
+
+	public String getEditor() {
+		return editor;
+	}
+
+	public void setEditor(String editor) {
+		this.editor = editor;
+	}
+
+	public Date getEditTime() {
+		return editTime;
+	}
+
+	public void setEditTime(Date editTime) {
+		this.editTime = editTime;
+	}
 	
+	public String getNote() {
+		return note;
+	}
+
+	public void setNote(String note) {
+		this.note = note;
+	}
+
 	@Override
 	public String toString() {
 		return "Charge{tenantName=" + tenantName + ", money=" + money + ", expiredTime=" + expiredTime + "}";

@@ -21,6 +21,11 @@ account.login['zh_CN']={
 	loginError: '登录出错',
 	saveError: '保存出错',
 	deleteError: '删除出错',
+	productStatus1: '正常',
+	productStatus2: '下线停用',
+	productStatus3: '可用，但已有新版',
+	chargeStatus1: '充值成功',
+	chargeStatus2: '取消充值',
 	delete: '删除',
 	datatableI18n: 'Chinese.json'
 };
@@ -34,6 +39,11 @@ account.login['en_US']={
 	loginError: 'Login Error',
 	saveError: 'Save Error',
 	deleteError: 'Delete Error',
+	productStatus1: 'Normal',
+	productStatus2: 'Stop',
+	productStatus3: 'Deprecated',
+	chargeStatus1: 'Charge Success',
+	chargeStatus2: 'Cancel Charge',
 	delete: 'Delete',
 	datatableI18n: 'English.json'
 };

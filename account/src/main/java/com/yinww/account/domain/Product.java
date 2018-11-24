@@ -5,6 +5,8 @@ import java.util.Date;
 
 import org.apache.ibatis.type.Alias;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Alias("product")
 public class Product implements Serializable {
 	private static final long serialVersionUID = -2981023802310876879L;
@@ -13,13 +15,17 @@ public class Product implements Serializable {
 	private String name;
 	private String code;
 	private String version;
+
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
 	private Date publishTime; // 上线时间
 	private String productManager; // 产品负责人
 	private String note;
 	private int status; // 状态： 1正常，2下线停用，3升级后成了旧版，但仍然可以，4升级成后了旧版，不再可以
 	private String creator;
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
 	private Date createTime;
 	private String editor;
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
 	private Date editTime;
 	
 	public Product() {

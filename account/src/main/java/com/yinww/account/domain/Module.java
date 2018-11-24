@@ -4,6 +4,8 @@ import java.util.Date;
 
 import org.apache.ibatis.type.Alias;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Alias("module")
 public class Module {
 	private String id;
@@ -14,6 +16,7 @@ public class Module {
 	private String url;
 	private int orderNo;
 	private int status;
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
 	private Date createTime;
 
 	private boolean active;

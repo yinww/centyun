@@ -2,6 +2,11 @@ package com.yinww.account.domain;
 
 import java.util.Date;
 
+import org.apache.ibatis.type.Alias;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+@Alias("consume")
 public class Consume {
 
 	private String id;
@@ -9,7 +14,9 @@ public class Consume {
 	private String tenantName;
 	private String productId;
 	private String productName;
-	private String num;
+	private double money; // 金额
+	private int amount; // 额度
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date occurTime;
 	private String ipStr;
 	private Long ip;
@@ -54,12 +61,20 @@ public class Consume {
 		this.productName = productName;
 	}
 
-	public String getNum() {
-		return num;
+	public double getMoney() {
+		return money;
 	}
 
-	public void setNum(String num) {
-		this.num = num;
+	public void setMoney(double money) {
+		this.money = money;
+	}
+
+	public int getAmount() {
+		return amount;
+	}
+
+	public void setAmount(int amount) {
+		this.amount = amount;
 	}
 
 	public Date getOccurTime() {

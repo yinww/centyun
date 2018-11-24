@@ -8,7 +8,7 @@
 		<result column="action" jdbcType="VARCHAR" property="action"/>
 		<result column="module" jdbcType="VARCHAR" property="module"/>
 		<result column="content" jdbcType="VARCHAR" property="content"/>
-		<result column="ip" jdbcType="INTEGER" javaType="long" property="ip"/>
+		<result column="ip" jdbcType="BIGINT" javaType="long" property="ip"/>
 		<result column="operator" jdbcType="VARCHAR" property="operator"/>
 		<result column="operate_time" jdbcType="TIMESTAMP" javaType="java.util.Date" property="operateTime"/>
 	</resultMap>
@@ -19,6 +19,6 @@
 	</insert>
 	
 	<select id="getAudits" resultMap="AuditResultMap">
-		select * from ac_audit
+		select * from ac_audit order by operate_time desc
 	</select>
 </mapper>

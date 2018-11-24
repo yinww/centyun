@@ -12,6 +12,7 @@
   <link rel="stylesheet" th:href="@{/lib/adminlte/css/skins/skin-blue.min.css}">
   <link rel="stylesheet" th:href="@{/lib/datatables.net-bs/css/dataTables.bootstrap.min.css}">
   <link rel="stylesheet" th:href="@{/lib/icheck/minimal/minimal.css}">
+  <link rel="stylesheet" th:href="@{/css/base.css}">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -38,13 +39,13 @@
     <section class="content container-fluid">
           <div class="box box-primary">
             <div class="box-header">
-              <h3 class="box-title">[[#{product.manage}]] <small>[[#{product.list}]]</small></h3>
+              <h3 class="box-title">[[#{product.manage}]]</h3>
             </div>
             <div class="box-tools">
-              <button type="button" class="btn btn-primary" id="addProduct"><i class="fa fa-plus"></i> <span th:text="#{common.add}">添加</span></button>
-              <button type="button" class="btn btn-primary" id="editProduct"><i class="fa fa-pencil"></i> <span th:text="#{common.edit}">编辑</span></button>
-              <button type="button" class="btn btn-primary" id="deleteProduct"><i class="fa fa-trash-o"></i> <span th:text="#{common.delete}">删除</span></button>
-              <button type="button" class="btn btn-primary" id="refreshProduct"><i class="fa fa-refresh"></i> <span th:text="#{common.refresh}">刷新</span></button>
+              <button type="button" class="btn btn-primary tablebtn" id="addProduct"><i class="fa fa-plus"></i> <span th:text="#{common.add}">添加</span></button>
+              <button type="button" class="btn btn-primary tablebtn" id="editProduct"><i class="fa fa-pencil"></i> <span th:text="#{common.edit}">编辑</span></button>
+              <button type="button" class="btn btn-primary tablebtn" id="deleteProduct"><i class="fa fa-trash-o"></i> <span th:text="#{common.delete}">删除</span></button>
+              <button type="button" class="btn btn-primary tablebtn" id="refreshProduct"><i class="fa fa-refresh"></i> <span th:text="#{common.refresh}">刷新</span></button>
             </div>
               
             <!-- /.box-header -->
@@ -58,7 +59,7 @@
                     <th th:text="#{product.version}">版本</th>
                     <th th:text="#{product.publishTime}">上线时间</th>
                     <th th:text="#{product.productManager}">产品负责人</th>
-                    <th th:text="#{product.status}">状态</th>
+                    <th th:text="#{common.status}">状态</th>
                     <th th:text="#{common.operate}">操作</th>
                   </tr>
                 </thead>
@@ -148,6 +149,11 @@
                     return "<div align='center'><input type='checkbox' class='icheckbox_minimal' name='ckb-jobid' value='" + data + "'></div>";
                 },
                 "aTargets": 0
+            },{
+                "render": function (data, type, row) {
+                    return getI18n('productStatus' + data);
+                },
+                "aTargets": 6
             },{
             	"aTargets": -1, //最后一列 
                 "render": function (data, type) {

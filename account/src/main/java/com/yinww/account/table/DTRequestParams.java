@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.yinww.util.CommonUtil;
 import com.yinww.web.core.constant.AppConstant;
 
 public class DTRequestParams {
@@ -103,9 +102,37 @@ public class DTRequestParams {
 		for (Map<Order, String> orders : order) {
 			Object col = cols.get(Integer.parseInt(orders.get(Order.column).toString()));
 			Object dir = orders.get(Order.dir);
-			result.add(new KeyValuePair(CommonUtil.toDbField((String)col), dir));
+			result.add(new KeyValuePair(toDbField((String)col), dir));
 		}
 		return result;
+	}
+
+	private String toDbField(String value) {
+		if(value == null || value.trim().length() == 0) {
+			return null;
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		int length = value.length();
+		for (int i = 0; i < length; i++) {
+			char a = value.charAt(i);
+			sb.append(Character.isUpperCase(a) ? "_" + Character.toLowerCase(a) : a);
+		}
+		String field = sb.toString();
+		if(field.equals("tenant_name")) {
+			return "t.name";
+		} else if(field.equals("product_name")) {
+			return "p.name";
+		} else if(field.equals("type")) {
+			return "a.type";
+		} else if(field.equals("mobile")) {
+			return "a.mobile";
+		} else if(field.equals("note")) {
+			return "a.note";
+		} else if(field.equals("status")) {
+			return "a.status";
+		}
+		return sb.toString();
 	}
 	
 	public String getSearchValue() {

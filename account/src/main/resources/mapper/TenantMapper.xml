@@ -25,14 +25,14 @@
 	</resultMap>
 	
 	<select id="getTenants" resultMap="TenantResultMap">
-		select * from ac_tenant
+		select * from ac_tenant a
 		<where>
 		    <if test="searchValue != null">
-		        name like concat('%', #{searchValue}, '%')
-		        or code like concat('%', #{searchValue}, '%')
-		        or contact like concat('%', #{searchValue}, '%')
-		        or mobile like concat('%', #{searchValue}, '%')
-		        or email like concat('%', #{searchValue}, '%')
+		        a.name like concat('%', #{searchValue}, '%')
+		        or a.code like concat('%', #{searchValue}, '%')
+		        or a.contact like concat('%', #{searchValue}, '%')
+		        or a.mobile like concat('%', #{searchValue}, '%')
+		        or a.email like concat('%', #{searchValue}, '%')
 		    </if>
 		</where>
 		<if test="orders != null">

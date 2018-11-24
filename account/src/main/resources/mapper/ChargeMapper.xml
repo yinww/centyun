@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yinww.account.mapper.ChargeMapper">
+	<resultMap id="ChargeResultMap" type="com.yinww.account.domain.Charge">
+		<id column="id" jdbcType="VARCHAR" property="id"/>
+		<result column="tenant_id" jdbcType="VARCHAR" property="tenantId"/>
+		<result column="tenant_name" jdbcType="VARCHAR" property="tenantName"/>
+		<result column="product_id" jdbcType="VARCHAR" property="productId"/>
+		<result column="product_name" jdbcType="VARCHAR" property="productName"/>
+		<result column="money" jdbcType="NUMERIC" javaType="double" property="money"/>
+		<result column="quota" jdbcType="INTEGER" property="quota"/>
+		<result column="expired_time" jdbcType="TIMESTAMP" javaType="java.util.Date" property="expiredTime"/>
+		<result column="note" jdbcType="VARCHAR" property="note"/>
+		<result column="status" jdbcType="INTEGER" property="status"/>
+		<result column="charge_manager" jdbcType="VARCHAR" property="chargeManager"/>
+		<result column="charge_time" jdbcType="TIMESTAMP" javaType="java.util.Date" property="chargeTime"/>
+		<result column="editor" jdbcType="VARCHAR" property="editor"/>
+		<result column="edit_time" jdbcType="TIMESTAMP" javaType="java.util.Date" property="editTime"/>
+	</resultMap>
+	
+	<select id="getPageCharges" resultMap="ChargeResultMap">
+		select a.*, t.name tenant_name, p.name product_name from ac_charge a
+		left join ac_tenant t on a.tenant_id=t.id left join ac_product p on a.product_id=p.id
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+		    <if test="searchValue != null">
+		        ( t.name like concat('%', #{searchValue}, '%')
+		        or p.name like concat('%', #{searchValue}, '%')
+		        or quota = #{searchValue} )
+		    </if>
+		    <if test="tenantId != null">and a.tenant_id=#{tenantId}</if>
+		</trim>
+		<if test="orders != null">
+		    order by
+		    <foreach collection="orders" item="order" separator=",">CONVERT(${order.key} USING gbk) ${order.value}</foreach>
+		</if>
+	</select>
+	
+	<select id="getChargeById" resultMap="ChargeResultMap">
+		select c.*, t.name tenant_name, p.name product_name from ac_charge c 
+		left join ac_tenant t on c.tenant_id=t.id left join ac_product p on c.product_id=p.id
+		where c.id=#{id}
+	</select>
+	
+	<insert id="addCharge">
+	    insert into ac_charge (id, tenant_id, product_id, money, quota, expired_time, note, status, charge_manager, charge_time)
+	    values(#{id}, #{tenantId}, #{productId}, #{money}, #{quota}, #{expiredTime}, #{note}, 1, #{chargeManager}, now())
+	</insert>
+	
+	<update id="updateStatus">
+	    update ac_charge set status=#{status}, editor=#{editor}, edit_time=now() where id=#{id}
+	</update>
+	
+</mapper>

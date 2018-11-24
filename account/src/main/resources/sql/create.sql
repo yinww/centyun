@@ -89,7 +89,7 @@ create table ac_product
    version              varchar(32),
    publish_time         datetime,
    product_manager      varchar(64),
-   note                 varchar(255),
+   note                 varchar(256),
    status               tinyint comment '1正常，2下线停用，3升级后成了旧版，但仍然可以，4升级成后了旧版，不再可以',
    creator              varchar(32),
    create_time          datetime,
@@ -111,9 +111,12 @@ create table ac_charge
    money                decimal(12,2),
    quota                int,
    expired_time         datetime,
-   status               tinyint,
+   note                 varchar(256),
+   status               tinyint comment '1 充值成功 2 取消充值',
    charge_manager       varchar(32),
    charge_time          datetime,
+   editor               varchar(32),
+   edit_time            datetime,
    primary key (id)
 )
 ENGINE = InnoDB
@@ -154,3 +157,19 @@ create table ac_audit
 )
 ENGINE = InnoDB
 DEFAULT CHARSET = utf8;
+
+/*==============================================================*/
+/* Table: ac_consume                                            */
+/*==============================================================*/
+create table ac_consume
+(
+   id                   varchar(32) not null,
+   tenant_id            varchar(32),
+   product_id           varchar(32),
+   amount               int,
+   money                decimal(12,2),
+   occur_time           datetime,
+   ip                   bigint,
+   ip_str               varchar(15),
+   primary key (id)
+);

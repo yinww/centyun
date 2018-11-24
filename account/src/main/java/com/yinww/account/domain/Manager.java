@@ -8,6 +8,8 @@ import org.apache.ibatis.type.Alias;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Alias("manager")
 public class Manager implements Serializable, UserDetails {
 	private static final long serialVersionUID = -4465842418724220179L;
@@ -20,9 +22,12 @@ public class Manager implements Serializable, UserDetails {
 	private String email;
 	private int status; // 1正常， 2锁定
 	private String creator;
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
 	private Date createTime;
 	private String editor;
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
 	private Date editTime;
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
 	private Date passwordTime; // 设置密码的时间
 	private String language;
 	

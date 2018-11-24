@@ -10,6 +10,7 @@
   <link rel="stylesheet" th:href="@{/lib/Ionicons/css/ionicons.min.css}">
   <link rel="stylesheet" th:href="@{/lib/adminlte/css/adminlte.min.css}">
   <link rel="stylesheet" th:href="@{/lib/adminlte/css/skins/skin-blue.min.css}">
+  <link rel="stylesheet" th:href="@{/lib/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css}">
   <link rel="stylesheet" th:href="@{/css/base.css}">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -46,96 +47,45 @@
               <div class="box-body">
               <div class="row">
                 <div class="form-group col-md-6">
-                  <label for="name" class="col-sm-3 control-label"><span th:text="#{product.name}">Name</span> <span class="required">*</span></label>
+                  <label class="col-sm-3 control-label"><span th:text="#{product.name}">Name</span> <span class="required">*</span></label>
                   <div class="col-sm-9">
-                    <input type="text" class="form-control" name="name" id="name" th:placeholder="#{product.name}">
+                    <input type="text" class="form-control" id="name" th:placeholder="#{product.name}">
                   </div>
                 </div>
                 <div class="form-group col-md-6">
-                  <label for="code" class="col-sm-3 control-label"><span th:text="#{product.code}">Code</span> <span class="required">*</span></label>
+                  <label class="col-sm-3 control-label"><span th:text="#{product.code}">Code</span> <span class="required">*</span></label>
                   <div class="col-sm-9">
-                    <input type="text" class="form-control" name="code" id="code" th:placeholder="#{product.code}">
-                  </div>
-                </div>
-              </div>
-          <!-- /.row -->
-              <div class="row">
-                <div class="form-group col-md-6">
-                  <label for="mainAccount" class="col-sm-3 control-label"><span th:text="#{tenant.mainAccount}">Main Account</span> <span class="required">*</span></label>
-                  <div class="col-sm-9">
-                    <input type="text" class="form-control" name="mainAccount" id="mainAccount" th:placeholder="#{tenant.mainAccount}">
-                  </div>
-                </div>
-                <div class="form-group col-md-6">
-                  <label for="contact" class="col-sm-3 control-label"><span th:text="#{tenant.mainAccountPwd}">Main Account Password</span> <span class="required">*</span></label>
-                  <div class="col-sm-9">
-                    <input type="text" class="form-control" name="mainAccountPwd" id="mainAccountPwd" th:placeholder="#{tenant.mainAccountPwd}">
+                    <input type="text" class="form-control" id="code" th:placeholder="#{product.code}">
                   </div>
                 </div>
               </div>
           <!-- /.row -->
               <div class="row">
                 <div class="form-group col-md-6">
-                  <label for="type" class="col-sm-3 control-label" th:text="#{tenant.type}">Type</label>
+                  <label class="col-sm-3 control-label"><span th:text="#{product.version}">version</span> <span class="required">*</span></label>
                   <div class="col-sm-9">
-                    <select class="form-control" name="type" id="type">
-                      <option value="0" th:text="#{tenant.type.0}">个人</option>
-                      <option value="1" th:text="#{tenant.type.1}" selected="selected">企业</option>
-                      <option value="2" th:text="#{tenant.type.2}">个体工商户</option>
-                      <option value="3" th:text="#{tenant.type.3}">政府</option>
-                      <option value="4" th:text="#{tenant.type.4}">媒体</option>
-                      <option value="5" th:text="#{tenant.type.5}">其他组织</option>
-                    </select>
+                    <input type="text" class="form-control" id="version" th:placeholder="#{product.version}">
                   </div>
                 </div>
                 <div class="form-group col-md-6">
-                  <label for="contact" class="col-sm-3 control-label" th:text="#{tenant.contact}">Contact</label>
+                  <label class="col-sm-3 control-label"><span th:text="#{product.publishTime}">Publish Time</span> <span class="required">*</span></label>
                   <div class="col-sm-9">
-                    <input type="text" class="form-control" name="contact" id="contact" th:placeholder="#{tenant.contact}">
+                    <input type="text" class="form-control" id="publishTime" th:placeholder="#{product.publishTime}">
                   </div>
                 </div>
               </div>
+          <!-- /.row -->
               <div class="row">
                 <div class="form-group col-md-6">
-                  <label for="mobile" class="col-sm-3 control-label" th:text="#{tenant.mobile}">Mobile</label>
+                  <label class="col-sm-3 control-label"><span th:text="#{product.productManager}">Product Manager</span> <span class="required">*</span></label>
                   <div class="col-sm-9">
-                    <input type="text" class="form-control" name="mobile" id="mobile" th:placeholder="#{tenant.mobile}">
+                    <input type="text" class="form-control" id="productManager" th:placeholder="#{product.productManager}">
                   </div>
                 </div>
                 <div class="form-group col-md-6">
-                  <label for="phone" class="col-sm-3 control-label" th:text="#{tenant.phone}">Phone</label>
+                  <label class="col-sm-3 control-label" th:text="#{product.note}">note</label>
                   <div class="col-sm-9">
-                    <input type="text" class="form-control" name="phone" id="phone" th:placeholder="#{tenant.phone}">
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="form-group col-md-6">
-                  <label for="email" class="col-sm-3 control-label" th:text="#{tenant.email}">Email</label>
-                  <div class="col-sm-9">
-                    <input type="email" class="form-control" name="email" id="email" th:placeholder="#{tenant.email}">
-                  </div>
-                </div>
-                <div class="form-group col-md-6">
-                  <label for="address" class="col-sm-3 control-label" th:text="#{tenant.address}">Address</label>
-                  <div class="col-sm-9">
-                    <input type="text" class="form-control" name="address" id="address" th:placeholder="#{tenant.address}">
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="form-group col-md-6">
-                  <label for="logo" class="col-sm-3 control-label" th:text="#{tenant.logo}">Logo</label>
-                  <div class="col-sm-9">
-                    <input type="file" name="file" id="file" accept="image/*" onchange="uploadLogo();">
-                    <input type="hidden" name="logo" id="logo">
-                    <div id="img" class="upload"></div>
-                  </div>
-                </div>
-                <div class="form-group col-md-6">
-                  <label for="note" class="col-sm-3 control-label" th:text="#{tenant.note}">note</label>
-                  <div class="col-sm-9">
-                    <textarea class="form-control" rows="3" name="note" id="note" th:placeholder="#{tenant.note}"></textarea>
+                    <textarea class="form-control" rows="3" id="note" th:placeholder="#{product.note}"></textarea>
                   </div>
                 </div>
               </div>
@@ -149,9 +99,9 @@
               <div class="row">
                 <div class="form-group col-md-6">
                   <div class="col-sm-offset-3 col-sm-9">
-                    <button type="button" id="save" class="btn btn-primary" th:text="#{common.save}" onclick="saveTenant(0)">保存</button>
-                    <button type="button" id="saveadd" class="btn btn-default" th:text="#{common.saveadd}" onclick="saveTenant(1)">保存并继续添加</button>
-                    <button type="button" class="btn btn-default" th:text="#{common.return}" onclick="gotopage('/tenant/index.html');">返回</button>
+                    <button type="button" id="save" class="btn btn-primary" th:text="#{common.save}" onclick="saveProduct(0)">保存</button>
+                    <button type="button" id="saveadd" class="btn btn-default tablebtn" th:text="#{common.saveadd}" onclick="saveProduct(1)">保存并继续添加</button>
+                    <button type="button" class="btn btn-default tablebtn" th:text="#{common.return}" onclick="gotopage('/product/index.html');">返回</button>
                   </div>
                 </div>
               </div>
@@ -178,7 +128,20 @@
 <script type="text/javascript" th:src="@{/lib/sha256.min.js}"></script>
 <script th:src="@{/lib/bootstrap/js/bootstrap.min.js}"></script>
 <script th:src="@{/lib/adminlte/js/adminlte.min.js}"></script>
-<script th:src="@{/lib/ajaxfileupload.js}"></script>
+<script th:src="@{/lib/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js}"></script>
+<script th:src="@{/lib/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js}"></script>
 <script th:src="@{/js/product/product.js}"></script>
+<script type="text/javascript">
+$(function () {
+	$('#publishTime').datetimepicker({
+		autoclose: true,
+		todayBtn: true,
+		todayHighlight: true,
+		//minuteStep: 1, // default is 5
+		format: "yyyy-mm-dd hh:ii",  //"yyyy-mm-dd hh:ii:ss"
+		language: "zh-CN"
+	})
+});
+</script>
 </body>
 </html>

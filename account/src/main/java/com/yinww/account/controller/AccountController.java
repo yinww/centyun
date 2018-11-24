@@ -42,9 +42,8 @@ public class AccountController extends BaseController {
 	public ModelAndView index(@RequestParam(required=false) String tenantId) {
 		ModelAndView model = new ModelAndView();
 		model.addObject("modules", getModules("/account/index.html"));
-		if(!CommonUtil.isEmpty(tenantId)) {
-			model.addObject("tenantId", tenantId);
-		}
+		model.addObject("tenantId", CommonUtil.isEmpty(tenantId) ? "" : tenantId);
+		model.addObject("tenants", tenantService.getAllTenants());
         model.setViewName("account/account-index");
         return model;
 	}

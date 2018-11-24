@@ -4,6 +4,8 @@ import java.util.Date;
 
 import org.apache.ibatis.type.Alias;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Alias("audit")
 public class Audit {
 	private String id;
@@ -13,6 +15,7 @@ public class Audit {
 	private Long ip;
 	private String ipStr;
 	private String operator;
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
 	private Date operateTime;
 
 	public String getId() {

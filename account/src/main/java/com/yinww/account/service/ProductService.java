@@ -55,4 +55,8 @@ public class ProductService {
 		productMapper.deleteProduct(ids);
 	}
 
+	public Object getAvailableProducts() {
+		return productMapper.getAvailableProducts();
+	}
+
 }

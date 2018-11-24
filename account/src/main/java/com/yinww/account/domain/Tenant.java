@@ -5,6 +5,8 @@ import java.util.Date;
 
 import org.apache.ibatis.type.Alias;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 /**
  * Tenant 租户
  * @author yinww
@@ -30,8 +32,10 @@ public class Tenant implements Serializable {
 	private String note;
 	private String accessKey;
 	private String creator;
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
 	private Date createTime;
 	private String editor;
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
 	private Date editTime;
 	
 	public Tenant() {

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yinww.account.mapper.ConsumeMapper">
+	<resultMap id="ConsumeResultMap" type="consume">
+		<id column="id" jdbcType="VARCHAR" property="id"/>
+		<result column="tenant_id" jdbcType="VARCHAR" property="tenantId"/>
+		<result column="tenant_name" jdbcType="VARCHAR" property="tenantName"/>
+		<result column="product_id" jdbcType="VARCHAR" property="productId"/>
+		<result column="product_name" jdbcType="VARCHAR" property="productName"/>
+		<result column="money" jdbcType="NUMERIC" javaType="double" property="money"/>
+		<result column="amount" jdbcType="INTEGER" property="amount"/>
+		<result column="occur_time" jdbcType="TIMESTAMP" javaType="java.util.Date" property="occurTime"/>
+		<result column="ip" jdbcType="BIGINT" javaType="long" property="ip"/>
+		<result column="ip_str" jdbcType="VARCHAR" property="ipStr"/>
+	</resultMap>
+	
+	<select id="getPageConsumes" resultMap="ConsumeResultMap">
+		select c.*, t.name tenant_name, p.name product_name from ac_consume c 
+		left join ac_tenant t on c.tenant_id=t.id left join ac_product p on c.product_id=p.id
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+		    <if test="searchValue != null">
+		        ( t.name like concat('%', #{searchValue}, '%')
+		        or p.name like concat('%', #{searchValue}, '%')
+		        or c.ip_str like concat('%', #{searchValue}, '%')
+		        or c.amount = #{searchValue} )
+		    </if>
+		    <if test="tenantId != null">and c.tenant_id=#{tenantId}</if>
+		</trim>
+		<if test="orders != null">
+		    order by
+		    <foreach collection="orders" item="order" separator=",">CONVERT(${order.key} USING gbk) ${order.value}</foreach>
+		</if>
+	</select>
+	
+	<select id="getConsumeById" resultMap="ConsumeResultMap">
+		select c.*, t.name tenant_name, p.name product_name from ac_consume c 
+		left join ac_tenant t on c.tenant_id=t.id left join ac_product p on c.product_id=p.id
+		where c.id=#{id}
+	</select>
+	
+	<insert id="addConsume">
+	    insert into ac_consume (id, tenant_id, product_id, money, amount, occur_time, ip, ip_str, charge_time)
+	    values(#{id}, #{tenantId}, #{productId}, #{money}, #{amount}, #{occurTime}, #{ip}, #{ipStr}, now())
+	</insert>
+</mapper>

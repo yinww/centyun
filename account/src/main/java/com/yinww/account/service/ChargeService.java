@@ -23,11 +23,11 @@ public class ChargeService {
 	@Autowired
 	private ChargeMapper chargeMapper;
 
-	public PageInfo<Charge> getCharges(DTRequestParams dtParams) {
+	public PageInfo<Charge> getPageCharges(DTRequestParams dtParams, String tenantId) {
 		PageHelper.startPage(dtParams.getStart(), dtParams.getLength());
 		String searchValue = dtParams.getSearchValue();
 		List<KeyValuePair> orders = dtParams.getOrders();
-		List<Charge> charges = chargeMapper.getCharges(StringUtils.isEmpty(searchValue) ? null: searchValue, 
+		List<Charge> charges = chargeMapper.getPageCharges(tenantId, StringUtils.isEmpty(searchValue) ? null: searchValue, 
 				CollectionUtils.isEmpty(orders) ? null : orders);
 		PageInfo<Charge> pageInfo = new PageInfo<>(charges);
 		return pageInfo;
@@ -41,7 +41,7 @@ public class ChargeService {
 		// 获取当前用户
 		Manager manager = (Manager)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		charge.setId(UUIDGenerator.getUUID());
-		charge.setChargeManagerId(manager.getLoginName());
+		charge.setChargeManager(manager.getLoginName());
 		chargeMapper.addCharge(charge);
 	}
 

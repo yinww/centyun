@@ -21,4 +21,6 @@ public interface ProductMapper {
 
 	void deleteProduct(@Param("ids") List<String> ids);
 
+	List<KeyValuePair> getAvailableProducts();
+
 }

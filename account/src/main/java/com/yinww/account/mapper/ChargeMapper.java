@@ -11,7 +11,7 @@ import com.yinww.account.table.KeyValuePair;
 @Mapper
 public interface ChargeMapper {
 
-	List<Charge> getCharges(@Param("searchValue") String searchValue, @Param("orders") List<KeyValuePair> orders);
+	List<Charge> getPageCharges(@Param("tenantId") String tenantId, @Param("searchValue") String searchValue, @Param("orders") List<KeyValuePair> orders);
 
 	Charge getChargeById(@Param("id") String id);
 

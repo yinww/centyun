@@ -19,13 +19,13 @@
 	</resultMap>
 	
 	<select id="getPageProducts" resultMap="ProductResultMap">
-		select * from ac_product
+		select a.* from ac_product a
 		<trim prefix="WHERE" prefixOverrides="AND |OR ">
 		    <if test="searchValue != null">
-		        name like concat('%', #{searchValue}, '%')
-		        or code like concat('%', #{searchValue}, '%')
-		        or product_manager concat('%', #{searchValue}, '%')
-		        or version like concat('%', #{searchValue}, '%')
+		        a.name like concat('%', #{searchValue}, '%')
+		        or a.code like concat('%', #{searchValue}, '%')
+		        or a.product_manager like concat('%', #{searchValue}, '%')
+		        or a.version like concat('%', #{searchValue}, '%')
 		    </if>
 		</trim>
 		<if test="orders != null">
@@ -40,12 +40,12 @@
 	
 	<insert id="addProduct">
 	    insert into ac_product (id, name, code, version, publish_time, product_manager, note, status, creator, create_time)
-	    values(#{id}, #{name}, #{code}, #{version}, #{publishTime}, #{productManager}, #{note}, #{status}, #{creator}, now())
+	    values(#{id}, #{name}, #{code}, #{version}, #{publishTime}, #{productManager}, #{note}, 1, #{creator}, now())
 	</insert>
 	
 	<update id="updateProduct">
 	    update ac_product set name=#{name}, code=#{code}, version=#{version}, publish_time=#{publishTime}, product_manager=#{productManager}
-	    , note=#{note}, status=#{status}, editor=#{editor}, edit_time=now()
+	    , note=#{note}, editor=#{editor}, edit_time=now()
 	    where id=#{id}
 	</update>
 	
@@ -53,4 +53,8 @@
 	    delete from ac_product where id in
 	    <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
 	</delete>
+
+	<select id="getAvailableProducts" resultType="com.yinww.account.table.KeyValuePair">
+		select id `key`, concat(name, '(', version, ')') value from ac_product where status=1 order by CONVERT(name USING gbk), publish_time desc
+	</select>
 </mapper>
