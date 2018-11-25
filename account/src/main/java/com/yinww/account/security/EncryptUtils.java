@@ -31,8 +31,8 @@ public class EncryptUtils {
 	
 	/**
 	 * 验证原始内容和加密后的密码是否匹配
-	 * @param text
-	 * @param encryptCode
+	 * @param text, 经过sh256加密过后的内容
+	 * @param encryptCode, 最终加密的密文
 	 * @return
 	 */
 	public static boolean valid(String text, String encryptCode) {
@@ -69,19 +69,10 @@ public class EncryptUtils {
 		return null;
 	}
 	
-	private static String toDbField(String value) {
-		StringBuilder sb = new StringBuilder();
-		int length = value.length();
-		for (int i = 0; i < length; i++) {
-			char a = value.charAt(i);
-			sb.append(Character.isUpperCase(a) ? "_" + Character.toLowerCase(a) : a);
-		}
-		return sb.toString();
-	}
-	
 	public static void main(String[] args) {
-		String loginName = "loginName";
-		System.out.println(toDbField(loginName));
+		String a = "lOuy1c3H1u867ArZ4FKeOMLsh93gIeQH1CmX8oypBvtNiqcxHqNGNgFFYrQ3k2HFlJFtDv2IaVPH1/JdeVpmsbE2zqlUcs5dMTOvKjjCfDs=";
+		boolean valid = valid(SHA256Util.getSHA256("asdf6789"), a);
+		System.out.println(valid);
 		/*
 		String text = "123456";
 		String obfuscationCode = getObfuscationCode(text);

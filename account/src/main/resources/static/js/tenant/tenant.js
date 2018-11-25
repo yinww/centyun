@@ -17,11 +17,13 @@ function saveTenant(saveType) {
 			arr.mainAccount = $('#mainAccount').val(); // 新增必须有主账号
 			if (null == arr.mainAccount || '' == arr.mainAccount) {
 				$('#errMsg').html(getI18n('mainAccountCantEmpty'));
+				$('#mainAccount').focus();
 				return false;
 			}
 			var mainAccountPwd = $('#mainAccountPwd').val(); // 新增必须有主账号密码
 			if (null == mainAccountPwd || '' == mainAccountPwd) {
 				$('#errMsg').html(getI18n('mainAccountPwdCantEmpty'));
+				$('#mainAccountPwd').focus();
 				return false;
 			} else {
 				arr.mainAccountPwd = sha256(mainAccountPwd);
@@ -50,13 +52,15 @@ function saveTenant(saveType) {
 function checkForm() {
 	var username = $('#name').val();
 	if (null == username || '' == username) {
-		$('#errMsg').html(getI18n('userCantEmpty'));
+		$('#errMsg').html(getI18n('nameCantEmpty'));
+		$('#name').focus();
 		return false;
 	}
 
 	var code = $('#code').val();
 	if (null == code || '' == code) {
 		$('#errMsg').html(getI18n('codeCantEmpty'));
+		$('#code').focus();
 		return false;
 	}
 	return true;

@@ -27,6 +27,7 @@
 		    <if test="searchValue != null">
 		        ( t.name like concat('%', #{searchValue}, '%')
 		        or p.name like concat('%', #{searchValue}, '%')
+		        or a.note like concat('%', #{searchValue}, '%')
 		        or quota = #{searchValue} )
 		    </if>
 		    <if test="tenantId != null">and a.tenant_id=#{tenantId}</if>
@@ -49,7 +50,8 @@
 	</insert>
 	
 	<update id="updateStatus">
-	    update ac_charge set status=#{status}, editor=#{editor}, edit_time=now() where id=#{id}
+	    update ac_charge set status=#{status}, editor=#{editor}, edit_time=now() where id in
+	    <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
 	</update>
 	
 </mapper>

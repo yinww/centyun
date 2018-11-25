@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.github.pagehelper.PageInfo;
+import com.yinww.account.constant.AccountConstant;
 import com.yinww.account.domain.Charge;
 import com.yinww.account.service.ChargeService;
 import com.yinww.account.service.ProductService;
@@ -32,6 +35,7 @@ import com.yinww.account.table.DataTableResult;
 import com.yinww.util.CommonUtil;
 import com.yinww.web.core.constant.AppConstant;
 import com.yinww.web.core.constant.ResultEntity;
+import com.yinww.web.core.exception.BadRequestException;
 
 @Controller
 @RequestMapping(value = "/charge")
@@ -69,10 +73,9 @@ public class ChargeController extends BaseController {
 	public ModelAndView add(@RequestParam(required=false, value="tenantId") String tenantId) {
 		ModelAndView model = new ModelAndView();
 		model.addObject("modules", getModules("/charge/index.html"));
-		if(CommonUtil.isEmpty(tenantId)) {
-			model.addObject("tenants", tenantService.getAllTenants());
-		} else {
-			model.addObject("tenant", tenantService.getTenantById(tenantId));
+		model.addObject("tenants", tenantService.getAllTenants());
+		if(!CommonUtil.isEmpty(tenantId)) {
+			model.addObject("tenantId", tenantId);
 		}
 		model.addObject("products", productService.getAvailableProducts());
         model.setViewName("charge/charge-add");
@@ -91,9 +94,15 @@ public class ChargeController extends BaseController {
 
 	@RequestMapping(value = "/save-charge", method = RequestMethod.POST)
 	@ResponseBody
-	public Object saveCharge(Charge charge) {
+	public Object saveCharge(Charge charge, HttpServletRequest request) {
 		try {
 			chargeService.saveCharge(charge);
+		} catch (BadRequestException e) {
+			log.error(e.getMessage(), e);
+			ResultEntity result = new ResultEntity();
+			result.setData(getMessage(e.getMessage(), request));
+			result.setStatus(HttpStatus.BAD_REQUEST.value());
+			return result;
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			ResultEntity result = new ResultEntity();
@@ -104,13 +113,19 @@ public class ChargeController extends BaseController {
 		return new ResultEntity(HttpStatus.OK.value());
 	}
 
-	@RequestMapping(value = "/update-status", method = RequestMethod.POST)
+	@RequestMapping(value = "/delete-charge", method = RequestMethod.POST)
 	@ResponseBody
-	public Object updateStatus(String ids, int status) {
+	public Object updateStatus(String ids, HttpServletRequest request) {
 		if(!CommonUtil.isEmpty(ids)) {
 			try {
 				List<String> list = Arrays.asList(ids.split(AppConstant.COMMA));
-				chargeService.updateStatus(list, status);
+				chargeService.updateStatus(list, AccountConstant.CHARGE_STATUS_DELETED); // 2 取消充值
+			} catch (BadRequestException e) {
+				log.error(e.getMessage(), e);
+				ResultEntity result = new ResultEntity();
+				result.setData(getMessage(e.getMessage(), request));
+				result.setStatus(HttpStatus.BAD_REQUEST.value());
+				return result;
 			} catch (Exception e) {
 				log.error(e.getMessage(), e);
 				ResultEntity result = new ResultEntity();

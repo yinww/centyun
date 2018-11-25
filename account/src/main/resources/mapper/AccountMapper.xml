@@ -48,13 +48,13 @@
 	</select>
 	
 	<insert id="addAccount">
-	    insert into ac_account (id, login_name, type, password, display_name, tenant_id, mobile, phone, email, creator, create_time)
-	    values(#{id}, #{loginName}, #{type}, #{password}, #{displayName}, #{tenantId}, #{mobile}, #{phone}, #{email}, #{creator}, now())
+	    insert into ac_account (id, login_name, type, password, display_name, tenant_id, mobile, phone, email, status, creator, create_time)
+	    values(#{id}, #{loginName}, #{type}, #{password}, #{displayName}, #{tenantId}, #{mobile}, #{phone}, #{email}, 1, #{creator}, now())
 	</insert>
 	
 	<insert id="addMainAccount">
-	    insert into ac_account (id, login_name, type, password, display_name, tenant_id, status, grade, creator, create_time)
-	    values(#{id}, #{loginName}, 1, #{password}, #{loginName}, #{tenantId}, 1, 0, #{creator}, now())
+	    insert into ac_account (id, login_name, type, password, display_name, tenant_id, mobile, phone, email, status, grade, creator, create_time)
+	    values(#{id}, #{loginName}, 1, #{password}, #{loginName}, #{tenantId}, #{mobile}, #{phone}, #{email}, 1, 0, #{creator}, now())
 	</insert>
 	
 	<update id="updateAccount">
@@ -63,8 +63,13 @@
 	    where id=#{id}
 	</update>
 	
-	<delete id="deleteAccount">
-	    delete from ac_account where id in
+	<update id="updateStatus">
+	    update ac_account set status=#{status}, editor=#{editor}, edit_time=now() where id in
+	    <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
+	</update>
+	
+	<delete id="repasswd">
+	    update ac_account set password=#{passwd} where id in
 	    <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
 	</delete>
 </mapper>

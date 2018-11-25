@@ -32,6 +32,7 @@
 		        or a.code like concat('%', #{searchValue}, '%')
 		        or a.contact like concat('%', #{searchValue}, '%')
 		        or a.mobile like concat('%', #{searchValue}, '%')
+		        or a.phone like concat('%', #{searchValue}, '%')
 		        or a.email like concat('%', #{searchValue}, '%')
 		    </if>
 		</where>
@@ -56,10 +57,10 @@
 	    where id=#{id}
 	</update>
 	
-	<delete id="deleteTenant">
-	    delete from ac_tenant where id in
+	<update id="updateStatus">
+	    update ac_tenant set status=#{status}, editor=#{editor}, edit_time=now() where id in
 	    <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
-	</delete>
+	</update>
 
 	<select id="getAllTenants" resultType="com.yinww.account.table.KeyValuePair">
 		select id `key`, name value from ac_tenant order by CONVERT(name USING gbk)

@@ -3,6 +3,8 @@ package com.yinww.account.controller;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.github.pagehelper.PageInfo;
+import com.yinww.account.security.EncryptUtils;
 import com.yinww.account.service.AccountService;
 import com.yinww.account.service.TenantService;
 import com.yinww.account.table.DTRequestParams;
@@ -25,6 +28,7 @@ import com.yinww.util.CommonUtil;
 import com.yinww.web.core.constant.AppConstant;
 import com.yinww.web.core.constant.ResultEntity;
 import com.yinww.web.core.domain.Account;
+import com.yinww.web.core.exception.BadRequestException;
 
 @Controller
 @RequestMapping(value = "/account")
@@ -66,10 +70,9 @@ public class AccountController extends BaseController {
 	public ModelAndView add(@RequestParam(required=false, value="tenantId") String tenantId) {
 		ModelAndView model = new ModelAndView();
 		model.addObject("modules", getModules("/account/index.html"));
-		if(CommonUtil.isEmpty(tenantId)) {
-			model.addObject("tenants", tenantService.getAllTenants());
-		} else {
-			model.addObject("tenant", tenantService.getTenantById(tenantId));
+		model.addObject("tenants", tenantService.getAllTenants());
+		if(!CommonUtil.isEmpty(tenantId)) {
+			model.addObject("tenantId", tenantId);
 		}
         model.setViewName("account/account-add");
         return model;
@@ -97,9 +100,15 @@ public class AccountController extends BaseController {
 
 	@RequestMapping(value = "/save-account", method = RequestMethod.POST)
 	@ResponseBody
-	public Object saveAccount(Account account) {
+	public Object saveAccount(Account account, HttpServletRequest request) {
 		try {
 			accountService.saveAccount(account);
+		} catch (BadRequestException e) {
+			log.error(e.getMessage(), e);
+			ResultEntity result = new ResultEntity();
+			result.setData(getMessage(e.getMessage(), request));
+			result.setStatus(HttpStatus.BAD_REQUEST.value());
+			return result;
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			ResultEntity result = new ResultEntity();
@@ -112,11 +121,17 @@ public class AccountController extends BaseController {
 
 	@RequestMapping(value = "/delete-account", method = RequestMethod.POST)
 	@ResponseBody
-	public Object deleteAccount(String ids) {
+	public Object deleteAccount(String ids, HttpServletRequest request) {
 		if(!CommonUtil.isEmpty(ids)) {
 			try {
 				List<String> list = Arrays.asList(ids.split(AppConstant.COMMA));
 				accountService.deleteAccount(list);
+			} catch (BadRequestException e) {
+				log.error(e.getMessage(), e);
+				ResultEntity result = new ResultEntity();
+				result.setData(getMessage(e.getMessage(), request));
+				result.setStatus(HttpStatus.BAD_REQUEST.value());
+				return result;
 			} catch (Exception e) {
 				log.error(e.getMessage(), e);
 				ResultEntity result = new ResultEntity();
@@ -126,6 +141,30 @@ public class AccountController extends BaseController {
 			}
 		}
 		return new ResultEntity(HttpStatus.OK.value());
+	}
+
+	@RequestMapping(value = "/repasswd", method = RequestMethod.POST)
+	@ResponseBody
+	public Object repasswd(@RequestParam("ids") String ids, @RequestParam("pwd") String pwd, HttpServletRequest request) {
+		if(!CommonUtil.isEmpty(ids)) {
+			try {
+				List<String> list = Arrays.asList(ids.split(AppConstant.COMMA));
+				accountService.repasswd(list, EncryptUtils.encrypt(pwd));
+			} catch (BadRequestException e) {
+				log.error(e.getMessage(), e);
+				ResultEntity result = new ResultEntity();
+				result.setData(getMessage(e.getMessage(), request));
+				result.setStatus(HttpStatus.BAD_REQUEST.value());
+				return result;
+			} catch (Exception e) {
+				log.error(e.getMessage(), e);
+				ResultEntity result = new ResultEntity();
+				result.setData(e.getMessage());
+				result.setStatus(HttpStatus.BAD_REQUEST.value());
+				return result;
+			}
+		}
+		return new ResultEntity(HttpStatus.OK.value(), getMessage("common.reasswdSuccess", request));
 	}
 
 }

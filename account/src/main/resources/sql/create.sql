@@ -26,6 +26,7 @@ create table ac_tenant
 )
 ENGINE = InnoDB
 DEFAULT CHARSET = utf8;
+create unique index idxuk_tenant_name on ac_tenant (name);
 
 /*==============================================================*/
 /* Table: ac_account                                            */
@@ -44,7 +45,7 @@ create table ac_account
    email                varchar(64),
    head_img             varchar(128),
    gender               tinyint comment '1男, 0女',
-   status               tinyint comment '0被锁定, 1正常, 2已审核, 3已认证',
+   status               tinyint comment '0已注册, 1已审核, 2已认证, 3已冻结, 4已注销',
    grade                tinyint comment '0初级, 1....',
    creator              varchar(32),
    create_time          datetime,
@@ -54,6 +55,7 @@ create table ac_account
 )
 ENGINE = InnoDB
 DEFAULT CHARSET = utf8;
+create unique index idxuk_account_name on ac_account (login_name);
 
 /*==============================================================*/
 /* Table: ac_manager                                            */
@@ -77,6 +79,7 @@ create table ac_manager
 )
 ENGINE = InnoDB
 DEFAULT CHARSET = utf8;
+create unique index idxuk_manager_name on ac_manager (login_name);
 
 /*==============================================================*/
 /* Table: ac_product                                            */
@@ -99,6 +102,7 @@ create table ac_product
 )
 ENGINE = InnoDB
 DEFAULT CHARSET = utf8;
+create unique index idxuk_productr on ac_product (name, code, version);
 
 /*==============================================================*/
 /* Table: ac_charge                                             */

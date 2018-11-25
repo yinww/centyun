@@ -11,6 +11,7 @@ import org.springframework.util.StringUtils;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.yinww.account.constant.AccountConstant;
 import com.yinww.account.domain.Manager;
 import com.yinww.account.domain.Tenant;
 import com.yinww.account.mapper.AccountMapper;
@@ -21,6 +22,7 @@ import com.yinww.account.table.KeyValuePair;
 import com.yinww.util.CommonUtil;
 import com.yinww.util.UUIDGenerator;
 import com.yinww.web.core.domain.Account;
+import com.yinww.web.core.exception.BadRequestException;
 
 @Service
 public class TenantService {
@@ -50,12 +52,18 @@ public class TenantService {
 	public void saveTenant(Tenant tenant) {
 		// 获取当前用户
 		Manager manager = (Manager)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if(manager == null) {
+			throw new BadRequestException(AccountConstant.AUTH_FAIL);
+		}
 		if(CommonUtil.isEmpty(tenant.getId())) {
 			tenant.setId(UUIDGenerator.getUUID());
 			tenant.setCreator(manager.getLoginName());
 			tenantMapper.addTenant(tenant);
 			Account account = new Account(UUIDGenerator.getUUID(), tenant.getId(), tenant.getMainAccount(), manager.getLoginName());
 			account.setPassword(EncryptUtils.encrypt(tenant.getMainAccountPwd()));
+			account.setMobile(tenant.getMobile());
+			account.setPhone(tenant.getPhone());
+			account.setEmail(tenant.getEmail());
 			accountMapper.addMainAccount(account);
 		} else {
 			tenant.setEditor(manager.getLoginName());
@@ -68,6 +76,10 @@ public class TenantService {
 	}
 
 	public void deleteTenant(List<String> ids) {
-		tenantMapper.deleteTenant(ids);
+		Manager manager = (Manager)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if(manager == null) {
+			throw new BadRequestException(AccountConstant.AUTH_FAIL);
+		}
+		tenantMapper.updateStatus(ids, AccountConstant.TENANT_STATUS_DELETED, manager.getLoginName());
 	}
 }

@@ -10,6 +10,7 @@ import org.springframework.util.StringUtils;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.yinww.account.constant.AccountConstant;
 import com.yinww.account.domain.Manager;
 import com.yinww.account.domain.Product;
 import com.yinww.account.mapper.ProductMapper;
@@ -17,6 +18,7 @@ import com.yinww.account.table.DTRequestParams;
 import com.yinww.account.table.KeyValuePair;
 import com.yinww.util.CommonUtil;
 import com.yinww.util.UUIDGenerator;
+import com.yinww.web.core.exception.BadRequestException;
 
 @Service
 public class ProductService {
@@ -41,6 +43,9 @@ public class ProductService {
 	public void saveProduct(Product product) {
 		// 获取当前用户
 		Manager manager = (Manager)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if(manager == null) {
+			throw new BadRequestException(AccountConstant.AUTH_FAIL);
+		}
 		if(CommonUtil.isEmpty(product.getId())) {
 			product.setId(UUIDGenerator.getUUID());
 			product.setCreator(manager.getLoginName());
@@ -52,7 +57,11 @@ public class ProductService {
 	}
 
 	public void deleteProduct(List<String> ids) {
-		productMapper.deleteProduct(ids);
+		Manager manager = (Manager)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if(manager == null) {
+			throw new BadRequestException(AccountConstant.AUTH_FAIL);
+		}
+		productMapper.updateStatus(ids, AccountConstant.PRODUCT_STATUS_OFFLINE, manager.getLoginName());
 	}
 
 	public Object getAvailableProducts() {

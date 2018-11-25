@@ -21,6 +21,8 @@ public interface AccountMapper {
 
 	List<Account> getPageAccounts(@Param("tenantId") String tenantId, @Param("searchValue") String searchValue, @Param("orders") List<KeyValuePair> orders);
 
-	void deleteAccount(List<String> ids);
+	void updateStatus(@Param("ids") List<String> ids, @Param("status") int status, @Param("editor") String editor);
+
+	void repasswd(@Param("ids") List<String> ids, @Param("passwd") String passwd);
 
 }

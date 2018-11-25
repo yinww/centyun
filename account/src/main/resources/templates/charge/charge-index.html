@@ -44,7 +44,7 @@
             </div>
             <div class="box-tools">
               <button type="button" class="btn btn-primary tablebtn" id="addCharge"><i class="fa fa-plus"></i> <span th:text="#{common.add}">添加</span></button>
-              <button type="button" class="btn btn-primary tablebtn tablebtn" id="deleteCharge"><i class="fa fa-trash-o"></i> <span th:text="#{common.delete}">删除</span></button>
+              <button type="button" class="btn btn-primary tablebtn tablebtn" id="deleteCharge"><i class="fa fa-remove"></i> <span th:text="#{charge.cancel}">取消</span></button>
               <button type="button" class="btn btn-primary" id="refreshCharge"><i class="fa fa-refresh"></i> <span th:text="#{common.refresh}">刷新</span></button>
               <label class="tenant" th:text="#{common.tenant}"></label> <select class="tenant-sm" id="type" onchange="updateTable()">
                 <option value="" th:text="#{common.pleaseSelect}">Please Select</option>
@@ -159,6 +159,11 @@
                 },
                 "aTargets": 0
             },{
+                "render": function (data, type) {
+                    return data.toFixed(2);
+                },
+                "aTargets": 3
+            },{
                 "render": function (data, type, row) {
                     return getI18n('chargeStatus' + data);
                 },
@@ -166,7 +171,7 @@
             },{
             	"aTargets": -1, //最后一列 
                 "render": function (data, type) {
-                    return "<a href='/charge/view.html?id=" + data + "'>查看</a> | <a href='/charge/edit.html?id=" + data + "'>编辑</a> | <a href='#' onclick=\"deleteCharge('" + data +"')\">删除</a>";
+                    return "<a href='/charge/view.html?id=" + data + "'>查看</a> | <a href='/charge/edit.html?id=" + data + "'>编辑</a> | <a href='#' onclick=\"deleteCharge('" + data +"')\">取消</a>";
                 }
             },{
             	"bSortable": false,
@@ -186,7 +191,9 @@
 	    });
 	    
 	    $("#addCharge").click(function(){
-	        window.location.href="/charge/add.html";
+	        var tenantId = $("#tenantId").val();
+	        var url = (null == tenantId || '' == tenantId) ? "/charge/add.html" : "/charge/add.html?tenantId=" + tenantId;
+	        window.location.href=url;
 	    });
 
 	    $("#editCharge").click(function(){

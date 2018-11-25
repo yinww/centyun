@@ -50,7 +50,7 @@
                   <label class="col-sm-3 control-label" th:text="#{charge.tenant}">Tenant</label>
                   <div class="col-sm-9">
                     <select class="form-control" id="tenantId" th:if="${tenants}">
-                      <option th:each="tenant : ${tenants}" th:value="${tenant.key}" th:text="${tenant.value}">圣桃</option>
+                      <option th:each="tenant : ${tenants}" th:value="${tenant.key}" th:text="${tenant.value}" th:selected="${#strings.equals(tenant.key, tenantId)}">圣桃</option>
                     </select>
                     <input type="hidden" class="form-control" id="tenantId" th:value="${tenant.id}" th:placeholder="#{charge.tenant}" th:if="${tenant}">
                     <label class="control-label" th:text="${tenant.name}" th:if="${tenant}"></label>

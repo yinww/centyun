@@ -49,10 +49,10 @@
 	    where id=#{id}
 	</update>
 	
-	<delete id="deleteProduct">
-	    delete from ac_product where id in
+	<update id="updateStatus">
+	    update ac_product set status=#{status}, editor=#{editor}, edit_time=now() where id in
 	    <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
-	</delete>
+	</update>
 
 	<select id="getAvailableProducts" resultType="com.yinww.account.table.KeyValuePair">
 		select id `key`, concat(name, '(', version, ')') value from ac_product where status=1 order by CONVERT(name USING gbk), publish_time desc

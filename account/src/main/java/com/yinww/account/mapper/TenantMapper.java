@@ -19,7 +19,7 @@ public interface TenantMapper {
 
 	List<Tenant> getTenants(@Param("searchValue") String searchValue, @Param("orders") List<KeyValuePair> orders);
 
-	void deleteTenant(@Param("ids") List<String> ids);
+	void updateStatus(@Param("ids") List<String> ids, @Param("status") int status, @Param("editor") String editor);
 
 	List<KeyValuePair> getAllTenants();
 

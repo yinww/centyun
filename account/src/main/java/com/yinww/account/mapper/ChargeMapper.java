@@ -17,6 +17,6 @@ public interface ChargeMapper {
 
 	void addCharge(Charge charge);
 
-	void updateStatus(@Param("ids") List<String> ids, int status);
+	void updateStatus(@Param("ids") List<String> ids, @Param("status") int status, @Param("editor") String editor);
 
 }

@@ -19,7 +19,7 @@ public interface ProductMapper {
 	
 	void updateProduct(Product product);
 
-	void deleteProduct(@Param("ids") List<String> ids);
+	void updateStatus(@Param("ids") List<String> ids, @Param("status") int status, @Param("editor") String editor);
 
 	List<KeyValuePair> getAvailableProducts();
 

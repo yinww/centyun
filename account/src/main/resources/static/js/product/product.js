@@ -33,13 +33,32 @@ function saveProduct(saveType) {
 function checkForm() {
 	var username = $('#name').val();
 	if (null == username || '' == username) {
-		$('#errMsg').html(getI18n('userCantEmpty'));
+		$('#errMsg').html(getI18n('nameCantEmpty'));
+		$('#name').focus();
 		return false;
 	}
-
 	var code = $('#code').val();
 	if (null == code || '' == code) {
 		$('#errMsg').html(getI18n('codeCantEmpty'));
+		$('#code').focus();
+		return false;
+	}
+	var version = $('#version').val();
+	if (null == version || '' == version) {
+		$('#errMsg').html(getI18n('versionCantEmpty'));
+		$('#version').focus();
+		return false;
+	}
+	var publishTime = $('#publishTime').val();
+	if (null == publishTime || '' == publishTime) {
+		$('#errMsg').html(getI18n('publishTimeCantEmpty'));
+		$('#publishTime').focus();
+		return false;
+	}
+	var productManager = $('#productManager').val();
+	if (null == productManager || '' == productManager) {
+		$('#errMsg').html(getI18n('productManagerCantEmpty'));
+		$('#productManager').focus();
 		return false;
 	}
 	return true;

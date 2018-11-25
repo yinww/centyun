@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -27,6 +28,7 @@ import com.yinww.account.table.DataTableResult;
 import com.yinww.util.CommonUtil;
 import com.yinww.web.core.constant.AppConstant;
 import com.yinww.web.core.constant.ResultEntity;
+import com.yinww.web.core.exception.BadRequestException;
 
 @Controller
 @RequestMapping(value = "/tenant")
@@ -100,9 +102,15 @@ public class TenantController extends BaseController {
 
 	@RequestMapping(value = "/save-tenant", method = RequestMethod.POST)
 	@ResponseBody
-	public Object saveTenant(Tenant tenant) {
+	public Object saveTenant(Tenant tenant, HttpServletRequest request) {
 		try {
 			tenantService.saveTenant(tenant);
+		} catch (BadRequestException e) {
+			log.error(e.getMessage(), e);
+			ResultEntity result = new ResultEntity();
+			result.setData(getMessage(e.getMessage(), request));
+			result.setStatus(HttpStatus.BAD_REQUEST.value());
+			return result;
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			ResultEntity result = new ResultEntity();
@@ -115,11 +123,17 @@ public class TenantController extends BaseController {
 
 	@RequestMapping(value = "/delete-tenant", method = RequestMethod.POST)
 	@ResponseBody
-	public Object deleteTenant(String ids) {
+	public Object deleteTenant(String ids, HttpServletRequest request) {
 		if(!CommonUtil.isEmpty(ids)) {
 			try {
 				List<String> list = Arrays.asList(ids.split(AppConstant.COMMA));
 				tenantService.deleteTenant(list);
+			} catch (BadRequestException e) {
+				log.error(e.getMessage(), e);
+				ResultEntity result = new ResultEntity();
+				result.setData(getMessage(e.getMessage(), request));
+				result.setStatus(HttpStatus.BAD_REQUEST.value());
+				return result;
 			} catch (Exception e) {
 				log.error(e.getMessage(), e);
 				ResultEntity result = new ResultEntity();

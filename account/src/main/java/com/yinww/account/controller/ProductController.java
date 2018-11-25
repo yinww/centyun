@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,7 @@ import com.yinww.account.table.DataTableResult;
 import com.yinww.util.CommonUtil;
 import com.yinww.web.core.constant.AppConstant;
 import com.yinww.web.core.constant.ResultEntity;
+import com.yinww.web.core.exception.BadRequestException;
 
 @Controller
 @RequestMapping(value = "/product")
@@ -85,9 +88,15 @@ public class ProductController extends BaseController {
 
 	@RequestMapping(value = "/save-product", method = RequestMethod.POST)
 	@ResponseBody
-	public Object saveProduct(Product product) {
+	public Object saveProduct(Product product, HttpServletRequest request) {
 		try {
 			productService.saveProduct(product);
+		} catch (BadRequestException e) {
+			log.error(e.getMessage(), e);
+			ResultEntity result = new ResultEntity();
+			result.setData(getMessage(e.getMessage(), request));
+			result.setStatus(HttpStatus.BAD_REQUEST.value());
+			return result;
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			ResultEntity result = new ResultEntity();
@@ -100,11 +109,17 @@ public class ProductController extends BaseController {
 
 	@RequestMapping(value = "/delete-product", method = RequestMethod.POST)
 	@ResponseBody
-	public Object deleteProduct(String ids) {
+	public Object deleteProduct(String ids, HttpServletRequest request) {
 		if(!CommonUtil.isEmpty(ids)) {
 			try {
 				List<String> list = Arrays.asList(ids.split(AppConstant.COMMA));
 				productService.deleteProduct(list);
+			} catch (BadRequestException e) {
+				log.error(e.getMessage(), e);
+				ResultEntity result = new ResultEntity();
+				result.setData(getMessage(e.getMessage(), request));
+				result.setStatus(HttpStatus.BAD_REQUEST.value());
+				return result;
 			} catch (Exception e) {
 				log.error(e.getMessage(), e);
 				ResultEntity result = new ResultEntity();

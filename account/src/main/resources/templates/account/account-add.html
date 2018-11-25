@@ -46,9 +46,9 @@
               <div class="box-body">
               <div class="row">
                 <div class="form-group col-md-6">
-                  <label for="name" class="col-sm-3 control-label"><span th:text="#{account.loginName}">Login Name</span> <span class="required">*</span></label>
+                  <label class="col-sm-3 control-label"><span th:text="#{account.loginName}">Login Name</span> <span class="required">*</span></label>
                   <div class="col-sm-9">
-                    <input type="text" class="form-control" name="loginName" id="loginName" th:placeholder="#{account.loginName}">
+                    <input type="text" class="form-control" id="loginName" th:placeholder="#{account.loginName}">
                   </div>
                 </div>
                 <div class="form-group col-md-6">
@@ -93,11 +93,9 @@
                 <div class="form-group col-md-6">
                   <label class="col-sm-3 control-label" th:text="#{account.tenant}">Tenant</label>
                   <div class="col-sm-9">
-                    <select class="form-control" name="type" id="type" th:if="${tenants}">
-                      <option th:each="tenant : ${tenants}" th:value="${tenant.key}" th:text="${tenant.value}">个人</option>
+                    <select class="form-control" id="tenantId" th:if="${tenants}">
+                      <option th:each="tenant : ${tenants}" th:value="${tenant.key}" th:text="${tenant.value}" th:selected="${#strings.equals(tenant.key, tenantId)}">tenant</option>
                     </select>
-                    <input type="hidden" class="form-control" id="type" th:value="${tenant.id}" th:placeholder="#{account.tenant}" th:if="${tenant}">
-                    <label class="control-label" th:text="${tenant.name}" th:if="${tenant}"></label>
                   </div>
                 </div>
                 <div class="form-group col-md-6">
@@ -126,14 +124,14 @@
                   <label class="col-sm-3 control-label" th:text="#{account.headImg}">headImg</label>
                   <div class="col-sm-9">
                     <input type="file" name="file" id="file" accept="image/*" onchange="uploadHead();">
-                    <input type="hidden" name="headImg" id="headImg">
+                    <input type="hidden" id="headImg">
                     <div id="img" class="upload"></div>
                   </div>
                 </div>
                 <div class="form-group col-md-6">
                   <label class="col-sm-3 control-label" th:text="#{account.gender}">gender</label>
                   <div class="col-sm-9">
-                    <select class="form-control" name="gender" id="gender">
+                    <select class="form-control" id="gender">
                       <option value="1" th:text="#{account.gender.1}">男</option>
                       <option value="0" th:text="#{account.gender.0}">女</option>
                     </select>

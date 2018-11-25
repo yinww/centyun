@@ -44,7 +44,7 @@
             <div class="box-tools">
               <button type="button" class="btn btn-primary tablebtn" id="addTenant"><i class="fa fa-plus"></i> <span th:text="#{common.add}">添加</span></button>
               <button type="button" class="btn btn-primary tablebtn" id="editTenant"><i class="fa fa-pencil"></i> <span th:text="#{common.edit}">编辑</span></button>
-              <button type="button" class="btn btn-primary tablebtn" id="deleteTenant"><i class="fa fa-trash-o"></i> <span th:text="#{common.delete}">删除</span></button>
+              <button type="button" class="btn btn-primary tablebtn" id="deleteTenant"><i class="fa fa-remove"></i> <span th:text="#{common.signout}">注销</span></button>
               <button type="button" class="btn btn-primary tablebtn" id="refreshTenant"><i class="fa fa-refresh"></i> <span th:text="#{common.refresh}">刷新</span></button>
             </div>
               
@@ -60,6 +60,7 @@
                     <th th:text="#{tenant.mobile}">手机</th>
                     <th th:text="#{tenant.phone}">电话</th>
                     <th th:text="#{tenant.email}">邮箱</th>
+                    <th th:text="#{common.status}">状态</th>
                     <th th:text="#{common.operate}">操作</th>
                   </tr>
                 </thead>
@@ -86,11 +87,11 @@
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">确认删除</h4>
+                <h4 class="modal-title">确认注销</h4>
                 <input type="hidden" id="ids">
               </div>
               <div class="modal-body">
-                <p>确认要删除选中的数据吗？</p>
+                <p>确认要注销选中的数据吗？</p>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" onclick="deleteTenantByIds()">确定</button>
@@ -139,6 +140,7 @@
 	            { "data": "mobile" },
 	            { "data": "phone" },
 	            { "data": "email" },
+	            { "data": "status" },
 	            { "data": "id" }
 	        ],
 	        "language": {
@@ -150,9 +152,14 @@
                 },
                 "aTargets": 0
             },{
+                "render": function (data, type) {
+                	return getI18n('tenantStatus' + data);
+                },
+                "aTargets": 7
+            },{
             	"aTargets": -1, //最后一列 
                 "render": function (data, type) {
-                    return "<a href='/tenant/view.html?id=" + data + "'>查看</a> | <a href='/tenant/edit.html?id=" + data + "'>编辑</a> | <a href='/account/index.html?tenantId=" + data + "'>账号</a> | <a href='/charge/index.html?tenantId=" + data + "'>充值</a> | <a href='/consume/index.html?tenantId=" + data + "'>消费</a> | <a href='#' onclick=\"deleteTenant('" + data +"')\">删除</a>";
+                    return "<a href='/tenant/view.html?id=" + data + "'>查看</a> | <a href='/tenant/edit.html?id=" + data + "'>编辑</a> | <a href='/account/index.html?tenantId=" + data + "'>账号</a> | <a href='/charge/index.html?tenantId=" + data + "'>充值</a> | <a href='/consume/index.html?tenantId=" + data + "'>消费</a> | <a href='#' onclick=\"deleteTenant('" + data +"')\">注销</a>";
                     //return "<button type=\"button\" class=\"btn\" data-toggle=\"tooltip\" title=\"编辑\" onclick=\"editTenant('" + data +"')\"><i class=\"fa fa-pencil\"></i></button> <button type=\"button\" class=\"btn\" data-toggle=\"tooltip\" title=\"删除\" onclick=\"deleteTenant('" + data +"')\"><i class=\"fa fa-trash-o\"></i></button>";
                 }
             },{
@@ -181,8 +188,10 @@
 	        $('input[name="ckb-jobid"]:checked').each(function(){ 
 	            ids.push($(this).val());
 	        });
-	        if(ids.length > 0) {
-	        	window.location.href="/tenant/add.html?ids=" + ids.join(",");
+	        if(ids.length == 1) {
+	        	window.location.href="/tenant/edit.html?id=" + ids[0];
+	        } else if(ids.length > 1) {
+	        	alert("请选择1条数据进行编辑");
 	        } else {
 	        	alert("请选择要编辑的数据");
 	        }

@@ -44,7 +44,7 @@
             <div class="box-tools">
               <button type="button" class="btn btn-primary tablebtn" id="addProduct"><i class="fa fa-plus"></i> <span th:text="#{common.add}">添加</span></button>
               <button type="button" class="btn btn-primary tablebtn" id="editProduct"><i class="fa fa-pencil"></i> <span th:text="#{common.edit}">编辑</span></button>
-              <button type="button" class="btn btn-primary tablebtn" id="deleteProduct"><i class="fa fa-trash-o"></i> <span th:text="#{common.delete}">删除</span></button>
+              <button type="button" class="btn btn-primary tablebtn" id="deleteProduct"><i class="fa fa-remove"></i> <span th:text="#{product.offline}">下线</span></button>
               <button type="button" class="btn btn-primary tablebtn" id="refreshProduct"><i class="fa fa-refresh"></i> <span th:text="#{common.refresh}">刷新</span></button>
             </div>
               
@@ -86,11 +86,11 @@
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">确认删除</h4>
+                <h4 class="modal-title">确认下线</h4>
                 <input type="hidden" id="ids">
               </div>
               <div class="modal-body">
-                <p>确认要删除选中的数据吗？</p>
+                <p>确认要下线选中的数据吗？</p>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" onclick="deleteProductByIds()">确定</button>
@@ -157,7 +157,7 @@
             },{
             	"aTargets": -1, //最后一列 
                 "render": function (data, type) {
-                    return "<a href='/product/view.html?id=" + data + "'>查看</a> | <a href='/product/edit.html?id=" + data + "'>编辑</a> | <a href='#' onclick=\"deleteProduct('" + data +"')\">删除</a>";
+                    return "<a href='/product/view.html?id=" + data + "'>查看</a> | <a href='/product/edit.html?id=" + data + "'>编辑</a> | <a href='#' onclick=\"deleteProduct('" + data +"')\">下线</a>";
                 }
             },{
             	"bSortable": false,

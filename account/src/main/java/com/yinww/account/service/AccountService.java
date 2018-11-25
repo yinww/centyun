@@ -10,12 +10,14 @@ import org.springframework.util.StringUtils;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.yinww.account.constant.AccountConstant;
 import com.yinww.account.domain.Manager;
 import com.yinww.account.mapper.AccountMapper;
 import com.yinww.account.table.DTRequestParams;
 import com.yinww.account.table.KeyValuePair;
 import com.yinww.util.UUIDGenerator;
 import com.yinww.web.core.domain.Account;
+import com.yinww.web.core.exception.BadRequestException;
 
 @Service
 public class AccountService {
@@ -29,6 +31,9 @@ public class AccountService {
 
 	public void saveAccount(Account account) {
 		Manager manager = (Manager)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if(manager == null) {
+			throw new BadRequestException(AccountConstant.AUTH_FAIL);
+		}
 		if(StringUtils.isEmpty(account.getId())) {
 			account.setId(UUIDGenerator.getUUID());
 			account.setCreator(manager.getLoginName());
@@ -50,7 +55,19 @@ public class AccountService {
 	}
 
 	public void deleteAccount(List<String> ids) {
-		accountMapper.deleteAccount(ids);
+		Manager manager = (Manager)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if(manager == null) {
+			throw new BadRequestException(AccountConstant.AUTH_FAIL);
+		}
+		accountMapper.updateStatus(ids, AccountConstant.ACCOUNT_STATUS_DELETED, manager.getLoginName());
+	}
+
+	public void repasswd(List<String> ids, String passwd) {
+		Manager manager = (Manager)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if(manager == null) {
+			throw new BadRequestException(AccountConstant.AUTH_FAIL);
+		}
+		accountMapper.repasswd(ids, passwd);
 	}
 
 }

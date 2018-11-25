@@ -45,7 +45,8 @@
             <div class="box-tools">
               <button type="button" class="btn btn-primary tablebtn" id="addAccount"><i class="fa fa-plus"></i> <span th:text="#{common.add}">添加</span></button>
               <button type="button" class="btn btn-primary tablebtn" id="editAccount"><i class="fa fa-pencil"></i> <span th:text="#{common.edit}">编辑</span></button>
-              <button type="button" class="btn btn-primary tablebtn" id="deleteAccount"><i class="fa fa-trash-o"></i> <span th:text="#{common.delete}">删除</span></button>
+              <button type="button" class="btn btn-primary tablebtn" id="deleteAccount"><i class="fa fa-remove"></i> <span th:text="#{common.signout}">注销</span></button>
+              <button type="button" class="btn btn-primary tablebtn" id="repasswdAccount"><i class="fa fa-key"></i> <span th:text="#{common.repasswd}">重置密码</span></button>
               <button type="button" class="btn btn-primary tablebtn" id="refreshAccount"><i class="fa fa-refresh"></i> <span th:text="#{common.refresh}">刷新</span></button>
               <label class="tenant" th:text="#{common.tenant}"></label> <select class="tenant-sm" id="type" onchange="updateTable()">
                 <option value="" th:text="#{common.pleaseSelect}">Please Select</option>
@@ -65,6 +66,7 @@
                     <th th:text="#{account.displayName}">显示名</th>
                     <th th:text="#{account.realName}">真实姓名</th>
                     <th th:text="#{account.mobile}">手机</th>
+                    <th th:text="#{common.status}">状态</th>
                     <th th:text="#{common.operate}">操作</th>
                   </tr>
                 </thead>
@@ -90,15 +92,56 @@
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">确认删除</h4>
+                <h4 class="modal-title" th:text="#{common.confirmCancel}">确认注销</h4>
                 <input type="hidden" id="ids">
               </div>
               <div class="modal-body">
-                <p>确认要删除选中的数据吗？</p>
+                <p th:text="#{common.ifCancel}">确认要注销选中的数据吗？</p>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-default pull-left" onclick="deleteAccountByIds()">确定</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">放弃</button>
+                <button type="button" class="btn btn-default pull-left" onclick="deleteAccountByIds()" th:text="#{common.ok}">确定</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" th:text="#{common.cancel}">放弃</button>
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+        
+        
+        <div class="modal fade" id="modal-repwd">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" th:text="#{common.repasswd}">重置密码</h4>
+                <input type="hidden" id="repwdids">
+              </div>
+              <div class="modal-body">
+              
+            <!-- form start -->
+            <form role="form">
+              <div class="box-body">
+                <div class="form-group">
+                  <label for="password" th:text="#{common.passwd}">Password</label>
+                  <input type="password" class="form-control" id="password" th:placeholder="#{common.plspasswd}">
+                </div>
+                <div class="form-group">
+                  <label for="repassword" th:text="#{common.confirmPasswd}">Confirm Password</label>
+                  <input type="password" class="form-control" id="repassword" th:placeholder="#{common.plsrepasswd}">
+                </div>
+                <div class="form-group">
+                  <label id="pwderrMsg" class="error"></label>
+                </div>
+              </div>
+              <!-- /.box-body -->
+            </form>
+          
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" onclick="repasswdByIds()" th:text="#{common.ok}">确定</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" th:text="#{common.cancel}">放弃</button>
               </div>
             </div>
             <!-- /.modal-content -->
@@ -110,6 +153,7 @@
 <script th:src="@{/lib/jquery.min.js}"></script>
 <script th:src="@{/lib/js.cookie.min.js}"></script>
 <script th:src="@{/js/lang.js}"></script>
+<script type="text/javascript" th:src="@{/lib/sha256.min.js}"></script>
 <script th:src="@{/lib/bootstrap/js/bootstrap.min.js}"></script>
 <script th:src="@{/lib/adminlte/js/adminlte.min.js}"></script>
 <script th:src="@{/lib/datatables.net/js/jquery.dataTables.min.js}"></script>
@@ -146,6 +190,7 @@
 	            { "data": "displayName" },
 	            { "data": "realName" },
 	            { "data": "mobile" },
+	            { "data": "status" },
 	            { "data": "id" }
 	        ],
 	        "language": {
@@ -162,9 +207,14 @@
                 },
                 "aTargets": 3
             },{
+                "render": function (data, type) {
+                	return getI18n('accountStatus' + data);
+                },
+                "aTargets": 7
+            },{
             	"aTargets": -1, //最后一列 
                 "render": function (data, type) {
-                    return "<a href='/account/edit.html?id=" + data + "'>编辑</a> | <a href='/account/view.html?id=" + data + "'>查看</a> | <a href='#' onclick=\"deleteAccount('" + data +"')\">删除</a>";
+                    return "<a href='/account/edit.html?id=" + data + "'>编辑</a> | <a href='/account/view.html?id=" + data + "'>查看</a> | <a href='#' onclick=\"deleteAccount('" + data +"')\">注销</a> | <a href='#' onclick=\"repasswdAccount('" + data +"')\">重置密码</a>";
                     //return "<button type=\"button\" class=\"btn\" data-toggle=\"tooltip\" title=\"编辑\" onclick=\"editTenant('" + data +"')\"><i class=\"fa fa-pencil\"></i></button> <button type=\"button\" class=\"btn\" data-toggle=\"tooltip\" title=\"删除\" onclick=\"deleteTenant('" + data +"')\"><i class=\"fa fa-trash-o\"></i></button>";
                 }
             },{
@@ -185,7 +235,8 @@
 	    });
 	    
 	    $("#addAccount").click(function(){
-	        window.location.href="/account/add.html";
+	        var tenantId = $("#tenantId").val();
+	        window.location.href= (null == tenantId || '' == tenantId) ? "/account/add.html" : "/account/add.html?tenantId="+tenantId;
 	    });
 
 	    $("#editAccount").click(function(){
@@ -217,6 +268,25 @@
 	        }
 	    });
 
+	    $("#repasswdAccount").click(function(){
+	        var ids = [];
+	        $('input[name="ckb-jobid"]:checked').each(function(){ 
+	        	ids.push($(this).val());
+	        });
+	        $("#ids").val(ids.join(","));
+	        
+	        if(ids.length > 0) {
+	        	$("#password").val("");
+	        	$("#repassword").val("");
+	        	$('#modal-repwd').modal({
+	                show: true,
+	                backdrop:'static'
+	            });
+	        } else {
+	        	alert("请选择要重置密码的账号");
+	        }
+	    });
+	    
 	    $("#refreshAccount").click(function(){
 	    	table.draw(false);
 	    });
@@ -246,6 +316,16 @@
 	  });
   }
   
+  function repasswdAccount(data) {
+	  $("#repwdids").val(data);
+	  $("#password").val("");
+	  $("#repassword").val("");
+	  $('#modal-repwd').modal({
+		  show: true,
+		  backdrop:'static'
+	  });
+  }
+  
   function deleteAccountByIds() {
 	var ids = $("#ids").val();
 	$.ajax({
@@ -265,6 +345,48 @@
 			alert(getI18n('deleteError'));
 		}
 	});
+  }
+
+  function repasswdByIds() {
+	var password = $("#password").val();
+	var repassword = $("#repassword").val();
+	if(!checkPassword(password, repassword)) return;
+	
+	var ids = $("#ids").val();
+	$.ajax({
+		url : '/account/repasswd',
+		type : 'post',
+		dataType : 'json',
+		data : {'ids' : ids, 'pwd' : sha256(password)},
+		success : function(data) {
+			if (data.status == 200) {
+				alert(data.data);
+				$('#modal-repwd').modal('hide');
+			} else {
+				alert(data.data);
+			}
+		},
+		error : function(data) {
+			console.log(data);
+			alert(getI18n('deleteError'));
+		}
+	});
+  }
+
+  function checkPassword(password, repassword) {
+  	if (null == password || '' == password) {
+  		$('#pwderrMsg').html(getI18n('pwdCantEmpty'));
+  		return false;
+  	}
+  	if (null == repassword || '' == repassword) {
+  		$('#pwderrMsg').html(getI18n('repwdCantEmpty'));
+  		return false;
+  	}
+  	if(password !== repassword) {
+  		$('#pwderrMsg').html(getI18n('pwdunequal'));
+  		return false;
+  	}
+  	return true;
   }
 </script>
 </body>

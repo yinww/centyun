@@ -10,12 +10,14 @@ import org.springframework.util.StringUtils;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.yinww.account.constant.AccountConstant;
 import com.yinww.account.domain.Charge;
 import com.yinww.account.domain.Manager;
 import com.yinww.account.mapper.ChargeMapper;
 import com.yinww.account.table.DTRequestParams;
 import com.yinww.account.table.KeyValuePair;
 import com.yinww.util.UUIDGenerator;
+import com.yinww.web.core.exception.BadRequestException;
 
 @Service
 public class ChargeService {
@@ -37,16 +39,23 @@ public class ChargeService {
 		return chargeMapper.getChargeById(id);
 	}
 
-	public void saveCharge(Charge charge) {
+	public void saveCharge(Charge charge) throws Exception {
 		// 获取当前用户
 		Manager manager = (Manager)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if(manager == null) {
+			throw new BadRequestException(AccountConstant.AUTH_FAIL);
+		}
 		charge.setId(UUIDGenerator.getUUID());
 		charge.setChargeManager(manager.getLoginName());
 		chargeMapper.addCharge(charge);
 	}
 
-	public void updateStatus(List<String> ids, int status) {
-		chargeMapper.updateStatus(ids, status);
+	public void updateStatus(List<String> ids, int status) throws Exception {
+		Manager manager = (Manager)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if(manager == null) {
+			throw new BadRequestException(AccountConstant.AUTH_FAIL);
+		}
+		chargeMapper.updateStatus(ids, status, manager.getLoginName());
 	}
 
 }
