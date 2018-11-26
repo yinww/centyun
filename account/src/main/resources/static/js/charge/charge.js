@@ -19,7 +19,7 @@ function saveCharge(saveType) {
 				if (data.status == 200) {
 					window.location.href = saveType == 1 ? "/charge/add.html" : "/charge/index.html";
 				} else {
-					$('#errMsg').html(data.msg);
+					$('#errMsg').html(data.data);
 				}
 			},
 			error : function(data) {

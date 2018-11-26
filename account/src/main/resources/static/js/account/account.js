@@ -42,7 +42,7 @@ function saveAccount(saveType) {
 			if (data.status == 200) {
 				window.location.href = saveType == 1 ? "/account/add.html" : "/account/index.html";
 			} else {
-				$('#errMsg').html(data.msg);
+				$('#errMsg').html(data.data);
 			}
 		},
 		error : function(data) {

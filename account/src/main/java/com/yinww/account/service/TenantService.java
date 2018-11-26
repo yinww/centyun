@@ -55,6 +55,10 @@ public class TenantService {
 		if(manager == null) {
 			throw new BadRequestException(AccountConstant.AUTH_FAIL);
 		}
+		
+		if(checkTenant(tenant)) {
+			throw new BadRequestException(AccountConstant.TENANT_EXISTED);
+		}
 		if(CommonUtil.isEmpty(tenant.getId())) {
 			tenant.setId(UUIDGenerator.getUUID());
 			tenant.setCreator(manager.getLoginName());
@@ -69,6 +73,11 @@ public class TenantService {
 			tenant.setEditor(manager.getLoginName());
 			tenantMapper.updateTenant(tenant);
 		}
+	}
+
+	private boolean checkTenant(Tenant tenant) {
+		int count = tenantMapper.getTenantByName(tenant);
+		return count > 0;
 	}
 
 	public Tenant getTenantById(String id) {

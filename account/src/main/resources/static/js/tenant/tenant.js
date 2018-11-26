@@ -38,7 +38,7 @@ function saveTenant(saveType) {
 				if (data.status == 200) {
 					window.location.href = saveType == 1 ? "/tenant/add.html" : "/tenant/index.html";
 				} else {
-					$('#errMsg').html(data.msg);
+					$('#errMsg').html(data.data);
 				}
 			},
 			error : function(data) {

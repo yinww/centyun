@@ -1,11 +1,14 @@
 package com.yinww.account.constant;
 
 public interface AccountConstant {
+	String AUTH_FAIL = "common.auth_fail";
+	
+	String TENANT_EXISTED = "tenant.existed";
+	String ACCOUNT_EXISTED = "account.existed";
+	String PRODUCT_EXISTED = "product.existed";
 	
 	int CHARGE_STATUS_OK = 1; // 充值成功
 	int CHARGE_STATUS_DELETED = 2; // 取消充值
-	
-	String AUTH_FAIL = "common.auth_fail";
 	
 	int TENANT_STATUS_REGISTED = 0;  // 0已注册
 	int TENANT_STATUS_AUDITED = 1;   // 1已审核

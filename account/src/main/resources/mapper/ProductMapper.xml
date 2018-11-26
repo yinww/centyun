@@ -34,8 +34,15 @@
 		</if>
 	</select>
 	
-	<select id="getProductById" resultMap="ProductResultMap">
+	<select id="getProductById" parameterType="java.lang.String" resultMap="ProductResultMap">
 		select * from ac_product where id=#{id}
+	</select>
+	
+	<select id="getProductByName" parameterType="com.yinww.account.domain.Product" resultType="int">
+		select count(*) from ac_product where name = #{name} and code = #{code} and version = #{version}
+		<if test="id != null">
+		    and <![CDATA[ id <> #{id} ]]>
+		</if>
 	</select>
 	
 	<insert id="addProduct">

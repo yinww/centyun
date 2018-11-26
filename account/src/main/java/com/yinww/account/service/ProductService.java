@@ -46,6 +46,9 @@ public class ProductService {
 		if(manager == null) {
 			throw new BadRequestException(AccountConstant.AUTH_FAIL);
 		}
+		if(checkProduct(product)) {
+			throw new BadRequestException(AccountConstant.TENANT_EXISTED);
+		}
 		if(CommonUtil.isEmpty(product.getId())) {
 			product.setId(UUIDGenerator.getUUID());
 			product.setCreator(manager.getLoginName());
@@ -54,6 +57,11 @@ public class ProductService {
 			product.setEditor(manager.getLoginName());
 			productMapper.updateProduct(product);
 		}
+	}
+
+	private boolean checkProduct(Product product) {
+		int count = productMapper.getProductByName(product);
+		return count > 0;
 	}
 
 	public void deleteProduct(List<String> ids) {

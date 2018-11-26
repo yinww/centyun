@@ -186,7 +186,7 @@
 	            ids.push($(this).val());
 	        });
 	        if(ids.length > 0) {
-	        	window.location.href="/product/add.html?ids=" + ids.join(",");
+	        	window.location.href="/product/edit.html?id=" + ids[0];
 	        } else {
 	        	alert("请选择要编辑的数据");
 	        }
@@ -244,7 +244,7 @@
 			if (data.status == 200) {
 				window.location.href = "/product/index.html";
 			} else {
-				alert(data.msg);
+				alert(data.data);
 			}
 		},
 		error : function(data) {

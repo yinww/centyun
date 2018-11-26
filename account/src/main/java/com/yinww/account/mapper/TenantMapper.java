@@ -23,4 +23,6 @@ public interface TenantMapper {
 
 	List<KeyValuePair> getAllTenants();
 
+	int getTenantByName(Tenant tenant);
+
 }

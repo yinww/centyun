@@ -34,6 +34,9 @@ public class AccountService {
 		if(manager == null) {
 			throw new BadRequestException(AccountConstant.AUTH_FAIL);
 		}
+		if(checkAccount(account)) {
+			throw new BadRequestException(AccountConstant.ACCOUNT_EXISTED);
+		}
 		if(StringUtils.isEmpty(account.getId())) {
 			account.setId(UUIDGenerator.getUUID());
 			account.setCreator(manager.getLoginName());
@@ -42,6 +45,11 @@ public class AccountService {
 			account.setEditor(manager.getLoginName());
 			accountMapper.updateAccount(account);
 		}
+	}
+
+	private boolean checkAccount(Account account) {
+		int count = accountMapper.getAccountByName(account);
+		return count > 0;
 	}
 
 	public PageInfo<Account> getPageAccounts(DTRequestParams dtParams, String tenantId) {

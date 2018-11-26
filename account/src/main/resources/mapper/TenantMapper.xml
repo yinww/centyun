@@ -46,6 +46,13 @@
 		select * from ac_tenant where id = #{id}
 	</select>
 	
+	<select id="getTenantByName" parameterType="com.yinww.account.domain.Tenant" resultType="int">
+		select count(*) from ac_tenant where name = #{name}
+		<if test="id != null">
+		    and <![CDATA[ id <> #{id} ]]>
+		</if>
+	</select>
+	
 	<insert id="addTenant">
 	    insert into ac_tenant (id, name, code, main_account, contact, mobile, phone, email, address, logo, type, status, note, creator, create_time)
 	    values(#{id}, #{name}, #{code}, #{mainAccount}, #{contact}, #{mobile}, #{phone}, #{email}, #{address}, #{logo}, #{type}, 0, #{note}, #{creator}, now())

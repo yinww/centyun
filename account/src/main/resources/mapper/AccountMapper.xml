@@ -47,6 +47,13 @@
 		select a.*, t.id tenant_id, t.name tenant_name from ac_account a left join ac_tenant t on a.tenant_id=t.id where a.id=#{id}
 	</select>
 	
+	<select id="getAccountByName" parameterType="com.yinww.web.core.domain.Account" resultType="int">
+		select count(*) from ac_account where login_name = #{loginName}
+		<if test="id != null">
+		    and <![CDATA[ id <> #{id} ]]>
+		</if>
+	</select>
+	
 	<insert id="addAccount">
 	    insert into ac_account (id, login_name, type, password, display_name, tenant_id, mobile, phone, email, status, creator, create_time)
 	    values(#{id}, #{loginName}, #{type}, #{password}, #{displayName}, #{tenantId}, #{mobile}, #{phone}, #{email}, 1, #{creator}, now())

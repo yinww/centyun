@@ -19,7 +19,7 @@ function saveProduct(saveType) {
 				if (data.status == 200) {
 					window.location.href = saveType == 1 ? "/product/add.html" : "/product/index.html";
 				} else {
-					$('#errMsg').html(data.msg);
+					$('#errMsg').html(data.data);
 				}
 			},
 			error : function(data) {

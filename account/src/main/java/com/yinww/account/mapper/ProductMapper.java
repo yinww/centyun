@@ -23,4 +23,6 @@ public interface ProductMapper {
 
 	List<KeyValuePair> getAvailableProducts();
 
+	int getProductByName(Product product);
+
 }

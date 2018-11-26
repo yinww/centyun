@@ -25,4 +25,6 @@ public interface AccountMapper {
 
 	void repasswd(@Param("ids") List<String> ids, @Param("passwd") String passwd);
 
+	int getAccountByName(Account account);
+
 }
