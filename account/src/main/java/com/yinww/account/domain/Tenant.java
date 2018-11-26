@@ -3,6 +3,8 @@ package com.yinww.account.domain;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.validation.constraints.NotBlank;
+
 import org.apache.ibatis.type.Alias;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -17,7 +19,9 @@ public class Tenant implements Serializable {
 	private static final long serialVersionUID = 7841144358194132207L;
 	
 	private String id;
+	@NotBlank(message = "{validerror.tenant.name}")
 	private String name;
+	@NotBlank(message = "{validerror.tenant.code}")
 	private String code;
 	private String mainAccount;
 	private String mainAccountPwd;

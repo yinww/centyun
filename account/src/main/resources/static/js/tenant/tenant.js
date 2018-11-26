@@ -35,9 +35,21 @@ function saveTenant(saveType) {
 			dataType : 'json',
 			data : arr,
 			success : function(data) {
+				console.log(data.status);
 				if (data.status == 200) {
 					window.location.href = saveType == 1 ? "/tenant/add.html" : "/tenant/index.html";
+				} else if (data.status == 406) {
+					var errors = data.data;
+					var error = "";
+					for (var i = 0; i < errors.length; i++) {
+						if(i > 0) {
+							error += "<br/>";
+						}
+						error += errors[i];
+					}
+					$('#errMsg').html(error);
 				} else {
+					console.log(data.data);
 					$('#errMsg').html(data.data);
 				}
 			},
