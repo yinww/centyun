@@ -4,7 +4,7 @@
 
 <mapper namespace="com.yinww.account.mapper.ManagerMapper">
 	<resultMap id="ModuleResultMap" type="module">
-		<id column="id" jdbcType="VARCHAR" property="id"/>
+		<id column="id" jdbcType="INTEGER" property="id"/>
 		<result column="code" jdbcType="VARCHAR" property="code"/>
 		<result column="name" jdbcType="INTEGER" property="name"/>
 		<result column="english_name" jdbcType="VARCHAR" property="englishName"/>
@@ -16,7 +16,7 @@
 	</resultMap>
 	
 	<resultMap id="ManagerResultMap" type="manager">
-		<id column="id" jdbcType="VARCHAR" property="id"/>
+		<id column="id" jdbcType="INTEGER" property="id"/>
 		<result column="login_name" jdbcType="VARCHAR" property="loginName"/>
 		<result column="password" jdbcType="INTEGER" property="password"/>
 		<result column="display_name" jdbcType="VARCHAR" property="displayName"/>

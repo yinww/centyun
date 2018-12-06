@@ -82,7 +82,7 @@ public class TenantController extends BaseController {
 	}
 
 	@RequestMapping(value = "/edit.html")
-	public ModelAndView edit(@RequestParam("id") String id) {
+	public ModelAndView edit(@RequestParam("id") Long id) {
 		ModelAndView model = new ModelAndView();
 		model.addObject("modules", getModules("/tenant/index.html"));
 		Tenant tenant = tenantService.getTenantById(id);
@@ -92,7 +92,7 @@ public class TenantController extends BaseController {
 	}
 
 	@RequestMapping(value = "/view.html")
-	public ModelAndView view(@RequestParam("id") String id) {
+	public ModelAndView view(@RequestParam("id") Long id) {
 		ModelAndView model = new ModelAndView();
 		model.addObject("modules", getModules("/tenant/index.html"));
 		Tenant tenant = tenantService.getTenantById(id);
@@ -128,7 +128,7 @@ public class TenantController extends BaseController {
 		if(!CommonUtil.isEmpty(ids)) {
 			try {
 				List<String> list = Arrays.asList(ids.split(AppConstant.COMMA));
-				tenantService.deleteTenant(list);
+				tenantService.deleteTenant(CommonUtil.strings2Longs(list));
 			} catch (BadRequestException e) {
 				log.error(e.getMessage(), e);
 				ResultEntity result = new ResultEntity();

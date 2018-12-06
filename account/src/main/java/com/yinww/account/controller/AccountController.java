@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.github.pagehelper.PageInfo;
-import com.yinww.account.security.EncryptUtils;
 import com.yinww.account.service.AccountService;
 import com.yinww.account.service.TenantService;
 import com.yinww.account.table.DTRequestParams;
@@ -29,6 +28,7 @@ import com.yinww.web.core.constant.AppConstant;
 import com.yinww.web.core.constant.ResultEntity;
 import com.yinww.web.core.domain.Account;
 import com.yinww.web.core.exception.BadRequestException;
+import com.yinww.web.core.util.EncryptUtils;
 
 @Controller
 @RequestMapping(value = "/account")
@@ -43,10 +43,10 @@ public class AccountController extends BaseController {
 	private TenantService tenantService;
 
 	@RequestMapping(value = "/index.html")
-	public ModelAndView index(@RequestParam(required=false) String tenantId) {
+	public ModelAndView index(@RequestParam(required=false) Long tenantId) {
 		ModelAndView model = new ModelAndView();
 		model.addObject("modules", getModules("/account/index.html"));
-		model.addObject("tenantId", CommonUtil.isEmpty(tenantId) ? "" : tenantId);
+		model.addObject("tenantId", tenantId == null || tenantId <= 0 ? 0 : tenantId);
 		model.addObject("tenants", tenantService.getAllTenants());
         model.setViewName("account/account-index");
         return model;
@@ -54,15 +54,22 @@ public class AccountController extends BaseController {
 
 	@RequestMapping(value = "/accounts", method = RequestMethod.POST)
 	@ResponseBody
-	public Object getAccounts(@ModelAttribute DTRequestParams dtParams, @RequestParam(required=false) String tenantId) {
-		PageInfo<Account> tenants = accountService.getPageAccounts(dtParams, tenantId);
+	public Object getAccounts(@ModelAttribute DTRequestParams dtParams, @RequestParam(required=false) Long tenantId) {
+		PageInfo<Account> tenants = accountService.getPageAccounts(dtParams, tenantId == null || tenantId <= 0 ? null : tenantId);
         return new DataTableResult<Account>(tenants, dtParams.getDraw());
 	}
 
 	@RequestMapping(value = "/{accountId}", method = RequestMethod.POST)
 	@ResponseBody
-	public Object getAccount(@PathVariable(value = "accountId") String accountId) {
+	public Object getAccount(@PathVariable(value = "accountId") Long accountId) {
 		Account account = accountService.getAccountById(accountId);
+		return account;
+	}
+
+	@RequestMapping(value = "/getAccountByToken")
+	@ResponseBody
+	public Object getAccountByToken(@RequestParam(value = "token") String token) {
+		Account account = accountService.getAccountByToken(token);
 		return account;
 	}
 
@@ -79,7 +86,7 @@ public class AccountController extends BaseController {
 	}
 
 	@RequestMapping(value = "/edit.html")
-	public ModelAndView edit(@RequestParam("id") String id) {
+	public ModelAndView edit(@RequestParam("id") Long id) {
 		ModelAndView model = new ModelAndView();
 		model.addObject("modules", getModules("/account/index.html"));
 		Account account = accountService.getAccountById(id);
@@ -89,7 +96,7 @@ public class AccountController extends BaseController {
 	}
 
 	@RequestMapping(value = "/view.html")
-	public ModelAndView view(@RequestParam("id") String id) {
+	public ModelAndView view(@RequestParam("id") Long id) {
 		ModelAndView model = new ModelAndView();
 		model.addObject("modules", getModules("/account/index.html"));
 		Account account = accountService.getAccountById(id);
@@ -119,13 +126,28 @@ public class AccountController extends BaseController {
 		return new ResultEntity(HttpStatus.OK.value());
 	}
 
+	@RequestMapping(value = "/updateLanguage")
+	@ResponseBody
+	public Object updateLanguage(@RequestParam("id") Long id, @RequestParam("language") String language) {
+		try {
+			accountService.updateLanguage(id, language);
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			ResultEntity result = new ResultEntity();
+			result.setData(e.getMessage());
+			result.setStatus(HttpStatus.BAD_REQUEST.value());
+			return result;
+		}
+		return new ResultEntity(HttpStatus.OK.value());
+	}
+
 	@RequestMapping(value = "/delete-account", method = RequestMethod.POST)
 	@ResponseBody
 	public Object deleteAccount(String ids, HttpServletRequest request) {
 		if(!CommonUtil.isEmpty(ids)) {
 			try {
 				List<String> list = Arrays.asList(ids.split(AppConstant.COMMA));
-				accountService.deleteAccount(list);
+				accountService.deleteAccount(CommonUtil.strings2Longs(list));
 			} catch (BadRequestException e) {
 				log.error(e.getMessage(), e);
 				ResultEntity result = new ResultEntity();
@@ -149,7 +171,7 @@ public class AccountController extends BaseController {
 		if(!CommonUtil.isEmpty(ids)) {
 			try {
 				List<String> list = Arrays.asList(ids.split(AppConstant.COMMA));
-				accountService.repasswd(list, EncryptUtils.encrypt(pwd));
+				accountService.repasswd(CommonUtil.strings2Longs(list), EncryptUtils.encrypt(pwd));
 			} catch (BadRequestException e) {
 				log.error(e.getMessage(), e);
 				ResultEntity result = new ResultEntity();

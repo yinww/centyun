@@ -16,8 +16,7 @@ import com.yinww.account.domain.Product;
 import com.yinww.account.mapper.ProductMapper;
 import com.yinww.account.table.DTRequestParams;
 import com.yinww.account.table.KeyValuePair;
-import com.yinww.util.CommonUtil;
-import com.yinww.util.UUIDGenerator;
+import com.yinww.util.SnowFlakeIdWorker;
 import com.yinww.web.core.exception.BadRequestException;
 
 @Service
@@ -36,7 +35,7 @@ public class ProductService {
 		return pageInfo;
 	}
 
-	public Product getProductById(String id) {
+	public Product getProductById(Long id) {
 		return productMapper.getProductById(id);
 	}
 
@@ -49,8 +48,10 @@ public class ProductService {
 		if(checkProduct(product)) {
 			throw new BadRequestException(AccountConstant.TENANT_EXISTED);
 		}
-		if(CommonUtil.isEmpty(product.getId())) {
-			product.setId(UUIDGenerator.getUUID());
+		Long id = product.getId();
+		if(id == null || id <= 0) {
+			SnowFlakeIdWorker snowFlake = new SnowFlakeIdWorker(0, 0);
+			product.setId(snowFlake.nextId());
 			product.setCreator(manager.getLoginName());
 			productMapper.addProduct(product);
 		} else {
@@ -64,7 +65,7 @@ public class ProductService {
 		return count > 0;
 	}
 
-	public void deleteProduct(List<String> ids) {
+	public void deleteProduct(List<Long> ids) {
 		Manager manager = (Manager)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if(manager == null) {
 			throw new BadRequestException(AccountConstant.AUTH_FAIL);

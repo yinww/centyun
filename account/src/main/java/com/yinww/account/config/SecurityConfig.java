@@ -14,7 +14,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import com.yinww.account.security.CaptchaAuthenticationFilter;
+import com.yinww.web.core.security.CaptchaAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -27,35 +27,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private AuthenticationFailureHandler accountAuthenticationFailHander;
 	
 	@Autowired
-	private AuthenticationProvider authenticationProvider;
+	private AuthenticationProvider accountAuthenticationProvider;
 	
-	@Autowired
-    private AuthenticationFailureHandler captchaAuthenticationFailHander;
-
-	@Autowired
-	private AuthenticationSuccessHandler captchaAuthenticationSuccessHandler;
-
-	@Value("${security.ignore}")
-	private String ignore;
+	@Value("${security.excludes}")
+	private String excludes;
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.formLogin()
+		http.addFilterBefore(captchaAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+		    .formLogin()
 		        .loginPage("/login").loginProcessingUrl("/login/form")//.failureUrl("/login-error")
-		        .successHandler(accountAuthenticationSuccessHandler)
-		        .failureHandler(accountAuthenticationFailHander)
+//		        .successHandler(accountAuthenticationSuccessHandler)
+//		        .failureHandler(accountAuthenticationFailHander)
 		    .permitAll()
 		.and().headers().frameOptions().sameOrigin()
-		.and().authorizeRequests().antMatchers("/captcha-image", "/change-lang", "/login/**").permitAll()
+		.and().authorizeRequests().antMatchers("/account/getAccountByToken", "/account/updateLanguage", "/captcha-image", "/change-lang", "/login/**").permitAll()
 		    .anyRequest().access("@securityService.hasPermission(request, authentication)")  //必须经过认证以后才能访问
 		.and().csrf().disable();
-		
-		http.addFilterBefore(captchaAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 	}
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.authenticationProvider(authenticationProvider);
+		auth.authenticationProvider(accountAuthenticationProvider);
 	}
 	
 	public CaptchaAuthenticationFilter captchaAuthenticationFilter() throws Exception {
@@ -63,14 +56,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	    authenticationFilter.setAuthenticationManager(authenticationManager());
 	    //只有post请求才拦截
 	    authenticationFilter.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/login/form", "POST"));
-	    authenticationFilter.setAuthenticationSuccessHandler(captchaAuthenticationSuccessHandler);
-	    authenticationFilter.setAuthenticationFailureHandler(captchaAuthenticationFailHander);
+	    authenticationFilter.setAuthenticationSuccessHandler(accountAuthenticationSuccessHandler);
+	    authenticationFilter.setAuthenticationFailureHandler(accountAuthenticationFailHander);
 	    return authenticationFilter;
 	}
 	
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-	    String[] ignores = ignore.split(",");
+	    String[] ignores = excludes.split(",");
 	    for (String string : ignores) {
 	      web.ignoring().antMatchers(string);
 	    }

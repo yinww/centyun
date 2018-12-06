@@ -84,5 +84,12 @@ public class CommonUtil {
 		}
 		return sb.toString();
 	}
-
+	
+	public static List<Long> strings2Longs(List<String> ids) {
+		List<Long> result = new ArrayList<>(ids.size());
+		for (String id : ids) {
+			result.add(Long.parseLong(id));
+		}
+		return result;
+	}
 }

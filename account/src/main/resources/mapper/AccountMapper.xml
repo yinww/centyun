@@ -4,7 +4,7 @@
 
 <mapper namespace="com.yinww.account.mapper.AccountMapper">
 	<resultMap id="AccountResultMap" type="com.yinww.web.core.domain.Account">
-		<id column="id" jdbcType="VARCHAR" property="id"/>
+		<id column="id" jdbcType="BIGINT" property="id"/>
 		<result column="login_name" jdbcType="VARCHAR" property="loginName"/>
 		<result column="type" jdbcType="INTEGER" property="type"/>
 		<result column="password" jdbcType="VARCHAR" property="password"/>
@@ -79,4 +79,13 @@
 	    update ac_account set password=#{passwd} where id in
 	    <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
 	</delete>
+	
+	<update id="updateLanguage">
+	    update ac_account set language=#{language} where id=#{id}
+	</update>
+	
+	<select id="getAccountByLoginName" resultMap="AccountResultMap">
+		select a.*, t.id tenant_id, t.name tenant_name from ac_account a left join ac_tenant t on a.tenant_id=t.id where a.login_name=#{loginName}
+	</select>
+	
 </mapper>

@@ -2,6 +2,8 @@ package com.yinww.util;
 
 import java.security.MessageDigest;
 
+import com.yinww.util.encoder.AESEncoder;
+
 public class SHA256Util {
 
 	public static String getSHA256(String raw){
@@ -37,7 +39,11 @@ public class SHA256Util {
 	}
 	
 	public static void main(String[] args) {
-		String sha256 = getSHA256("123456");
+		String a = "name=xiaobo&code=match&secret=He@8x9N!u";
+		String sha256 = getSHA256(a);
 		System.out.println(sha256);
+		String encryptAES = AESEncoder.getInstance().encryptAES(a);
+		System.out.println(encryptAES);
+		System.out.println(AESEncoder.getInstance().decryptAES(encryptAES));
 	}
 }

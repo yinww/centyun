@@ -16,13 +16,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import com.yinww.account.domain.Manager;
+import com.yinww.web.core.util.EncryptUtils;
 
-@Component
+@Component("accountAuthenticationProvider")
 public class AccountAuthenticationProvider implements AuthenticationProvider {
 	private Logger log = LoggerFactory.getLogger(getClass());
 
 	@Autowired
-    private UserDetailsService userDetailService;
+    private UserDetailsService managerService;
 
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -32,7 +33,7 @@ public class AccountAuthenticationProvider implements AuthenticationProvider {
         // 这里构建来判断用户是否存在和密码是否正确
         Manager manager = null;
 		try {
-			manager = (Manager) userDetailService.loadUserByUsername(userName);
+			manager = (Manager) managerService.loadUserByUsername(userName);
 		} catch (DataAccessException e) {
 			log.error(e.getMessage(), e);
 			throw new BadCredentialsException("Login.DBError");

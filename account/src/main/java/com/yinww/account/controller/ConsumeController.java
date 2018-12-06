@@ -16,7 +16,6 @@ import com.yinww.account.service.ConsumeService;
 import com.yinww.account.service.TenantService;
 import com.yinww.account.table.DTRequestParams;
 import com.yinww.account.table.DataTableResult;
-import com.yinww.util.CommonUtil;
 
 @Controller
 @RequestMapping(value = "/consume")
@@ -31,10 +30,10 @@ public class ConsumeController extends BaseController {
 	private TenantService tenantService;
 
 	@RequestMapping(value = "/index.html")
-	public ModelAndView index(@RequestParam(required=false) String tenantId) {
+	public ModelAndView index(@RequestParam(required=false) Long tenantId) {
 		ModelAndView model = new ModelAndView();
 		model.addObject("modules", getModules("/consume/index.html"));
-		model.addObject("tenantId", CommonUtil.isEmpty(tenantId) ? "" : tenantId);
+		model.addObject("tenantId", tenantId == null || tenantId <= 0 ? null : tenantId);
 		model.addObject("tenants", tenantService.getAllTenants());
         model.setViewName("consume/consume-index");
         return model;
@@ -42,13 +41,13 @@ public class ConsumeController extends BaseController {
 
 	@RequestMapping(value = "/consumes")
 	@ResponseBody
-	public Object getConsumes(@ModelAttribute DTRequestParams dtParams, @RequestParam(required=false) String tenantId) {
-		PageInfo<Consume> consumes = consumeService.getPageConsumes(dtParams, tenantId);
+	public Object getConsumes(@ModelAttribute DTRequestParams dtParams, @RequestParam(required=false) Long tenantId) {
+		PageInfo<Consume> consumes = consumeService.getPageConsumes(dtParams, tenantId == null || tenantId <= 0 ? null : tenantId);
         return new DataTableResult<Consume>(consumes, dtParams.getDraw());
 	}
 
 	@RequestMapping(value = "/view.html")
-	public ModelAndView view(@RequestParam("id") String id) {
+	public ModelAndView view(@RequestParam("id") Long id) {
 		ModelAndView model = new ModelAndView();
 		model.addObject("modules", getModules("/consume/index.html"));
 		try {

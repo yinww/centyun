@@ -16,7 +16,7 @@ import com.yinww.account.domain.Manager;
 import com.yinww.account.mapper.ChargeMapper;
 import com.yinww.account.table.DTRequestParams;
 import com.yinww.account.table.KeyValuePair;
-import com.yinww.util.UUIDGenerator;
+import com.yinww.util.SnowFlakeIdWorker;
 import com.yinww.web.core.exception.BadRequestException;
 
 @Service
@@ -25,7 +25,7 @@ public class ChargeService {
 	@Autowired
 	private ChargeMapper chargeMapper;
 
-	public PageInfo<Charge> getPageCharges(DTRequestParams dtParams, String tenantId) {
+	public PageInfo<Charge> getPageCharges(DTRequestParams dtParams, Long tenantId) {
 		PageHelper.startPage(dtParams.getStart(), dtParams.getLength());
 		String searchValue = dtParams.getSearchValue();
 		List<KeyValuePair> orders = dtParams.getOrders();
@@ -35,7 +35,7 @@ public class ChargeService {
 		return pageInfo;
 	}
 
-	public Charge getChargeById(String id) {
+	public Charge getChargeById(Long id) {
 		return chargeMapper.getChargeById(id);
 	}
 
@@ -45,12 +45,13 @@ public class ChargeService {
 		if(manager == null) {
 			throw new BadRequestException(AccountConstant.AUTH_FAIL);
 		}
-		charge.setId(UUIDGenerator.getUUID());
+		SnowFlakeIdWorker snowFlake = new SnowFlakeIdWorker(0, 0);
+		charge.setId(snowFlake.nextId());
 		charge.setChargeManager(manager.getLoginName());
 		chargeMapper.addCharge(charge);
 	}
 
-	public void updateStatus(List<String> ids, int status) throws Exception {
+	public void updateStatus(List<Long> ids, int status) throws Exception {
 		Manager manager = (Manager)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if(manager == null) {
 			throw new BadRequestException(AccountConstant.AUTH_FAIL);

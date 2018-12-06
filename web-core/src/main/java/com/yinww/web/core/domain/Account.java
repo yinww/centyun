@@ -1,47 +1,52 @@
 package com.yinww.web.core.domain;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 
-public class Account implements Serializable {
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+public class Account implements Serializable, UserDetails {
 	
 	private static final long serialVersionUID = 5483313813369766000L;
 	
-	private String id;
+	private Long id;
 	private String loginName;
 	private int type; // 账号类型，0子账号, 1主账号
 	private String password;
 	private String displayName;
 	private String realName;
-	private String tenantId;
+	private Long tenantId;
 	private String tenantName;
 	private String mobile;
 	private String phone;
 	private String email;
 	private String headImg;
 	private int gender; // 性别，1男, 0女
-	private int status; // 状态，0被锁定, 1正常, 2已审核, 3已认证
+	private int status; // 状态，0已注册, 1已审核, 2已认证, 3已冻结, 4已注销
 	private int grade; // 等级，0子账号, 1主账号
 	private String creator;
 	private Date createTime;
 	private String editor;
 	private Date editTime;
+	private String language;
 	
 	public Account() {
 	}
 
-	public Account(String id, String tenantId, String loginName, String creator) {
+	public Account(Long id, Long tenantId, String loginName, String creator) {
 		this.id = id;
 		this.tenantId = tenantId;
 		this.loginName = loginName;
 		this.creator = creator;
 	}
 
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -85,11 +90,11 @@ public class Account implements Serializable {
 		this.realName = realName;
 	}
 
-	public String getTenantId() {
+	public Long getTenantId() {
 		return tenantId;
 	}
 
-	public void setTenantId(String tenantId) {
+	public void setTenantId(Long tenantId) {
 		this.tenantId = tenantId;
 	}
 
@@ -189,10 +194,49 @@ public class Account implements Serializable {
 		this.editTime = editTime;
 	}
 
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+
 	@Override
 	public String toString() {
 		return new StringBuilder("Account{id=").append(id).append(", loginName=").append(loginName)
 				.append(", mobile=").append(mobile)
 				.append(", tenantName=").append(tenantName).append("}").toString();
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return null;
+	}
+
+	@Override
+	public String getUsername() {
+		return loginName;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		// 状态，0已注册, 1已审核, 2已认证, 3已冻结, 4已注销
+		return status < 3;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return status < 3;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return status < 3;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return status < 3;
 	}
 }

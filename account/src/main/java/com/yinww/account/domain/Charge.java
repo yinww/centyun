@@ -18,7 +18,7 @@ public class Charge implements Serializable {
 
 	private static final long serialVersionUID = 7421627264111503805L;
 	
-	private String id;
+	private Long id;
 	private String tenantId;
 	private String tenantName;
 	private String productId;
@@ -39,11 +39,11 @@ public class Charge implements Serializable {
 	public Charge() {
 	}
 
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

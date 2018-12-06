@@ -4,7 +4,7 @@
 /*==============================================================*/
 create table ac_tenant
 (
-   id                   varchar(32) not null,
+   id                   bigint not null,
    name                 varchar(128) not null,
    code                 varchar(64),
    main_account         varchar(32),
@@ -17,11 +17,11 @@ create table ac_tenant
    type                 tinyint comment '0个人, 1企业, 2个体工商户, 3政府, 4媒体, 5其他组织',
    status               tinyint comment '0已注册, 1已审核, 2已认证, 3已冻结, 4已注销',
    note                 varchar(256),
-   access_key           varchar(64),
    creator              varchar(32),
    create_time          datetime,
    editor               varchar(32),
    edit_time            datetime,
+   access_key           varchar(64),
    primary key (id)
 )
 ENGINE = InnoDB
@@ -33,7 +33,7 @@ create unique index idxuk_tenant_name on ac_tenant (name);
 /*==============================================================*/
 create table ac_account
 (
-   id                   varchar(32) not null,
+   id                   bigint not null,
    login_name           varchar(32) not null,
    type                 tinyint comment '0子账号, 1主账号',
    password             varchar(108),
@@ -47,6 +47,7 @@ create table ac_account
    gender               tinyint comment '1男, 0女',
    status               tinyint comment '0已注册, 1已审核, 2已认证, 3已冻结, 4已注销',
    grade                tinyint comment '0初级, 1....',
+   language             varchar(8),
    creator              varchar(32),
    create_time          datetime,
    editor               varchar(32),
@@ -62,7 +63,7 @@ create unique index idxuk_account_name on ac_account (login_name);
 /*==============================================================*/
 create table ac_manager
 (
-   id                   varchar(32) not null,
+   id                   int not null,
    login_name           varchar(32) not null,
    password             varchar(108) not null,
    display_name         varchar(32) not null,
@@ -86,7 +87,7 @@ create unique index idxuk_manager_name on ac_manager (login_name);
 /*==============================================================*/
 create table ac_product
 (
-   id                   varchar(32) not null,
+   id                   bigint not null,
    name                 varchar(64) not null,
    code                 varchar(64),
    version              varchar(32),
@@ -109,7 +110,7 @@ create unique index idxuk_productr on ac_product (name, code, version);
 /*==============================================================*/
 create table ac_charge
 (
-   id                   varchar(32) not null,
+   id                   bigint not null,
    tenant_id            varchar(32) not null,
    product_id           varchar(32) not null,
    money                decimal(12,2),
@@ -131,7 +132,7 @@ DEFAULT CHARSET = utf8;
 /*==============================================================*/
 create table ac_module
 (
-   id                   varchar(32) not null,
+   id                   int not null,
    code                 varchar(32),
    name                 varchar(32),
    english_name         varchar(64),
@@ -150,7 +151,7 @@ DEFAULT CHARSET = utf8;
 /*==============================================================*/
 create table ac_audit
 (
-   id                   varchar(32) not null,
+   id                   bigint not null,
    action               varchar(64),
    module               varchar(32),
    content              text,
@@ -167,7 +168,7 @@ DEFAULT CHARSET = utf8;
 /*==============================================================*/
 create table ac_consume
 (
-   id                   varchar(32) not null,
+   id                   bigint not null,
    tenant_id            varchar(32),
    product_id           varchar(32),
    amount               int,

@@ -1,5 +1,10 @@
 package com.yinww.util;
 
+/**
+ * IP与Long的相互转换工具类, MySQL数据库中存取Long型ip的效率更高
+ * @author yinww
+ *
+ */
 public class IPUtil {
 	/**
 	 * ip地址转长整型

@@ -72,5 +72,7 @@
 		<module>code</module>
 		<module>spider</module>
 		<module>sms</module>
+		<module>mail</module>
+		<module>login</module>
 	</modules>
 </project>

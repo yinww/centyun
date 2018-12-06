@@ -61,3 +61,6 @@ http://ip.taobao.com/service/getIpInfo.php?ip=[ip地址字串]
 
 icons:
 https://adminlte.io/themes/AdminLTE/pages/UI/icons.html
+
+--------
+https://github.com/zenorocha/clipboard.js/  and https://clipboardjs.com/

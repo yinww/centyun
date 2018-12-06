@@ -13,7 +13,7 @@ import com.yinww.account.domain.Consume;
 import com.yinww.account.mapper.ConsumeMapper;
 import com.yinww.account.table.DTRequestParams;
 import com.yinww.account.table.KeyValuePair;
-import com.yinww.util.UUIDGenerator;
+import com.yinww.util.SnowFlakeIdWorker;
 
 @Service
 public class ConsumeService {
@@ -21,7 +21,7 @@ public class ConsumeService {
 	@Autowired
 	private ConsumeMapper consumeMapper;
 
-	public PageInfo<Consume> getPageConsumes(DTRequestParams dtParams, String tenantId) {
+	public PageInfo<Consume> getPageConsumes(DTRequestParams dtParams, Long tenantId) {
 		PageHelper.startPage(dtParams.getStart(), dtParams.getLength());
 		String searchValue = dtParams.getSearchValue();
 		List<KeyValuePair> orders = dtParams.getOrders();
@@ -32,13 +32,14 @@ public class ConsumeService {
 	}
 
 
-	public Consume getConsumeById(String id) {
+	public Consume getConsumeById(Long id) {
 		return consumeMapper.getConsumeById(id);
 	}
 
 	public void saveConsume(Consume consume) {
 		// 获取当前用户
-		consume.setId(UUIDGenerator.getUUID());
+		SnowFlakeIdWorker snowFlake = new SnowFlakeIdWorker(0, 0);
+		consume.setId(snowFlake.nextId());
 		consumeMapper.addConsume(consume);
 	}
 

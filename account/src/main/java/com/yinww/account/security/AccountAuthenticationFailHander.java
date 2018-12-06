@@ -28,15 +28,15 @@ public class AccountAuthenticationFailHander extends SimpleUrlAuthenticationFail
 
 	@Autowired
 	private ObjectMapper objectMapper;
-
+	
 	@Autowired
     private MessageSource messageSource;
 
 	@Override
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException exception) throws IOException, ServletException {
-        log.info("login error", exception);
-		Map<String, Object> map = new HashMap<>();
+        log.info("captch error", exception);
+        Map<String, Object> map = new HashMap<>();
 		map.put("code", HttpStatus.BAD_REQUEST.value());
 		map.put("msg", getMessage(exception.getMessage(), request));
 		response.setContentType("application/json;charset=UTF-8");
@@ -50,4 +50,5 @@ public class AccountAuthenticationFailHander extends SimpleUrlAuthenticationFail
 		}
 		return messageSource.getMessage(code, null, locale);
 	}
+
 }

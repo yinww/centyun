@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.yinww.account.domain.Audit;
+import com.yinww.web.core.domain.Audit;
 
 @Mapper
 public interface AuditMapper {

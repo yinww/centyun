@@ -15,16 +15,20 @@ public interface AccountMapper {
 	
 	void updateAccount(Account account);
 
-	Account getAccountById(@Param("id") String accountId);
+	Account getAccountById(@Param("id") Long accountId);
 
 	void addMainAccount(Account account);
 
-	List<Account> getPageAccounts(@Param("tenantId") String tenantId, @Param("searchValue") String searchValue, @Param("orders") List<KeyValuePair> orders);
+	List<Account> getPageAccounts(@Param("tenantId") Long tenantId, @Param("searchValue") String searchValue, @Param("orders") List<KeyValuePair> orders);
 
-	void updateStatus(@Param("ids") List<String> ids, @Param("status") int status, @Param("editor") String editor);
+	void updateStatus(@Param("ids") List<Long> ids, @Param("status") int status, @Param("editor") String editor);
 
-	void repasswd(@Param("ids") List<String> ids, @Param("passwd") String passwd);
+	void repasswd(@Param("ids") List<Long> ids, @Param("passwd") String passwd);
 
 	int getAccountByName(Account account);
+
+	void updateLanguage(@Param("id") Long id, @Param("language") String language);
+
+	Account getAccountByLoginName(@Param("loginName") String loginName);
 
 }

@@ -91,11 +91,11 @@
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">确认删除</h4>
+                <h4 class="modal-title">确认取消充值</h4>
                 <input type="hidden" id="ids">
               </div>
               <div class="modal-body">
-                <p>确认要删除选中的数据吗？</p>
+                <p>确认要取消所选数据的充值吗？</p>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" onclick="deleteChargeByIds()">确定</button>
@@ -171,7 +171,7 @@
             },{
             	"aTargets": -1, //最后一列 
                 "render": function (data, type) {
-                    return "<a href='/charge/view.html?id=" + data + "'>查看</a> | <a href='/charge/edit.html?id=" + data + "'>编辑</a> | <a href='#' onclick=\"deleteCharge('" + data +"')\">取消</a>";
+                    return "<a href='/charge/view.html?id=" + data + "'>查看</a> | <a href='#' onclick=\"deleteCharge('" + data +"')\">取消</a>";
                 }
             },{
             	"bSortable": false,
@@ -196,18 +196,6 @@
 	        window.location.href=url;
 	    });
 
-	    $("#editCharge").click(function(){
-	        var ids = [];
-	        $('input[name="ckb-jobid"]:checked').each(function(){ 
-	            ids.push($(this).val());
-	        });
-	        if(ids.length > 0) {
-	        	window.location.href="/charge/add.html?ids=" + ids.join(",");
-	        } else {
-	        	alert("请选择要编辑的数据");
-	        }
-	    });
-
 	    $("#deleteCharge").click(function(){
 	        var ids = [];
 	        $('input[name="ckb-jobid"]:checked').each(function(){ 
@@ -222,7 +210,7 @@
 	                backdrop:'static'
 	            });
 	        } else {
-	        	alert("请选择要删除的数据");
+	        	alert("请选择要取消充值的数据");
 	        }
 	    });
 
@@ -242,10 +230,6 @@
 	  var tenantId = $("#tenantId").val();
 	  var newurl = (null == tenantId || '' == tenantId) ? "/charge/charges" : "/charge/charges?tenantId=" + tenantId;
 	  table.ajax.url( newurl ).load();
-  }
-  
-  function editCharge(data) {
-	  alert("要编辑数据" + data);
   }
   
   function deleteCharge(data) {

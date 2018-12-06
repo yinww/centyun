@@ -16,13 +16,12 @@ import com.yinww.account.domain.Manager;
 import com.yinww.account.domain.Tenant;
 import com.yinww.account.mapper.AccountMapper;
 import com.yinww.account.mapper.TenantMapper;
-import com.yinww.account.security.EncryptUtils;
 import com.yinww.account.table.DTRequestParams;
 import com.yinww.account.table.KeyValuePair;
-import com.yinww.util.CommonUtil;
-import com.yinww.util.UUIDGenerator;
+import com.yinww.util.SnowFlakeIdWorker;
 import com.yinww.web.core.domain.Account;
 import com.yinww.web.core.exception.BadRequestException;
+import com.yinww.web.core.util.EncryptUtils;
 
 @Service
 public class TenantService {
@@ -59,11 +58,14 @@ public class TenantService {
 		if(checkTenant(tenant)) {
 			throw new BadRequestException(AccountConstant.TENANT_EXISTED);
 		}
-		if(CommonUtil.isEmpty(tenant.getId())) {
-			tenant.setId(UUIDGenerator.getUUID());
+		Long id = tenant.getId();
+		if(id == null || id <= 0) {
+			SnowFlakeIdWorker snowFlake = new SnowFlakeIdWorker(0, 0);
+			id = snowFlake.nextId();
+			tenant.setId(id);
 			tenant.setCreator(manager.getLoginName());
 			tenantMapper.addTenant(tenant);
-			Account account = new Account(UUIDGenerator.getUUID(), tenant.getId(), tenant.getMainAccount(), manager.getLoginName());
+			Account account = new Account(snowFlake.nextId(), id, tenant.getMainAccount(), manager.getLoginName());
 			account.setPassword(EncryptUtils.encrypt(tenant.getMainAccountPwd()));
 			account.setMobile(tenant.getMobile());
 			account.setPhone(tenant.getPhone());
@@ -80,11 +82,11 @@ public class TenantService {
 		return count > 0;
 	}
 
-	public Tenant getTenantById(String id) {
+	public Tenant getTenantById(Long id) {
 		return tenantMapper.getTenantById(id);
 	}
 
-	public void deleteTenant(List<String> ids) {
+	public void deleteTenant(List<Long> ids) {
 		Manager manager = (Manager)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if(manager == null) {
 			throw new BadRequestException(AccountConstant.AUTH_FAIL);

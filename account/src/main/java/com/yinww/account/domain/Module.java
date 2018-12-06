@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Alias("module")
 public class Module {
-	private String id;
+	private Integer id;
 	private String code;
 	private String name;
 	private String englishName;
@@ -21,11 +21,11 @@ public class Module {
 
 	private boolean active;
 	
-	public String getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

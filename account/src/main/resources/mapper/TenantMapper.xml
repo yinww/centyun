@@ -4,7 +4,7 @@
 
 <mapper namespace="com.yinww.account.mapper.TenantMapper">
 	<resultMap id="TenantResultMap" type="com.yinww.account.domain.Tenant">
-		<id column="id" jdbcType="VARCHAR" property="id"/>
+		<id column="id" jdbcType="BIGINT" property="id"/>
 		<result column="name" jdbcType="VARCHAR" property="name"/>
 		<result column="code" jdbcType="VARCHAR" property="code"/>
 		<result column="main_account" jdbcType="VARCHAR" property="mainAccount"/>
@@ -42,7 +42,7 @@
 		</if>
 	</select>
 
-	<select id="getTenantById" parameterType="java.lang.String" resultMap="TenantResultMap">
+	<select id="getTenantById" parameterType="long" resultMap="TenantResultMap">
 		select * from ac_tenant where id = #{id}
 	</select>
 	

@@ -26,6 +26,9 @@ public interface AppConstant {
 	String DOT = ".";
 	String COMMA = ",";
 	
+	String TOKEN = "cty_token";
+	String LOGIN_ACCOUNT = "login_account";
+	
 	int DEFAULT_PAGE_START = 1;
 	int DEFAULT_PAGE_SIZE = 10;
 	

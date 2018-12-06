@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class Tenant implements Serializable {
 	private static final long serialVersionUID = 7841144358194132207L;
 	
-	private String id;
+	private Long id;
 	@NotBlank(message = "{validerror.tenant.name}")
 	private String name;
 	@NotBlank(message = "{validerror.tenant.code}")
@@ -45,11 +45,11 @@ public class Tenant implements Serializable {
 	public Tenant() {
 	}
 
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

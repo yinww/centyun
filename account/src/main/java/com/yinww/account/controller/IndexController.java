@@ -32,13 +32,13 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import com.google.code.kaptcha.Producer;
 import com.yinww.account.AccountApplication;
-import com.yinww.account.domain.Audit;
 import com.yinww.account.domain.Manager;
 import com.yinww.account.file.FileUpload;
-import com.yinww.account.security.CaptchaAuthenticationFilter;
-import com.yinww.account.service.AuditService;
+import com.yinww.account.service.AuditServiceImpl;
 import com.yinww.util.IPUtil;
 import com.yinww.web.core.constant.ResultEntity;
+import com.yinww.web.core.domain.Audit;
+import com.yinww.web.core.security.CaptchaAuthenticationFilter;
 
 @Controller
 public class IndexController extends BaseController {
@@ -49,7 +49,7 @@ public class IndexController extends BaseController {
     private Producer captchaProducer;
 
 	@Autowired
-	private AuditService auditService;
+	private AuditServiceImpl auditService;
 
 	@Value("${UPLOAD_DIR}")
 	private String uploadDir;
@@ -95,7 +95,7 @@ public class IndexController extends BaseController {
 	    	audit.setContent(ip);
 	    	audit.setIp(IPUtil.ipToLong(ip));
 	    	audit.setOperator(manager.getLoginName());
-	    	auditService.saveAccount(audit);
+	    	auditService.saveAudit(audit);
 	    }
     	
 		return "redirect:/login?logout";

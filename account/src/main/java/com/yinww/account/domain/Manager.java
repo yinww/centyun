@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class Manager implements Serializable, UserDetails {
 	private static final long serialVersionUID = -4465842418724220179L;
 	
-	private String id;
+	private Integer id;
 	private String loginName;
 	private String password;
 	private String displayName;
@@ -34,11 +34,11 @@ public class Manager implements Serializable, UserDetails {
 	public Manager() {
 	}
 
-	public String getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

@@ -67,7 +67,7 @@ public class ProductController extends BaseController {
 	}
 
 	@RequestMapping(value = "/edit.html")
-	public ModelAndView edit(@RequestParam("id") String id) {
+	public ModelAndView edit(@RequestParam("id") Long id) {
 		ModelAndView model = new ModelAndView();
 		model.addObject("modules", getModules("/product/index.html"));
 		Product product = productService.getProductById(id);
@@ -77,7 +77,7 @@ public class ProductController extends BaseController {
 	}
 
 	@RequestMapping(value = "/view.html")
-	public ModelAndView view(@RequestParam("id") String id) {
+	public ModelAndView view(@RequestParam("id") Long id) {
 		ModelAndView model = new ModelAndView();
 		model.addObject("modules", getModules("/product/index.html"));
 		Product product = productService.getProductById(id);
@@ -113,7 +113,7 @@ public class ProductController extends BaseController {
 		if(!CommonUtil.isEmpty(ids)) {
 			try {
 				List<String> list = Arrays.asList(ids.split(AppConstant.COMMA));
-				productService.deleteProduct(list);
+				productService.deleteProduct(CommonUtil.strings2Longs(list));
 			} catch (BadRequestException e) {
 				log.error(e.getMessage(), e);
 				ResultEntity result = new ResultEntity();

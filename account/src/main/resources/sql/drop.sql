@@ -5,3 +5,4 @@ drop table if exists ac_tenant;
 drop table if exists ac_manager;
 drop table if exists ac_module;
 drop table if exists ac_audit;
+drop table if exists ac_consume;

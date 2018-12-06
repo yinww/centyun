@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class Product implements Serializable {
 	private static final long serialVersionUID = -2981023802310876879L;
 	
-	private String id;
+	private Long id;
 	private String name;
 	private String code;
 	private String version;
@@ -31,11 +31,11 @@ public class Product implements Serializable {
 	public Product() {
 	}
 
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

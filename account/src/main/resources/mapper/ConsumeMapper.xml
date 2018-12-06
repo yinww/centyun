@@ -4,7 +4,7 @@
 
 <mapper namespace="com.yinww.account.mapper.ConsumeMapper">
 	<resultMap id="ConsumeResultMap" type="consume">
-		<id column="id" jdbcType="VARCHAR" property="id"/>
+		<id column="id" jdbcType="BIGINT" property="id"/>
 		<result column="tenant_id" jdbcType="VARCHAR" property="tenantId"/>
 		<result column="tenant_name" jdbcType="VARCHAR" property="tenantName"/>
 		<result column="product_id" jdbcType="VARCHAR" property="productId"/>

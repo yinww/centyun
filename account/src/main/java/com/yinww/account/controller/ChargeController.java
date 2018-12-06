@@ -53,10 +53,10 @@ public class ChargeController extends BaseController {
 	private ProductService productService;
 
 	@RequestMapping(value = "/index.html")
-	public ModelAndView index(@RequestParam(required=false) String tenantId) {
+	public ModelAndView index(@RequestParam(required=false) Long tenantId) {
 		ModelAndView model = new ModelAndView();
 		model.addObject("modules", getModules("/charge/index.html"));
-		model.addObject("tenantId", CommonUtil.isEmpty(tenantId) ? "" : tenantId);
+		model.addObject("tenantId", tenantId == null || tenantId <= 0 ? null : tenantId);
 		model.addObject("tenants", tenantService.getAllTenants());
         model.setViewName("charge/charge-index");
         return model;
@@ -64,17 +64,17 @@ public class ChargeController extends BaseController {
 
 	@RequestMapping(value = "/charges")
 	@ResponseBody
-	public Object getCharges(@ModelAttribute DTRequestParams dtParams, @RequestParam(required=false) String tenantId) {
-		PageInfo<Charge> charges = chargeService.getPageCharges(dtParams, tenantId);
+	public Object getCharges(@ModelAttribute DTRequestParams dtParams, @RequestParam(required=false) Long tenantId) {
+		PageInfo<Charge> charges = chargeService.getPageCharges(dtParams, tenantId == null || tenantId <= 0 ? null : tenantId);
         return new DataTableResult<Charge>(charges, dtParams.getDraw());
 	}
 
 	@RequestMapping(value = "/add.html")
-	public ModelAndView add(@RequestParam(required=false, value="tenantId") String tenantId) {
+	public ModelAndView add(@RequestParam(required=false, value="tenantId") Long tenantId) {
 		ModelAndView model = new ModelAndView();
 		model.addObject("modules", getModules("/charge/index.html"));
 		model.addObject("tenants", tenantService.getAllTenants());
-		if(!CommonUtil.isEmpty(tenantId)) {
+		if(tenantId != null && tenantId > 0) {
 			model.addObject("tenantId", tenantId);
 		}
 		model.addObject("products", productService.getAvailableProducts());
@@ -83,7 +83,7 @@ public class ChargeController extends BaseController {
 	}
 
 	@RequestMapping(value = "/view.html")
-	public ModelAndView view(@RequestParam("id") String id) {
+	public ModelAndView view(@RequestParam("id") Long id) {
 		ModelAndView model = new ModelAndView();
 		model.addObject("modules", getModules("/charge/index.html"));
 		Charge charge = chargeService.getChargeById(id);
@@ -119,7 +119,7 @@ public class ChargeController extends BaseController {
 		if(!CommonUtil.isEmpty(ids)) {
 			try {
 				List<String> list = Arrays.asList(ids.split(AppConstant.COMMA));
-				chargeService.updateStatus(list, AccountConstant.CHARGE_STATUS_DELETED); // 2 取消充值
+				chargeService.updateStatus(CommonUtil.strings2Longs(list), AccountConstant.CHARGE_STATUS_DELETED); // 2 取消充值
 			} catch (BadRequestException e) {
 				log.error(e.getMessage(), e);
 				ResultEntity result = new ResultEntity();

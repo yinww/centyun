@@ -4,7 +4,7 @@
 
 <mapper namespace="com.yinww.account.mapper.ProductMapper">
 	<resultMap id="ProductResultMap" type="com.yinww.account.domain.Product">
-		<id column="id" jdbcType="VARCHAR" property="id"/>
+		<id column="id" jdbcType="BIGINT" property="id"/>
 		<result column="name" jdbcType="VARCHAR" property="name"/>
 		<result column="code" jdbcType="VARCHAR" property="code"/>
 		<result column="version" jdbcType="VARCHAR" property="version"/>
@@ -34,7 +34,7 @@
 		</if>
 	</select>
 	
-	<select id="getProductById" parameterType="java.lang.String" resultMap="ProductResultMap">
+	<select id="getProductById" parameterType="long" resultMap="ProductResultMap">
 		select * from ac_product where id=#{id}
 	</select>
 	

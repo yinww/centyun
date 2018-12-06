@@ -17,7 +17,8 @@ import javax.imageio.ImageIO;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
+
+import com.yinww.util.CommonUtil;
 
 /**
  * png图片处理成圆形的工具类
@@ -35,7 +36,7 @@ public class CircleImageUtil {
 	 * @return
 	 */
 	private static boolean isHttpFile(String path) {
-		if (!StringUtils.isEmpty(path) && path.toLowerCase().startsWith("http")) {
+		if (!CommonUtil.isEmpty(path) && path.toLowerCase().startsWith("http")) {
 			return true;
 		}
 		return false;
@@ -59,7 +60,7 @@ public class CircleImageUtil {
 	 * @return
 	 */
 	public static boolean getCircleImage(CircleImageParam param) {
-		if (StringUtils.isEmpty(param.getSourcePath()) || StringUtils.isEmpty(param.getDestinyPath())) {
+		if (CommonUtil.isEmpty(param.getSourcePath()) || CommonUtil.isEmpty(param.getDestinyPath())) {
 			return false;
 		}
 

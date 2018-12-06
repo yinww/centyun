@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @Alias("consume")
 public class Consume {
 
-	private String id;
+	private Long id;
 	private String tenantId;
 	private String tenantName;
 	private String productId;
@@ -21,11 +21,11 @@ public class Consume {
 	private String ipStr;
 	private Long ip;
 
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
