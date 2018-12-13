@@ -21,12 +21,19 @@
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
       <!-- Sidebar Menu -->
-      <ul class="sidebar-menu" data-widget="tree" th:each="module : ${modules}">
-        <li th:class="${module.active}? 'active'">
-          <a th:href="${module.url}"><i class="fa " th:classappend="${module.icon}"></i>
-            <span th:text="${session.SPRING_SECURITY_CONTEXT.authentication.principal.language == 'zh_CN' ? module.name : module.englishName}">Link</span></a>
-          <ul class="treeview-menu" th:if="${not #lists.isEmpty(module.children)}" th:each="moduleChild : ${module.children}">
-            <li><a href="#"><i class="fa" th:classappend="${moduleChild.icon}"></i> <span th:text="${session.SPRING_SECURITY_CONTEXT.authentication.principal.language == 'zh_CN' ? moduleChild.name : moduleChild.englishName}">Link</span></a></li>
+      <ul class="sidebar-menu tree" data-widget="tree" th:each="module : ${modules}">
+        <li class="treeview">
+          <a href="#">
+            <i class="fa " th:classappend="${module.icon}"></i> <span th:text="${session.SPRING_SECURITY_CONTEXT.authentication.principal.language == 'zh_CN' ? module.name : module.englishName}">Link</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu" style="display: none;">
+            <li th:if="${not #lists.isEmpty(module.children)}" th:each="moduleChild : ${module.children}">
+              <a th:href="${moduleChild.url}"><i class="fa " th:classappend="${moduleChild.icon}"></i>
+                <span th:text="${session.SPRING_SECURITY_CONTEXT.authentication.principal.language == 'zh_CN' ? moduleChild.name : moduleChild.englishName}">Link</span>
+              </a></li>
           </ul>
         </li>
       </ul>

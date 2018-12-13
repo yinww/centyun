@@ -22,6 +22,6 @@
 		<if test="status != null">
 		    where status = #{status}
 		</if>
-		order by order_no
+		order by parent_id, order_no
 	</select>
 </mapper>
