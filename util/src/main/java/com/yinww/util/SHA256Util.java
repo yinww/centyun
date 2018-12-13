@@ -37,13 +37,4 @@ public class SHA256Util {
 		}
 		return stringBuffer.toString();
 	}
-	
-	public static void main(String[] args) {
-		String a = "name=xiaobo&code=match&secret=He@8x9N!u";
-		String sha256 = getSHA256(a);
-		System.out.println(sha256);
-		String encryptAES = AESEncoder.getInstance().encryptAES(a);
-		System.out.println(encryptAES);
-		System.out.println(AESEncoder.getInstance().decryptAES(encryptAES));
-	}
 }

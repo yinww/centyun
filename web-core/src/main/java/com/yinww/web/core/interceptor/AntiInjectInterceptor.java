@@ -55,7 +55,8 @@ public class AntiInjectInterceptor extends HandlerInterceptorAdapter {
 			return true;
 		}
 
-		String basePath = request.getScheme() + "://" + request.getServerName();
+		String basePath = referrer.startsWith("https://") ? "https://" : "http://";
+		basePath += request.getServerName();
 		if (referrer.lastIndexOf(basePath) == 0) {
 			return true; // referrer包含当前域名不做校验，返回true
 		}

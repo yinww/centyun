@@ -29,8 +29,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private AuthenticationProvider accountAuthenticationProvider;
 	
-	@Value("${security.excludes}")
-	private String excludes;
+	@Value("${security.ignores}")
+	private String ignores;
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -41,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //		        .failureHandler(accountAuthenticationFailHander)
 		    .permitAll()
 		.and().headers().frameOptions().sameOrigin()
-		.and().authorizeRequests().antMatchers("/account/getAccountByToken", "/account/updateLanguage", "/captcha-image", "/change-lang", "/login/**").permitAll()
+		.and().authorizeRequests().antMatchers("/encode/**", "/account/getAccountByToken", "/account/updateLanguage", "/captcha-image", "/change-lang", "/login/**").permitAll()
 		    .anyRequest().access("@securityService.hasPermission(request, authentication)")  //必须经过认证以后才能访问
 		.and().csrf().disable();
 	}
@@ -63,9 +63,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-	    String[] ignores = excludes.split(",");
-	    for (String string : ignores) {
-	      web.ignoring().antMatchers(string);
+	    String[] ignoreArray = ignores.split(",");
+	    for (String ignore : ignoreArray) {
+	      web.ignoring().antMatchers(ignore);
 	    }
 	}
 }

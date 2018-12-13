@@ -75,9 +75,9 @@ public class EncryptUtils {
 	}
 	
 	public static void main(String[] args) {
-		String a = "lOuy1c3H1u867ArZ4FKeOMLsh93gIeQH1CmX8oypBvtNiqcxHqNGNgFFYrQ3k2HFlJFtDv2IaVPH1/JdeVpmsbE2zqlUcs5dMTOvKjjCfDs=";
+/*		String a = "lOuy1c3H1u867ArZ4FKeOMLsh93gIeQH1CmX8oypBvtNiqcxHqNGNgFFYrQ3k2HFlJFtDv2IaVPH1/JdeVpmsbE2zqlUcs5dMTOvKjjCfDs=";
 		boolean valid = valid(SHA256Util.getSHA256("asdf6789"), a);
-		System.out.println(valid);
+		System.out.println(valid);*/
 		/*
 		String text = "123456";
 		String obfuscationCode = getObfuscationCode(text);
@@ -93,6 +93,8 @@ public class EncryptUtils {
 		System.out.println(obfuscationCode);
 		System.out.println(encryptPwd(text));
 		*/
+		
+		System.out.println(encryptPwd("Hello369"));
 	}
 
 }

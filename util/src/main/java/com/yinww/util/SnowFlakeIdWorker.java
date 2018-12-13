@@ -91,14 +91,4 @@ public class SnowFlakeIdWorker {
 		return System.currentTimeMillis();
 	}
 
-	public static void main(String[] args) {
-		SnowFlakeIdWorker snowFlake = new SnowFlakeIdWorker(1, 1);
-		long start = System.currentTimeMillis();
-		for (int i = 0; i < 10; i++) {
-			long id = snowFlake.nextId();
-			System.out.println(id);
-		}
-		System.out.println(System.currentTimeMillis() - start);
-	}
-
 }

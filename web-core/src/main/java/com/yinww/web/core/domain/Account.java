@@ -7,6 +7,8 @@ import java.util.Date;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class Account implements Serializable, UserDetails {
 	
 	private static final long serialVersionUID = 5483313813369766000L;
@@ -27,8 +29,10 @@ public class Account implements Serializable, UserDetails {
 	private int status; // 状态，0已注册, 1已审核, 2已认证, 3已冻结, 4已注销
 	private int grade; // 等级，0子账号, 1主账号
 	private String creator;
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date createTime;
 	private String editor;
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date editTime;
 	private String language;
 	

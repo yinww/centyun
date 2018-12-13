@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +25,7 @@ import com.yinww.account.service.TenantService;
 import com.yinww.account.table.DTRequestParams;
 import com.yinww.account.table.DataTableResult;
 import com.yinww.util.CommonUtil;
+import com.yinww.util.encoder.AESEncoder;
 import com.yinww.web.core.constant.AppConstant;
 import com.yinww.web.core.constant.ResultEntity;
 import com.yinww.web.core.domain.Account;
@@ -69,7 +71,8 @@ public class AccountController extends BaseController {
 	@RequestMapping(value = "/getAccountByToken")
 	@ResponseBody
 	public Object getAccountByToken(@RequestParam(value = "token") String token) {
-		Account account = accountService.getAccountByToken(token);
+		String loginName = AESEncoder.getInstance().decryptAES(token);
+		UserDetails account = accountService.loadUserByUsername(loginName);
 		return account;
 	}
 

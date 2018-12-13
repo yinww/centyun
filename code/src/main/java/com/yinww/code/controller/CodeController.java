@@ -18,7 +18,8 @@ public class CodeController {
     private StringEncryptor stringEncryptor;
 	
 	@RequestMapping(value = "/encrypt/{value}", method = RequestMethod.POST)
-	public String encrypt(@PathVariable String value) {
+	public String encrypt() {
+		String value = "ctY#7H4x9KnUw8mxeG9pzdb";
 		String encrypt = stringEncryptor.encrypt(value);
 		log.info(value + "====" + encrypt);
 		return encrypt;

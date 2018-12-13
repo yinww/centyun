@@ -20,7 +20,10 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yinww.util.IPUtil;
+import com.yinww.util.encoder.AESEncoder;
 import com.yinww.web.core.client.AccountFeignClient;
+import com.yinww.web.core.constant.AppConstant;
+import com.yinww.web.core.cookie.CookieUtils;
 import com.yinww.web.core.domain.Account;
 import com.yinww.web.core.domain.Audit;
 import com.yinww.web.core.service.AuditService;
@@ -67,6 +70,10 @@ public class PassportAuthenticationSuccessHandler extends SavedRequestAwareAuthe
 	    	audit.setIp(IPUtil.ipToLong(ip));
 	    	audit.setOperator(account.getLoginName());
 	    	auditService.saveLoginAudit(audit);
+	    	
+	    	// 设置token的cookies
+	    	String token = AESEncoder.getInstance().encryptAES(account.getLoginName());
+	    	CookieUtils.setCookie(request, response, AppConstant.TOKEN, token);
 	    }
 	    
 		// 这里可以根据实际情况，来确定是跳转到页面或者json格式。

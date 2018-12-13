@@ -1,7 +1,9 @@
 package com.yinww.login.controller;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
@@ -21,7 +23,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.code.kaptcha.Producer;
+import com.yinww.login.domain.Module;
+import com.yinww.login.service.ModuleService;
 import com.yinww.web.core.client.AccountFeignClient;
+import com.yinww.web.core.constant.AppConstant;
 import com.yinww.web.core.cookie.CookieUtils;
 import com.yinww.web.core.domain.Account;
 import com.yinww.web.core.security.CaptchaAuthenticationFilter;
@@ -29,6 +34,9 @@ import com.yinww.web.core.security.CaptchaAuthenticationFilter;
 @Controller
 public class LoginController {
 	private Logger log = LoggerFactory.getLogger(LoginController.class);
+	
+	@Autowired
+	private ModuleService moduleService;
 
 	@Autowired
     private Producer captchaProducer;
@@ -37,8 +45,9 @@ public class LoginController {
 	private AccountFeignClient accountFeignClient;
 
     @GetMapping(value = "/getCookies")
+    @ResponseBody
     public Object getCookies(HttpServletRequest request) {
-        String cookieValue = CookieUtils.getCookieValue(request, "crm_token");
+        String cookieValue = CookieUtils.getCookieValue(request, AppConstant.TOKEN);
         Map<String, Object> result = new HashMap<>();
         result.put("success", true);
         result.put("crmToken_in_crm", cookieValue);
@@ -46,18 +55,44 @@ public class LoginController {
     }
 
     @GetMapping(value = "/setCookies", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
     public Object setCookies(HttpServletRequest request, HttpServletResponse response) {
-        CookieUtils.setCookie(request, response, "crm_token", "yinww111_crm");
+        CookieUtils.setCookie(request, response, AppConstant.TOKEN, "yinww111_crm");
         Map<String, Object> result = new HashMap<>();
         result.put("success", true);
         return result;
     }
 
 	@RequestMapping(value = {"/", "/index.html"})
-	public String login() {
-		return "login";
+	public ModelAndView index() {
+        ModelAndView model = new ModelAndView();
+        List<Module> modules = moduleService.getAvailableModules();
+		model.addObject("modules", resortModule(modules));
+        model.setViewName("index");
+        return model;
 	}
 	
+	private List<Module> resortModule(List<Module> modules) {
+		if(modules == null || modules.size() == 0) {
+			return null;
+		}
+		List<Module> result = new ArrayList<>();
+		Map<Long, Module> moduleMap = new HashMap<>();
+		for (Module module : modules) {
+			Long pid = module.getParentId();
+			Module pModule = moduleMap.get(pid);
+			if(pModule != null) {
+				pModule.addChild(module);
+			}
+			Long id = module.getId();
+			moduleMap.put(id, module);
+			if(pid == 0) {
+				result.add(module); // pid为0的是根节点
+			}
+		}
+		return result;
+	}
+
 	@GetMapping(value = "/login")
     public ModelAndView login(
             @RequestParam(value = "error", required = false) String error,

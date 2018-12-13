@@ -10,8 +10,8 @@
 		<result column="english_name" jdbcType="VARCHAR" property="englishName"/>
 		<result column="icon" jdbcType="VARCHAR" property="icon"/>
 		<result column="url" jdbcType="VARCHAR" property="url"/>
-		<result column="order_no" jdbcType="VARCHAR" property="orderNo"/>
-		<result column="status" jdbcType="VARCHAR" property="status"/>
+		<result column="order_no" jdbcType="INTEGER" property="orderNo"/>
+		<result column="status" jdbcType="INTEGER" property="status"/>
 		<result column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" property="createTime"/>
 	</resultMap>
 	
@@ -22,7 +22,7 @@
 		<result column="display_name" jdbcType="VARCHAR" property="displayName"/>
 		<result column="phone" jdbcType="VARCHAR" property="phone"/>
 		<result column="email" jdbcType="VARCHAR" property="email"/>
-		<result column="status" jdbcType="VARCHAR" property="status"/>
+		<result column="status" jdbcType="INTEGER" property="status"/>
 		<result column="creator" jdbcType="VARCHAR" property="creator"/>
 		<result column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" property="createTime"/>
 		<result column="editor" jdbcType="VARCHAR" property="editor"/>
