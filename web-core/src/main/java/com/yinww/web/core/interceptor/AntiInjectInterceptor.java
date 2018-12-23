@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.AntPathMatcher;
+import org.springframework.util.PathMatcher;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -55,8 +57,19 @@ public class AntiInjectInterceptor extends HandlerInterceptorAdapter {
 			return true;
 		}
 
-		String basePath = referrer.startsWith("https://") ? "https://" : "http://";
-		basePath += request.getServerName();
+		String schema = referrer.startsWith("https://") ? "https://" : "http://";
+		String serverName = request.getServerName();
+		if(serverName.split("\\.").length > 2) {
+			// 如果是相同的主域名则也认为在白名单内, 通过验证
+			PathMatcher matcher = new AntPathMatcher();
+			String pattern = schema + "*" + serverName.substring(serverName.indexOf(".")) + "/**/*";
+			boolean match = matcher.match(pattern, referrer);
+			if(match) {
+				return true;
+			}
+		}
+
+		String basePath = schema + serverName;
 		if (referrer.lastIndexOf(basePath) == 0) {
 			return true; // referrer包含当前域名不做校验，返回true
 		}

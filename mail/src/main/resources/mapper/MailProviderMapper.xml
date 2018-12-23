@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yinww.mail.mapper.MailProviderMapper">
+	<resultMap id="MailResultMap" type="com.yinww.mail.domain.MailProvider">
+		<id column="id" jdbcType="BIGINT" property="id"/>
+		<result column="name" jdbcType="VARCHAR" property="name"/>
+		<result column="note" jdbcType="VARCHAR" property="note"/>
+		<result column="status" jdbcType="INTEGER" property="status"/>
+	</resultMap>
+	
+	<select id="getMailProviders" resultMap="MailResultMap">
+		select * from ml_mail_provider where status=1 order by id
+	</select>
+</mapper>

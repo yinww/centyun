@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yinww.web.core.exception.AutoLoginException;
 
 @Component("passportAuthenticationFailHander")
 public class PassportAuthenticationFailHander extends SimpleUrlAuthenticationFailureHandler {
@@ -38,7 +39,8 @@ public class PassportAuthenticationFailHander extends SimpleUrlAuthenticationFai
         log.info("captch error", exception);
         Map<String, Object> map = new HashMap<>();
 		map.put("code", HttpStatus.BAD_REQUEST.value());
-		map.put("msg", getMessage(exception.getMessage(), request));
+		boolean isAutoLogin = exception instanceof AutoLoginException; // 如果是自动登录失败, 则不显示异常信息
+		map.put("msg", isAutoLogin ? "" : getMessage(exception.getMessage(), request));
 		response.setContentType("application/json;charset=UTF-8");
 		response.getWriter().write(objectMapper.writeValueAsString(map));
 	}

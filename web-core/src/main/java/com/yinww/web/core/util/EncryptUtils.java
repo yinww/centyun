@@ -95,6 +95,7 @@ public class EncryptUtils {
 		*/
 		
 		System.out.println(encryptPwd("Hello369"));
+
 	}
 
 }

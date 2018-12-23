@@ -67,7 +67,7 @@ public class PassportAuthenticationSuccessHandler extends SavedRequestAwareAuthe
 	    	audit.setAction("login");
 	    	audit.setModule("system");
 	    	audit.setContent(ip);
-	    	audit.setIp(IPUtil.ipToLong(ip));
+	    	audit.setIp(ip == null ? null : IPUtil.ipToLong(ip));
 	    	audit.setOperator(account.getLoginName());
 	    	auditService.saveLoginAudit(audit);
 	    	

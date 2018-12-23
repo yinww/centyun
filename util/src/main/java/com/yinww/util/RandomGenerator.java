@@ -180,4 +180,20 @@ public class RandomGenerator {
 		return getStrings(DIR, 2, length);
 	}
 
+	/**
+	 * 生成num个范围是[min, max]的数据
+	 * @param min, 最小值
+	 * @param max, 最大值
+	 * @param count, 生成count个
+	 * @return
+	 */
+	public static List<Integer> getRandomIntList(int min, int max, int count) {
+		List<Integer> result = new ArrayList<Integer>();
+		Random random = new Random();
+		for (int i = 0; i < count; i++) {
+			result.add(random.nextInt(max - min) + min);
+		}
+		return result;
+	}
+
 }

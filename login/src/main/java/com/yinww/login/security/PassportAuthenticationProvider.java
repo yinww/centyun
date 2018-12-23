@@ -47,7 +47,9 @@ public class PassportAuthenticationProvider implements AuthenticationProvider {
 		}
 		
         String password = (String) authentication.getCredentials();// 这个是表单中输入的密码
-		if (account == null || !EncryptUtils.valid(password, account.getPassword())) {
+        boolean isAutoLogin = password != null && password.startsWith("ENCD(") && password.endsWith(")");
+        // 如果是自动登录则在CaptchaAuthenticationFilter中验证
+		if (account == null || (!isAutoLogin && !EncryptUtils.valid(password, account.getPassword()))) {
 			throw new BadCredentialsException("Login.UserPasswdError");
 		}
 		Collection<? extends GrantedAuthority> authorities = account.getAuthorities();
