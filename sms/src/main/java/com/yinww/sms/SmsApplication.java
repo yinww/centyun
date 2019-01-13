@@ -1,4 +1,4 @@
-package com.yinww.mail;
+package com.yinww.sms;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -20,11 +20,10 @@ import com.yinww.web.core.WebCoreConfig;
 @Import(WebCoreConfig.class)
 @EnableAutoConfiguration(exclude = {MultipartAutoConfiguration.class, SecurityAutoConfiguration.class, UserDetailsServiceAutoConfiguration.class
 		, SecurityFilterAutoConfiguration.class, SecurityRequestMatcherProviderAutoConfiguration.class})
-public class MailApplication {
+public class SmsApplication {
 	public static final String APPNAME = "mail";
 
 	public static void main(String[] args) {
-		SpringApplication.run(MailApplication.class, args);
+		SpringApplication.run(SmsApplication.class, args);
 	}
-
 }

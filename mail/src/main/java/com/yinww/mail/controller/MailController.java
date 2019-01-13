@@ -22,6 +22,7 @@ import com.yinww.util.SnowFlakeIdWorker;
 import com.yinww.web.core.constant.AppConstant;
 
 @Controller
+@RequestMapping(value = "/mail")
 public class MailController {
 	private Logger log = LoggerFactory.getLogger(MailController.class);
 	

@@ -60,7 +60,7 @@ public class MagicNumberUtil {
 	 * @param src
 	 * @return
 	 */
-	public static String bytesToHex(byte[] src) {
+	private static String bytesToHex(byte[] src) {
 		if (src == null || src.length <= 0) {
 			return null;
 		}

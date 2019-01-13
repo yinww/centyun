@@ -1,10 +1,11 @@
-package com.yinww.login.domain;
+package com.yinww.web.core.domain;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Module {
 	private Long id;
@@ -16,6 +17,8 @@ public class Module {
 	private String url;
 	private int status;
 	private int orderNo; // 顺序号, 排序用
+	
+	@JsonProperty("createTime")
 	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date createTime;
 	

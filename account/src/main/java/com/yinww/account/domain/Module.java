@@ -6,7 +6,7 @@ import org.apache.ibatis.type.Alias;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-@Alias("module")
+@Alias("acModule")
 public class Module {
 	private Integer id;
 	private String code;

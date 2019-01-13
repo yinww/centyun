@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.yinww.login.domain.Module;
+import com.yinww.web.core.domain.Module;
 
 @Mapper
 public interface ModuleMapper {

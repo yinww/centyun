@@ -3,7 +3,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.yinww.account.mapper.ManagerMapper">
-	<resultMap id="ModuleResultMap" type="module">
+	<resultMap id="ModuleResultMap" type="acModule">
 		<id column="id" jdbcType="INTEGER" property="id"/>
 		<result column="code" jdbcType="VARCHAR" property="code"/>
 		<result column="name" jdbcType="INTEGER" property="name"/>

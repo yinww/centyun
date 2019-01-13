@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.code.kaptcha.Producer;
-import com.yinww.login.domain.Module;
 import com.yinww.login.service.ModuleService;
 import com.yinww.util.RandomGenerator;
 import com.yinww.util.SHA256Util;
@@ -36,6 +35,7 @@ import com.yinww.web.core.client.AccountFeignClient;
 import com.yinww.web.core.constant.AppConstant;
 import com.yinww.web.core.cookie.CookieUtils;
 import com.yinww.web.core.domain.Account;
+import com.yinww.web.core.domain.Module;
 import com.yinww.web.core.security.CaptchaAuthenticationFilter;
 import com.yinww.web.core.util.EncryptUtils;
 
@@ -82,7 +82,15 @@ public class LoginController {
         model.setViewName("index");
         return model;
 	}
-	
+
+	@RequestMapping(value = "getAvailableModules", produces = "application/json; charset=utf-8")
+	@ResponseBody
+	public List<Module> getAvailableModules() {
+        List<Module> modules = moduleService.getAvailableModules();
+        modules = resortModule(modules);
+        return modules;
+	}
+
 	private List<Module> resortModule(List<Module> modules) {
 		if(modules == null || modules.size() == 0) {
 			return null;
